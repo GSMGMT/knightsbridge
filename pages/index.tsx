@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Hold on brave Knight!
         </h1>
-        <h2 className={styles.title}> We are updating the <a href="https://kxco.io">Knightbridge!</a></h2>
+        <h2 className={styles.title}> We are updating the <a href="https://kxco.io">Knightsbridge!</a></h2>
 
         <p className={styles.description}>
           Meanwhile visit our {' '}
