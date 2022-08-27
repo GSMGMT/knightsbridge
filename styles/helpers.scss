@@ -1,0 +1,213 @@
+@import './variables';
+
+// media queries
+@mixin w {
+  @media only screen and (max-width: '1419px') {
+    @content;
+  }
+}
+@mixin x {
+  @media only screen and (max-width: '1339px') {
+    @content;
+  }
+}
+@mixin d {
+  @media only screen and (max-width: '1179px') {
+    @content;
+  }
+}
+@mixin t {
+  @media only screen and (max-width: '1023px') {
+    @content;
+  }
+}
+@mixin m {
+  @media only screen and (max-width: '767px') {
+    @content;
+  }
+}
+@mixin a {
+  @media only screen and (max-width: '639px') {
+    @content;
+  }
+}
+@mixin s {
+  @media only screen and (max-width: '474px') {
+    @content;
+  }
+}
+
+// fonts
+@mixin dm-sans {
+  font-family: 'DM Sans', sans-serif;
+}
+@mixin poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+// typography
+@mixin body-1 {
+  font-size: 24px;
+  line-height: calc(32 / 24);
+  letter-spacing: -0.01em;
+}
+@mixin body-bold-1 {
+  font-size: 24px;
+  line-height: calc(32 / 24);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+@mixin body-2 {
+  font-size: 16px;
+  line-height: calc(24 / 16);
+}
+@mixin body-bold-2 {
+  font-size: 16px;
+  line-height: calc(24 / 16);
+  font-weight: 500;
+}
+@mixin caption-1 {
+  font-size: 14px;
+  line-height: calc(24 / 14);
+}
+@mixin caption-bold-1 {
+  font-size: 14px;
+  line-height: calc(24 / 14);
+  font-weight: 500;
+}
+@mixin caption-2 {
+  font-size: 12px;
+  line-height: calc(20 / 12);
+}
+@mixin caption-bold-2 {
+  font-size: 12px;
+  line-height: calc(20 / 12);
+  font-weight: 600;
+}
+@mixin caption-3 {
+  font-size: 10px;
+  line-height: calc(16 / 10);
+}
+@mixin caption-bold-3 {
+  @include caption-3;
+  font-weight: 500;
+}
+@mixin hairline-1 {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+@mixin hairline-2 {
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+@mixin button-1 {
+  @include dm-sans;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+@mixin button-2 {
+  @include dm-sans;
+  font-size: 14px;
+  line-height: calc(16 / 14);
+  font-weight: 700;
+}
+
+//triangle
+@mixin arr($width, $height, $bg, $direction) {
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+
+  @if $direction == t {
+    border-width: 0 $width / 2 + px $height + px $width / 2 + px;
+    border-color: transparent transparent $bg transparent;
+  }
+  @if $direction == r {
+    border-width: $height / 2 + px 0 $height / 2 + px $width + px;
+    border-color: transparent transparent transparent $bg;
+  }
+  @if $direction == b {
+    border-width: $height + px $width / 2 + px 0 $width / 2 + px;
+    border-color: $bg transparent transparent transparent;
+  }
+  @if $direction == l {
+    border-width: $height / 2 + px $width + px $height / 2 + px 0;
+    border-color: transparent $bg transparent transparent;
+  }
+  @if $direction == tl {
+    border-width: $height + px $width + px 0 0;
+    border-color: $bg transparent transparent transparent;
+  }
+  @if $direction == tr {
+    border-width: 0 $width + px $height + px 0;
+    border-color: transparent $bg transparent transparent;
+  }
+  @if $direction == br {
+    border-width: 0 0 $height + px $width + px;
+    border-color: transparent transparent $bg transparent;
+  }
+  @if $direction == bl {
+    border-width: $width + px 0 0 $height + px;
+    border-color: transparent transparent transparent $bg;
+  }
+}
+
+// placeholder
+@mixin placeholder {
+  &::placeholder {
+    @content;
+  }
+}
+
+@mixin r($width) {
+  @media only screen and (max-width: #{$width + 'px'}) {
+    @content;
+  }
+}
+@mixin rmin($width) {
+  @media only screen and (min-width: #{$width + 'px'}) {
+    @content;
+  }
+}
+@mixin text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// theme
+@mixin dark {
+  @at-root :global(.dark-mode) & {
+    @content;
+  }
+}
+@mixin dark-body {
+  @at-root .dark-mode {
+    @content;
+  }
+}
+@mixin dark-common {
+  @at-root .dark-mode & {
+    @content;
+  }
+}
+
+@mixin light-common {
+  @at-root body:not(.dark-mode) & {
+    @content;
+  }
+}
+
+@mixin feedback {
+  &.error {
+    --feedback-color: #{$p3};
+  }
+  &.success {
+    --feedback-color: #{$p4};
+  }
+}

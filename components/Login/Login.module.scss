@@ -1,0 +1,146 @@
+@import '../../styles/helpers';
+
+.login {
+  display: flex;
+
+  @include t {
+    display: block;
+  }
+}
+.col {
+  position: relative;
+
+  &:first-child {
+    flex-shrink: 0;
+
+    width: 512px;
+    min-height: 100vh;
+
+    background-color: $n2;
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+    background-size: cover;
+
+    @include x {
+      width: 420px;
+    }
+    @include d {
+      width: 350px;
+    }
+    @include t {
+      width: auto;
+      min-height: auto;
+
+      background: none !important;
+    }
+    @include dark {
+      background-color: $n2;
+    }
+  }
+  &:nth-child(2) {
+    position: relative;
+
+    display: flex;
+    flex-grow: 1;
+
+    padding: 148px 64px 132px;
+
+    @include w {
+      padding: 124px 48px 76px;
+    }
+    @include t {
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+    @include m {
+      flex-direction: column;
+
+      padding: 100px 32px 32px;
+    }
+  }
+}
+.logo {
+  position: absolute;
+  top: 64px;
+  left: 80px;
+
+  width: 156px;
+  @include w {
+    top: 48px;
+    left: 64px;
+  }
+  @include m {
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+
+    &.light {
+      display: none;
+    }
+
+    @include t {
+      &.dark {
+        display: none;
+      }
+      &.light {
+        display: initial;
+      }
+
+      @include dark {
+        &.light {
+          display: none;
+        }
+        &.dark {
+          display: initial;
+        }
+      }
+    }
+  }
+}
+.head {
+  position: absolute;
+  top: 80px;
+  right: 80px;
+  left: 80px;
+
+  text-align: right;
+  @include button-2;
+
+  @include w {
+    top: 56px;
+    right: 64px;
+    left: 64px;
+  }
+  @include t {
+    right: 48px;
+  }
+  @include m {
+    position: static;
+
+    margin-bottom: 32px;
+    text-align: center;
+  }
+}
+.link {
+  margin-left: 5px;
+
+  color: $p1;
+
+  transition: color 0.2s;
+
+  &:hover {
+    color: darken($p1, 10);
+  }
+}
+.wrap {
+  width: 380px;
+  margin: auto;
+
+  @include a {
+    width: 100%;
+  }
+}

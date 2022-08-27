@@ -1,0 +1,112 @@
+@import '../../../../styles/helpers';
+
+@import '../../../../components/Search/Search.module';
+@import '../../../../components/Coin/List/CoinList.module';
+
+.title {
+  @include body-bold-1;
+
+  margin-top: 40px;
+}
+
+.form {
+  margin-bottom: 32px;
+  margin-top: 16px;
+}
+.result {
+  .loading {
+    animation-name: loading;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+}
+
+.select-exchange {
+  .row {
+    grid-template-columns: 24px 1fr !important;
+
+    > :first-child {
+      width: 24px;
+      height: 24px;
+    }
+    > :last-child {
+      margin-left: 12px;
+    }
+  }
+}
+.select-pair {
+  .row {
+    grid-template-columns: 24px 1fr !important;
+
+    > :first-child {
+      width: 24px;
+      height: 24px;
+    }
+    > :last-child {
+      margin-left: 12px;
+    }
+
+    .checkbox {
+      margin: auto;
+    }
+
+    .pair {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .info {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+          @include text-overflow;
+        }
+        .exchange {
+          font-weight: 400;
+          color: $n4;
+
+          @include dark {
+            color: $n5;
+          }
+        }
+      }
+    }
+  }
+}
+
+.area {
+  display: flex;
+  flex-direction: column;
+}
+
+.load-more {
+  margin-top: 12px;
+  margin-left: auto;
+
+  color: $p1;
+  @include poppins;
+  @include caption-bold-2;
+
+  transition: all 0.3s;
+
+  &:disabled {
+    color: rgba($p1, 0.5);
+  }
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 48px;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

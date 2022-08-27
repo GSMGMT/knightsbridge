@@ -1,0 +1,65 @@
+.hero,
+.h1,
+.h2,
+.h3,
+.h4 {
+  @include dm-sans;
+  font-weight: 700;
+}
+
+.hero {
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+
+  @include x {
+    font-size: 80px;
+  }
+  @include d {
+    font-size: 64px;
+  }
+}
+
+.h1 {
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+
+  @include m {
+    font-size: 48px;
+    line-height: calc(56 / 48);
+  }
+
+  @include a {
+    font-size: 32px;
+  }
+}
+
+.h2 {
+  font-size: 48px;
+  line-height: calc(56 / 48);
+  letter-spacing: -0.02em;
+
+  @include m {
+    font-size: 40px;
+    line-height: calc(48 / 40);
+    letter-spacing: -0.01em;
+  }
+}
+
+.h3 {
+  font-size: 40px;
+  line-height: calc(48 / 40);
+  letter-spacing: -0.01em;
+
+  @include m {
+    font-size: 32px;
+    line-height: calc(40 / 32);
+  }
+}
+
+.h4 {
+  font-size: 32px;
+  line-height: calc(40 / 32);
+  letter-spacing: -0.01em;
+}

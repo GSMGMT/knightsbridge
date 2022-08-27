@@ -1,0 +1,65 @@
+@import '../../styles/helpers';
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
+.page-item {
+  display: flex;
+
+  &.disabled {
+    .page-link {
+      background-color: $n7;
+
+      border-color: $n7;
+
+      color: $n5;
+
+      @include dark {
+        background-color: $n2;
+
+        border-color: $n2;
+
+        color: $n3;
+      }
+    }
+  }
+
+  &.active {
+    .page-link {
+      border-color: $p1;
+
+      color: $p1;
+    }
+  }
+}
+
+.page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 4px;
+  min-width: 32px;
+  height: 32px;
+  border: 2px solid $n6;
+  border-radius: 4px;
+
+  color: $n2;
+
+  @include button-2;
+  text-align: center;
+
+  fill: currentColor;
+  transition: all 0.3s;
+
+  @include dark {
+    color: $n8;
+
+    border-color: $n4;
+  }
+}

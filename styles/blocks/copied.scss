@@ -1,0 +1,49 @@
+@import '../helpers';
+
+.copied {
+  position: relative;
+
+  --pop-bg: #{$n3};
+  --pop-color: #{$n8};
+
+  @include dark-common {
+    --pop-bg: #{$n6};
+    --pop-color: #{$n2};
+  }
+
+  &::before,
+  &::after {
+    position: absolute;
+    left: 50%;
+
+    z-index: 1000;
+  }
+  &::before {
+    content: 'Copied to clipboard';
+
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+
+    background-color: var(--pop-bg);
+
+    color: var(--pop-color);
+    @include poppins;
+    @include caption-2;
+
+    padding: 6px 8px;
+    border-radius: 6px;
+    width: max-content;
+  }
+  &::after {
+    content: '';
+
+    bottom: 100%;
+    transform: translateX(-50%);
+
+    --width: 8px;
+
+    border: calc(var(--width) / 2) solid transparent;
+    border-bottom: 0;
+    border-top: var(--width) solid var(--pop-bg);
+  }
+}

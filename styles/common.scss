@@ -1,0 +1,99 @@
+// common styles
+body {
+  min-width: 100%;
+
+  background: $n7;
+
+  @include poppins;
+  font-size: 14px;
+  line-height: calc(24 / 14);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $n2;
+
+  @include dark-body {
+    background: $n1;
+    color: $n8;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+svg,
+img {
+  vertical-align: middle;
+}
+
+.desktop {
+  &-hide {
+    @include d {
+      display: none !important;
+    }
+  }
+  &-show {
+    display: none !important;
+
+    @include d {
+      display: block !important;
+    }
+  }
+  &-text-right {
+    @include d {
+      text-align: right;
+    }
+  }
+}
+
+.tablet {
+  &-hide {
+    @include t {
+      display: none !important;
+    }
+  }
+  &-show {
+    display: none !important;
+
+    @include t {
+      display: block !important;
+    }
+  }
+}
+
+.mobile {
+  &-hide {
+    @include m {
+      display: none !important;
+    }
+  }
+  &-show {
+    display: none !important;
+
+    @include m {
+      display: block !important;
+    }
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+.fetching {
+  animation-name: fetching;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes fetching {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

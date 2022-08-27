@@ -1,0 +1,115 @@
+@import '../../../../../../styles/helpers';
+
+@import '../../../../../../components/Dropzone/Dropzone.module.scss';
+
+.header {
+  display: flex;
+  flex-direction: row;
+
+  .title {
+    margin-bottom: 24px;
+
+    @include body-bold-1;
+  }
+  .timer {
+    margin-left: auto;
+    max-width: 110px;
+
+    @include caption-bold-3;
+    color: $n4;
+    text-align: right;
+
+    @include dark {
+      color: $n5;
+    }
+    .time {
+      color: $p3;
+      @include caption-bold-2;
+    }
+  }
+}
+.text,
+.info {
+  margin-bottom: 12px;
+}
+.text {
+  color: $n4;
+}
+.info {
+  @include body-bold-2;
+}
+.list {
+  margin-bottom: 32px;
+}
+.line {
+  display: flex;
+  align-items: center;
+  align-items: flex-start;
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $n6;
+
+    @include dark {
+      border-color: $n3;
+    }
+  }
+}
+.subtitle {
+  margin-right: auto;
+  padding-right: 20px;
+
+  color: $n4;
+}
+.details {
+  display: flex;
+  align-items: center;
+  text-align: right;
+
+  text-transform: uppercase;
+}
+.content {
+  margin-right: 12px;
+
+  font-weight: 500;
+}
+.copy {
+  * {
+    pointer-events: none;
+  }
+  svg {
+    fill: $n4;
+    transition: fill 0.2s;
+  }
+  &:not(:disabled):hover {
+    svg {
+      fill: $n2;
+
+      @include dark {
+        fill: $n8;
+      }
+    }
+  }
+}
+.code {
+  padding: 12px;
+  border-radius: 4px;
+
+  background: $n6;
+
+  text-align: center;
+  @include body-bold-2;
+  @include dark {
+    background: $n3;
+  }
+}
+.btns {
+  margin-top: 24px;
+
+  text-align: center;
+
+  .button {
+    min-width: 184px;
+  }
+}

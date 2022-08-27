@@ -1,0 +1,55 @@
+@import '../../../styles/helpers';
+
+.nav {
+  display: flex;
+
+  @include m {
+    flex-direction: column;
+  }
+}
+.item,
+.nav > div {
+  &:not(:last-child) {
+    margin-right: 40px;
+
+    @include d {
+      margin-right: 32px;
+    }
+    @include t {
+      margin-right: 20px;
+    }
+    @include m {
+      margin: 0;
+    }
+  }
+}
+.item {
+  @include dm-sans;
+  font-size: 14px;
+  line-height: 40px;
+  font-weight: 700;
+  color: $n4;
+
+  transition: all 0.2s;
+
+  @include m {
+    padding: 0 22px;
+    border-left: 2px solid transparent;
+
+    @include poppins;
+    font-size: 24px;
+    line-height: 64px;
+    font-weight: 600;
+  }
+  &:hover,
+  &.active {
+    color: $n2;
+
+    @include dark {
+      color: $n8;
+    }
+    @include m {
+      border-color: $p1;
+    }
+  }
+}

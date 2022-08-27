@@ -1,0 +1,40 @@
+// colors
+$p1: #0063f5;
+$p2: #9757d7;
+$p3: #ca2439;
+$p4: #58bd7d;
+$p5: #273990;
+$s1: #4bc9f0;
+$s2: #e4d7cf;
+$s3: #ffac2f;
+$s4: #cdb4db;
+$white: #ffffff;
+
+$n1: #141416;
+$n2: #23262f;
+$n3: #353945;
+$n4: #777e90;
+$n5: #b1b5c3;
+$n6: #e6e8ec;
+$n7: #f4f5f6;
+$n8: #fcfcfd;
+
+$datepicker-bg-color: #f0f0f0 !default;
+$datepicker-border-color: #aeaeae !default;
+$datepicker-highlighted-color: #3dcc4a !default;
+$datepicker-muted-color: #ccc !default;
+$datepicker-selected-color: $n6 !default;
+$datepicker-text-color: #000 !default;
+$datepicker-header-color: #000 !default;
+$datepicker-navigation-disabled-color: lighten(
+  $datepicker-muted-color,
+  10%
+) !default;
+$datepicker-border-radius: 0;
+$datepicker-day-margin: 0 !default;
+$datepicker-font-size: 0.8rem !default;
+$datepicker-font-family: 'Poppins', sans-serif;
+$datepicker-item-size: 40px !default;
+$datepicker-margin: 0.4rem !default;
+$datepicker-navigation-button-size: 32px !default;
+$datepicker-triangle-size: 8px !default;

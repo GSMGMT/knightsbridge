@@ -1,0 +1,47 @@
+@import '../../../../../styles/helpers';
+
+.top {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid $n6;
+
+  @include dark {
+    border-color: $n3;
+  }
+}
+.title {
+  margin-bottom: 32px;
+
+  text-align: center;
+}
+.info {
+  text-align: center;
+  @include caption-2;
+  color: $n4;
+}
+.button {
+  width: 100%;
+  margin-top: 32px;
+}
+.foot {
+  margin-top: 24px;
+
+  text-align: center;
+}
+.link {
+  @include button-2;
+  color: $n2;
+
+  transition: color 0.2s;
+
+  @include dark {
+    color: $n8;
+  }
+  &:hover {
+    color: $p1;
+  }
+}
+
+.recaptcha-check {
+  display: none;
+}

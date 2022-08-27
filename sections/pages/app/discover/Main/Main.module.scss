@@ -1,0 +1,90 @@
+@import '../../../../../styles/helpers';
+
+.main {
+  position: relative;
+
+  padding-top: 156px;
+  min-height: 692px;
+
+  background: #e2f5ff;
+
+  @include m {
+    min-height: auto;
+    padding: 64px 0 112px;
+  }
+  @include dark {
+    background: #18191d;
+  }
+}
+.wrap {
+  position: relative;
+  z-index: 3;
+
+  max-width: 545px;
+  margin-bottom: 143px;
+
+  @include m {
+    margin-bottom: 8px;
+  }
+}
+.title {
+  margin-bottom: 32px;
+
+  @include m {
+    margin-bottom: 16px;
+
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+.text {
+  @include body-1;
+  color: $n3;
+
+  @include m {
+    font-size: 16px;
+  }
+  @include dark {
+    color: $n5;
+  }
+  strong {
+    font-weight: 600;
+  }
+}
+.bg {
+  position: absolute;
+  top: 0;
+  right: calc(50% - 760px);
+
+  width: 780px;
+
+  pointer-events: none;
+
+  @include d {
+    right: calc(50% - 820px);
+  }
+  @include m {
+    position: static;
+
+    width: auto;
+    margin: 0 -76px 24px -30px;
+  }
+  img {
+    width: 100%;
+  }
+}
+.loading {
+  animation: loading 0.5s infinite;
+}
+
+@keyframes loading {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

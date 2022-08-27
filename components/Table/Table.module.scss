@@ -1,0 +1,185 @@
+@import '../../styles/helpers';
+
+@mixin grid($grid: false) {
+  &.grid,
+  .grid {
+    @if $grid != false {
+      display: grid;
+      grid-template-columns: $grid;
+      column-gap: 32px;
+
+      @include d {
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+
+        > div:not(.actions) {
+          display: flex;
+        }
+      }
+    }
+
+    @content;
+  }
+}
+
+@mixin table($columns, $grid, $status) {
+  .table {
+    width: 100%;
+  }
+  .row {
+    padding: 20px 16px;
+
+    cursor: pointer;
+
+    @include grid($grid);
+
+    @include d {
+      padding: 0;
+
+      &:not(:last-child) {
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid $n6;
+
+        @include dark {
+          border-color: $n3;
+        }
+      }
+    }
+
+    &:first-child {
+      border-bottom: 1px solid $n6;
+
+      @include caption-bold-2;
+      color: $n4;
+
+      @include dark {
+        border-color: $n3;
+      }
+
+      @include d {
+        display: none;
+      }
+    }
+    &:not(:first-child) {
+      border-radius: 12px;
+
+      &.active {
+        .actions {
+          display: flex;
+        }
+      }
+
+      .actions {
+        padding-top: 16px;
+        grid-column: span $columns;
+
+        @include d {
+          bottom: 10px;
+          left: 0px;
+        }
+
+        display: none;
+
+        flex-direction: row;
+        gap: 8px;
+
+        svg {
+          margin-left: 0 !important;
+        }
+
+        .action {
+          padding: 8px 12px;
+
+          @include button-2;
+        }
+      }
+
+      @include d {
+        border-radius: 0;
+      }
+
+      @include grid {
+        @include caption-bold-1;
+
+        .main {
+          color: $n2;
+
+          @include dark {
+            color: $n6;
+          }
+        }
+        .detail {
+          color: $n4;
+        }
+        .info {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 4px;
+
+          &.column {
+            flex-direction: column;
+          }
+
+          @include d {
+            align-items: flex-end;
+          }
+        }
+        .label {
+          display: none;
+
+          @include d {
+            display: block;
+
+            margin-right: auto;
+
+            @include caption-bold-2;
+            color: $n4;
+          }
+        }
+        .status {
+          text-transform: capitalize;
+
+          position: relative;
+
+          text-indent: 20px;
+          display: inline-block;
+
+          &::before {
+            content: '';
+
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+
+            background-color: var(--status-color);
+          }
+
+          @each $key, $color in $status {
+            &.#{$key} {
+              --status-color: #{$color};
+            }
+          }
+        }
+      }
+
+      &:hover {
+        background: $n7;
+
+        @include dark {
+          background: rgba($n3, 0.33);
+        }
+        @include d {
+          background: none !important;
+        }
+      }
+    }
+  }
+}

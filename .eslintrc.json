@@ -1,3 +1,55 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "jest": true,
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "next",
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@next/next/no-html-link-for-pages": [
+          "error",
+          "apps/knightsbridge-nextjs/pages"
+        ]
+      }
+    }
+  ],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "prettier/prettier": "error",
+    "import/prefer-default-export": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unescaped-entities": "off",
+    "consistent-return": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-nested-ternary": "off",
+    "default-case": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/jsx-fragments": "off",
+    "import/no-cycle": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "react/no-array-index-key": "off"
+  }
 }

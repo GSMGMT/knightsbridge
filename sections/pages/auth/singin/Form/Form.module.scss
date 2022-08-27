@@ -1,0 +1,110 @@
+@import '../../../../../styles/helpers';
+
+.nav {
+  display: flex;
+  justify-content: center;
+
+  margin-bottom: 32px;
+
+  .link {
+    display: flex;
+
+    padding: 6px 12px;
+    border-radius: 14px;
+
+    background: none;
+    transition: all 0.2s;
+
+    color: $n4;
+
+    @include button-2;
+
+    &:hover {
+      color: $n3;
+
+      @include dark {
+        color: $n8;
+      }
+    }
+    &.active {
+      background: $n3;
+
+      color: $n8;
+
+      @include dark {
+        background: $n3;
+
+        color: $n8;
+      }
+    }
+    &:not(:last-child) {
+      margin-right: 24px;
+    }
+  }
+}
+
+.container {
+  margin-bottom: 32px;
+}
+
+.line {
+  display: flex;
+  align-items: flex-end;
+
+  .field {
+    &:first-child {
+      flex-shrink: 0;
+
+      width: 128px;
+      margin-right: 8px;
+    }
+
+    &:nth-child(2) {
+      flex-grow: 1;
+    }
+  }
+}
+
+.foot {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 16px;
+
+  @include caption-bold-2;
+
+  .link {
+    color: $p1;
+
+    transition: color 0.2s;
+
+    &:hover {
+      color: darken($p1, 10);
+    }
+  }
+}
+
+.scan {
+  @include caption-bold-2;
+
+  color: $n4;
+
+  transition: color 0.2s;
+
+  &:hover {
+    color: $n2;
+  }
+}
+
+.button {
+  width: 100%;
+  margin-top: 32px;
+}
+
+.check {
+  margin-top: 32px;
+}
+
+.recaptcha-check {
+  display: none;
+}

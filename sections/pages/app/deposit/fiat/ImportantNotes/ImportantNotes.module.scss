@@ -1,0 +1,57 @@
+@import '../../../../../../styles/helpers';
+
+.title {
+  margin-bottom: 24px;
+
+  @include body-bold-1;
+}
+.text,
+.info {
+  margin-bottom: 12px;
+}
+.text {
+  color: $n4;
+
+  a {
+    transition: 0.3s all;
+
+    color: $n3;
+
+    &:hover {
+      color: $n5;
+    }
+
+    @include dark {
+      color: $n5;
+
+      &:hover {
+        color: $n6;
+      }
+    }
+  }
+}
+.info {
+  @include body-bold-2;
+}
+.code {
+  padding: 12px;
+  border-radius: 4px;
+
+  background: $n6;
+
+  text-align: center;
+  @include body-bold-2;
+
+  @include dark {
+    background: $n3;
+  }
+}
+.btns {
+  margin-top: 24px;
+
+  text-align: right;
+
+  .button {
+    min-width: 184px;
+  }
+}

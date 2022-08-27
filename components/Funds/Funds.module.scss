@@ -1,0 +1,154 @@
+@import '../../styles/helpers';
+
+.wrap {
+  padding: 20px 0 0;
+
+  @include m {
+    padding: 0;
+  }
+}
+.line {
+  display: flex;
+  align-items: center;
+
+  padding: 0 32px;
+
+  @include m {
+    display: none;
+  }
+}
+.form {
+  position: relative;
+
+  flex-shrink: 0;
+
+  width: 256px;
+  margin-right: auto;
+}
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 20px;
+  border: 2px solid $n6;
+
+  background: none;
+  transition: border-color 0.2s;
+
+  @include poppins;
+  @include caption-2;
+  color: $n2;
+
+  @include dark {
+    border-color: $n3;
+
+    color: $n8;
+  }
+  @include placeholder {
+    color: $n4;
+  }
+  &:focus {
+    border-color: $n4;
+  }
+}
+.result {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 40px;
+
+  svg {
+    fill: $n4;
+    transition: fill 0.2s;
+  }
+  &:hover {
+    svg {
+      fill: $p1;
+    }
+  }
+}
+.link {
+  display: flex;
+  align-items: center;
+
+  @include poppins;
+  @include caption-2;
+  font-weight: 500;
+  color: $n4;
+
+  transition: color 0.2s;
+
+  svg {
+    margin-left: 4px;
+
+    fill: $n4;
+    transition: fill 0.2s;
+  }
+  &:hover {
+    color: $n2;
+
+    svg {
+      fill: $n2;
+    }
+    @include dark {
+      color: $n8;
+
+      svg {
+        fill: $n8;
+      }
+    }
+  }
+}
+.row {
+  display: flex;
+
+  border-bottom: 1px solid $n7;
+
+  @include dark {
+    border-color: $n2;
+  }
+}
+.col {
+  flex: 1;
+
+  padding: 16px;
+
+  @include caption-bold-2;
+  color: $n3;
+
+  @include dark {
+    color: $n6;
+  }
+  &:first-child {
+    padding-left: 32px;
+
+    @include m {
+      padding-left: 16px;
+    }
+  }
+  &:last-child {
+    padding-right: 32px;
+
+    @include m {
+      padding-right: 16px;
+    }
+  }
+  &:not(:first-child) {
+    text-align: right;
+  }
+  &:not(:first-child):not(:nth-child(2)) {
+    @include m {
+      display: none;
+    }
+  }
+}
+
+.button {
+  height: 32px;
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}

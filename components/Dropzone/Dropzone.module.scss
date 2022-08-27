@@ -1,0 +1,58 @@
+.dropzone {
+  padding: 32px 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  grid-column: span 2;
+
+  background-color: $n7;
+  transition: 0.3s all;
+
+  margin-top: 24px;
+  border: 2px dashed $p1;
+  border-radius: 4px;
+
+  > * {
+    margin: auto;
+  }
+
+  @include dark {
+    background-color: $n2;
+  }
+  &.success {
+    border-color: $p4;
+  }
+  .title,
+  .subtitle {
+    color: $n2;
+
+    fill: currentColor;
+
+    @include dark {
+      color: $n6;
+    }
+
+    @include text-overflow;
+  }
+  .title {
+    @include button-1;
+
+    margin-bottom: 16px;
+  }
+  .subtitle {
+    @include caption-bold-1;
+
+    padding-right: 0;
+  }
+  .description {
+    @include caption-2;
+
+    color: $n4;
+  }
+  .max-size {
+    @include caption-bold-3;
+
+    color: $n4;
+  }
+}

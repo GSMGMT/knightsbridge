@@ -1,0 +1,42 @@
+@import '../../styles/helpers';
+
+.correct {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
+
+  background: $n7;
+
+  font-weight: 500;
+  color: $p4;
+
+  @include dark {
+    background: $n3;
+  }
+
+  svg {
+    margin-right: 4px;
+
+    fill: $p4;
+
+    flex-shrink: 0;
+  }
+
+  div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    span {
+      color: $n2;
+
+      @include dark {
+        color: $n8;
+      }
+    }
+  }
+}

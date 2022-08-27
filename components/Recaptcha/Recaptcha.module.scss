@@ -1,0 +1,21 @@
+@import '../../styles/helpers';
+
+.recaptcha {
+  margin: auto;
+  width: fit-content;
+  margin-top: 32px;
+  padding-top: 10px;
+  padding-bottom: 8px;
+
+  iframe {
+    transform: scale(1.25);
+  }
+}
+
+.note {
+  margin-top: 4px;
+
+  @include caption-3;
+  font-weight: 500;
+  color: $p3;
+}

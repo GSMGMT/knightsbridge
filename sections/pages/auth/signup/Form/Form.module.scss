@@ -1,0 +1,94 @@
+@import '../../../../../styles/helpers';
+
+.top {
+  margin-bottom: 32px;
+
+  @include dark {
+    border-color: $n3;
+  }
+  .info {
+    margin-bottom: 20px;
+  }
+}
+.title {
+  text-align: center;
+}
+.info {
+  text-align: center;
+  @include caption-2;
+  color: $n4;
+}
+.btns {
+  display: flex;
+  justify-content: center;
+
+  margin: 0 -10px;
+
+  @include m {
+    margin: 0 -6px;
+  }
+  .button {
+    flex: 0 0 calc(50% - 20px);
+
+    margin: 0 10px;
+
+    @include m {
+      flex: 0 0 calc(50% - 12px);
+
+      margin: 0 6px;
+    }
+    &:not(:last-child) {
+      margin-right: 12px;
+
+      @include m {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+.field {
+  &:not(:last-child) {
+    margin-bottom: 32px;
+  }
+}
+.form > .button {
+  width: 100%;
+  margin-top: 32px;
+}
+.form > .info {
+  margin-bottom: 32px;
+}
+
+.recaptcha-check {
+  display: none;
+}
+
+.password-requirements {
+  list-style-type: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  margin: 12px 0 32px;
+
+  .requirement {
+    @include caption-bold-3;
+
+    color: $p3;
+
+    &::before {
+      content: '✘';
+
+      margin-right: 4px;
+    }
+
+    &.valid {
+      color: $p4;
+
+      &::before {
+        content: '✔';
+      }
+    }
+  }
+}

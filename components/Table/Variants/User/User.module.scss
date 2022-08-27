@@ -1,0 +1,10 @@
+@import '../../Table.module.scss';
+
+@include table(
+  4,
+  16fr 25fr 37fr 100px,
+  (
+    'confirmed': $p4,
+    'pending': $s3,
+  )
+);
