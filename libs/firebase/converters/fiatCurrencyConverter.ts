@@ -1,6 +1,7 @@
 import {
   DocumentData,
   QueryDocumentSnapshot,
+  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { FiatCurrency } from '@contracts/FiatCurrency';
@@ -20,8 +21,8 @@ export const FiatCurrencyConverter = {
       symbol: data.symbol,
       cmcId: data.cmcId,
       quote: data.quote,
-      createdAt: new Date(data.createdAt * 1000),
-      updatedAt: new Date(data.updatedAt * 1000),
+      createdAt: (data.createdAt as Timestamp).toDate(),
+      updatedAt: (data.updatedAt as Timestamp).toDate(),
     };
   },
 };

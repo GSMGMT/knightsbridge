@@ -8,16 +8,12 @@ import getCurrencyById from '@libs/firebase/functions/fiat/currency/getCurrencyB
 import insertDeposit from '@libs/firebase/functions/fiat/deposit/insertDeposit';
 import { Bank } from '@contracts/Bank';
 import { FiatCurrency } from '@contracts/FiatCurrency';
+import { isPersisted } from '@utils/validator';
 
 interface InsertDepositDTO {
   amount: number;
   currencyId: string;
   bankId: string;
-}
-
-async function isPersisted(uid: string, f: (uid: string) => Promise<unknown>) {
-  const register = await f(uid);
-  return !!register;
 }
 
 const schema: SchemaOf<InsertDepositDTO> = object().shape({
