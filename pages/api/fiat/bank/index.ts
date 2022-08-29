@@ -44,7 +44,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         const bank = await insertBank(data);
 
-        return res.status(200).json(
+        return res.status(201).json(
           ResponseModel.create(bank, {
             message: 'Bank inserted successfully',
           })

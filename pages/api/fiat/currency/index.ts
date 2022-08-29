@@ -77,7 +77,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           console.log('Tmp file successfully deleted')
         );
 
-        return res.status(200).json(
+        return res.status(201).json(
           ResponseModel.create(currency, {
             message: 'Currency inserted successfully',
           })
