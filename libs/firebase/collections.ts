@@ -1,5 +1,7 @@
 export enum FirebaseCollections {
   USERS = 'users',
   REFERRALS = 'referrals',
-  FIAT_CURRENCY = 'fiat_currency',
+  FIAT_CURRENCIES = 'fiat_currencies',
+  DEPOSITS = 'deposits',
+  BANK = 'banks',
 }
