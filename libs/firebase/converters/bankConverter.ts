@@ -19,8 +19,8 @@ export const BankConverter = {
       bankName: data.bankName,
       branch: data.branch,
       bankAddress: data.bankAddress,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
+      createdAt: new Date(data.createdAt * 1000),
+      updatedAt: new Date(data.updatedAt * 1000),
     };
   },
 };

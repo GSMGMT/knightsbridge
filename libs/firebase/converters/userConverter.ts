@@ -13,7 +13,6 @@ export const UserConverter = {
       name: data.name,
       surname: data.surname,
       role: data.role,
-      verified: data.verified,
     };
   },
 };

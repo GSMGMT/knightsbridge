@@ -3,7 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { firestore } from '@libs/firebase/config';
 import { FiatCurrencyConverter } from '@libs/firebase/converters/fiatCurrencyConverter';
-import { FiatCurrency } from '@contracts/FIAT/Currency';
+import { FiatCurrency } from '@contracts/FiatCurrency';
 
 const getCurrencyById = async (
   uid: string

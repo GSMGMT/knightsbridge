@@ -3,10 +3,10 @@ import { NextApiResponse } from 'next';
 import { object, string, mixed, SchemaOf, number } from 'yup';
 
 import { withUser, NextApiRequestWithUser } from '@middlewares/withUser';
-import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
-import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { ResponseModel } from '@contracts/Response';
+import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
+import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
 import listFiatCurrencies from '@libs/firebase/functions/fiat/currency/listCurrencies';
 
 export const config = {

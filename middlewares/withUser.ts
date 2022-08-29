@@ -3,9 +3,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminAuth } from '@libs/firebase-admin/config';
 
 import { ResponseModel } from '@contracts/Response';
+import getUserByUid from '@libs/firebase/functions/users/getUserById';
+import { User } from '@contracts/User';
 
 export type NextApiRequestWithUser = NextApiRequest & {
-  user: string;
+  user: User;
 };
 
 type NextApiHandler = (
@@ -32,7 +34,8 @@ export function withUser(handler: NextApiHandler) {
           .json(ResponseModel.create(null, { message: 'Not authenticated' }));
       }
 
-      req.user = uid;
+      const user = await getUserByUid(uid);
+      req.user = user as User;
 
       return handler(req, res);
     } catch (err: any) {

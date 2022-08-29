@@ -9,7 +9,6 @@ export interface User {
   name: string;
   surname: string;
   role: string;
-  verified: boolean;
   accessToken?: string;
   refreshToken?: string;
 }

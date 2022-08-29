@@ -9,7 +9,7 @@ import {
 
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { firestore } from '@libs/firebase/config';
-import { FiatCurrency } from '@contracts/FIAT/Currency';
+import { FiatCurrency } from '@contracts/FiatCurrency';
 import { FiatCurrencyConverter } from '@libs/firebase/converters/fiatCurrencyConverter';
 
 const listFiatCurrencies = async (
