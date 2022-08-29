@@ -2,11 +2,12 @@ import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
 import { object, string, mixed, SchemaOf, number } from 'yup';
 
-import { NextApiRequestWithUser, withUser } from '@middlewares/withUser';
+import { withUser, NextApiRequestWithUser } from '@middlewares/withUser';
 import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
 import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { ResponseModel } from '@contracts/Response';
+import listFiatCurrencies from '@libs/firebase/functions/fiat/currency/listCurrencies';
 
 export const config = {
   api: {
@@ -23,6 +24,11 @@ interface InsertCurrencyDTO {
   quote: number;
 }
 
+interface PaginationDTO {
+  pageNumber: number;
+  pageSize: number;
+}
+
 const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   name: string().required('Name is required.'),
   code: string().required('Code is required.'),
@@ -30,6 +36,11 @@ const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   symbol: string().required('Symbol is required.'),
   cmcId: number().required('CMC ID is required.'),
   quote: number().required('Quote is required.'),
+});
+
+const listFiatCurrenciesSchema: SchemaOf<PaginationDTO> = object().shape({
+  pageNumber: number().required('Page number is required.'),
+  pageSize: number().required('Page size is required.'),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
@@ -44,7 +55,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         const buffer = await readFile(logo.filepath);
         const filePath = `fiat/logo/${logo.newFilename}`;
 
-        await saveCurrencyLogo(
+        const currency = await saveCurrencyLogo(
           {
             buffer,
             filename: logo.newFilename,
@@ -67,8 +78,20 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
 
         return res.status(200).json(
-          ResponseModel.create(null, {
+          ResponseModel.create(currency, {
             message: 'Currency inserted successfully',
+          })
+        );
+      }
+      case 'GET': {
+        const { pageNumber, pageSize } =
+          await listFiatCurrenciesSchema.validate(req.query);
+
+        const fiatCurrencies = await listFiatCurrencies(pageNumber, pageSize);
+
+        return res.status(200).json(
+          ResponseModel.create(fiatCurrencies, {
+            message: 'Fiat currencies fetched successfully',
           })
         );
       }

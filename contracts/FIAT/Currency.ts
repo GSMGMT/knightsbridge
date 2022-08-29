@@ -1,11 +1,11 @@
-export interface Currency {
-  uid?: string;
+export interface FiatCurrency {
+  uid: string;
   name: string;
   code: string;
   logo: string;
   symbol: string;
   cmcId: number;
-  quote?: number;
+  quote: number;
   createdAt: Date;
   updatedAt: Date;
 }
