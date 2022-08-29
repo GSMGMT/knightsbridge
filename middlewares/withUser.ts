@@ -4,14 +4,14 @@ import { adminAuth } from '@libs/firebase-admin/config';
 
 import { ResponseModel } from '@contracts/Response';
 
-type NextApiHandler = (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => Promise<unknown> | unknown;
-
 export type NextApiRequestWithUser = NextApiRequest & {
   user: string;
 };
+
+type NextApiHandler = (
+  req: NextApiRequestWithUser,
+  res: NextApiResponse
+) => Promise<unknown> | unknown;
 
 export function withUser(handler: NextApiHandler) {
   return async (req: NextApiRequestWithUser, res: NextApiResponse) => {

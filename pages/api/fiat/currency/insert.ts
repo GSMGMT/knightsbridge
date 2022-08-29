@@ -1,7 +1,8 @@
 import { readFile, unlink } from 'fs/promises';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { object, string, mixed, SchemaOf, number } from 'yup';
 
+import { NextApiRequestWithUser, withUser } from '@middlewares/withUser';
 import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
 import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
 import parseMultipartForm from '@utils/parseMultipartForm';
@@ -31,10 +32,7 @@ const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   quote: number().required('Quote is required.'),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'POST': {
@@ -88,3 +86,5 @@ export default async function handler(
       .json(ResponseModel.create(null, { message: 'Something went wrong' }));
   }
 }
+
+export default withUser(handler);
