@@ -1,15 +1,15 @@
 import cn from 'classnames';
 
-import { Icon } from '../Icon';
-
-import { useCopy } from '../../hooks/Copy';
-
-import styles from './DepositInfo.module.scss';
-
 import {
   Coin as PairedCoin,
   WalletAddress,
-} from '../../services/api/fetchCoins';
+} from '@services/api/app/fetchCoins';
+
+import { Icon } from '@components/Icon';
+
+import { useCopy } from '@hooks/Copy';
+
+import styles from './DepositInfo.module.scss';
 
 type Coin = Pick<PairedCoin, 'id' | 'logo' | 'name' | 'symbol' | 'price'>;
 

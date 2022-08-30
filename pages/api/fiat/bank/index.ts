@@ -1,7 +1,7 @@
 import { NextApiResponse } from 'next';
 import { object, string, SchemaOf, number } from 'yup';
 
-import { withUser, NextApiRequestWithUser } from '@middlewares/withUser';
+import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { ResponseModel } from '@contracts/Response';
 import insertBank from '@libs/firebase/functions/fiat/bank/insertBank';
 import listBanks from '@libs/firebase/functions/fiat/bank/listBanks';

@@ -11,6 +11,7 @@ import { useCopy } from '@hooks/Copy';
 import { Icon } from '@components/Icon';
 import { Modal } from '@components/Modal';
 import CheckI from '@public/images/icons/check.svg';
+import { depositConfirm } from '@services/api/app/deposit/confirm';
 import { Successfully } from '../Successfully';
 
 import { Request } from '..';
@@ -87,9 +88,10 @@ export const PaymentDetails = ({
     try {
       setFetching(true);
 
-      // await api.postForm(`/api/fiat/deposit/${id}/confirm`, {
-      //   receipt: file,
-      // });
+      await depositConfirm({
+        depositId: id,
+        receipt: file,
+      });
 
       setSuccess(true);
     } catch (error) {

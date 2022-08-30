@@ -2,7 +2,7 @@ import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
 import { object, string, mixed, SchemaOf, ValidationError } from 'yup';
 
-import { withUser, NextApiRequestWithUser } from '@middlewares/withUser';
+import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { ResponseModel } from '@contracts/Response';
 import { isPersisted } from '@utils/validator';

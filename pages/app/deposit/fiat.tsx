@@ -1,13 +1,13 @@
-import { parseCookies } from 'nookies';
-import { GetServerSideProps } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import { useCallback, useMemo, useState } from 'react';
 
-import { adminAuth } from '@libs/firebase-admin/config';
-
 import { Bidding } from '@components/Bidding';
+
 import { SelectCurrency } from '@sections/pages/app/deposit/fiat/SelectCurrency';
 import { ImportantNotes } from 'sections/pages/app/deposit/fiat/ImportantNotes';
 import { PaymentDetails } from 'sections/pages/app/deposit/fiat/PaymentDetails';
+
+import { withUser } from '@middlewares/client/withUser';
 
 const steps = [
   { title: 'Select currency', slug: 'currency' },
@@ -66,19 +66,6 @@ const DepositFiat = () => {
     </Bidding>
   );
 };
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  try {
-    const { token } = parseCookies(ctx);
-    await adminAuth.verifyIdToken(token);
-
-    return {
-      props: {},
-    };
-  } catch (err) {
-    ctx.res.writeHead(302, { Location: '/auth/signin' });
-    ctx.res.end();
-
-    return { props: {} as never };
-  }
-};
+export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
+  withUser(ctx);
 export default DepositFiat;

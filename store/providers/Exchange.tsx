@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { PairSource } from '@services/api/app/fetchSources';
+
 import { api } from '../../services/api';
 
-import { PairSource } from '../../services/api/fetchSources';
 import {
   ExchangeContext,
   HandleFetchWallet,
