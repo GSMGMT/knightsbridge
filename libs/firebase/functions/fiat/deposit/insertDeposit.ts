@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { firestore } from '@libs/firebase/config';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { FIATDepositStatus } from '@contracts/FiatDeposit';
-import { DepositConverter } from '@libs/firebase/converters/depositConverter';
+import { FiatDepositConverter } from '@libs/firebase/converters/depositConverter';
 import { nanoid } from 'nanoid';
 import { FiatCurrency } from '@contracts/FiatCurrency';
 import { Bank } from '@contracts/Bank';
@@ -26,7 +26,7 @@ const insertDeposit = async (newDeposit: InsertDeposit) => {
     firestore,
     FirebaseCollections.DEPOSITS,
     uid
-  ).withConverter(DepositConverter);
+  ).withConverter(FiatDepositConverter);
 
   await setDoc(DepositDoc, {
     uid,

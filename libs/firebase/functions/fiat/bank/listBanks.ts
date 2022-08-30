@@ -4,29 +4,37 @@ import {
   limit,
   orderBy,
   query,
-  startAt,
+  QueryConstraint,
 } from 'firebase/firestore';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { firestore } from '@libs/firebase/config';
 import { BankConverter } from '@libs/firebase/converters/bankConverter';
 import { Bank } from '@contracts/Bank';
+import { Sort } from '@utils/types';
 
-const listBanks = async (
-  pageNumber: number,
-  pageSize: number
-): Promise<Bank[]> => {
+interface ListBanks {
+  size: number;
+  sort: Sort[];
+}
+
+const listBanks = async ({ size, sort }: ListBanks): Promise<Bank[]> => {
   const BankCollection = collection(
     firestore,
     FirebaseCollections.BANK
   ).withConverter(BankConverter);
 
-  const q = query(
-    BankCollection,
-    orderBy('createdAt'),
-    startAt((pageNumber - 1) * pageSize),
-    limit(pageSize)
-  );
+  const queryConstraints: QueryConstraint[] = [limit(size)];
+
+  if (sort?.length) {
+    queryConstraints.unshift(
+      ...sort.map(({ field, orientation }) => orderBy(field, orientation))
+    );
+  } else {
+    queryConstraints.unshift(orderBy('createdAt'));
+  }
+
+  const q = query(BankCollection, ...queryConstraints);
 
   const querySnapshot = await getDocs(q);
 

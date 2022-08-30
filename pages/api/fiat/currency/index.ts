@@ -1,6 +1,6 @@
 import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
-import { object, string, mixed, SchemaOf, number } from 'yup';
+import { object, string, mixed, SchemaOf, number, array } from 'yup';
 
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import parseMultipartForm from '@utils/parseMultipartForm';
@@ -8,6 +8,8 @@ import { ResponseModel } from '@contracts/Response';
 import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
 import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
 import listFiatCurrencies from '@libs/firebase/functions/fiat/currency/listCurrencies';
+import { Pagination } from '@utils/types';
+import { parseSortField } from '@utils/validator';
 
 export const config = {
   api: {
@@ -24,11 +26,6 @@ interface InsertCurrencyDTO {
   quote: number;
 }
 
-interface PaginationDTO {
-  pageNumber: number;
-  pageSize: number;
-}
-
 const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   name: string().required('Name is required.'),
   code: string().required('Code is required.'),
@@ -38,9 +35,9 @@ const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   quote: number().required('Quote is required.'),
 });
 
-const listFiatCurrenciesSchema: SchemaOf<PaginationDTO> = object().shape({
-  pageNumber: number().required('Page number is required.'),
-  pageSize: number().required('Page size is required.'),
+const listFiatCurrenciesSchema: SchemaOf<Pagination> = object().shape({
+  size: number().max(5000).default(100),
+  sort: array().transform((_, originalValue) => parseSortField(originalValue)),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
@@ -84,10 +81,11 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
       }
       case 'GET': {
-        const { pageNumber, pageSize } =
-          await listFiatCurrenciesSchema.validate(req.query);
+        const { size, sort } = await listFiatCurrenciesSchema.validate(
+          req.query
+        );
 
-        const fiatCurrencies = await listFiatCurrencies(pageNumber, pageSize);
+        const fiatCurrencies = await listFiatCurrencies({ size, sort });
 
         return res.status(200).json(
           ResponseModel.create(fiatCurrencies, {

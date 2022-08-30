@@ -11,7 +11,7 @@ export enum FIATDepositStatus {
   EXPIRED = 'EXPIRED',
 }
 
-export interface Deposit {
+export interface FiatDeposit {
   uid?: string;
   amount: number;
   referenceNo: string;

@@ -2,12 +2,12 @@ import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
 import { firestore } from '@libs/firebase/config';
 import { FirebaseCollections } from '@libs/firebase/collections';
-import { Deposit } from '@contracts/FiatDeposit';
-import { DepositConverter } from '@libs/firebase/converters/depositConverter';
+import { FiatDeposit } from '@contracts/FiatDeposit';
+import { FiatDepositConverter } from '@libs/firebase/converters/depositConverter';
 
 const updateDeposit = async (
   uid: string,
-  fieldsToUpdate: Partial<Omit<Deposit, 'createdAt' | 'uid'>>
+  fieldsToUpdate: Partial<Omit<FiatDeposit, 'createdAt' | 'uid'>>
 ) => {
   const serverTime = serverTimestamp();
 
@@ -15,7 +15,7 @@ const updateDeposit = async (
     firestore,
     FirebaseCollections.DEPOSITS,
     uid
-  ).withConverter(DepositConverter);
+  ).withConverter(FiatDepositConverter);
 
   await updateDoc(DepositDoc, {
     ...fieldsToUpdate,

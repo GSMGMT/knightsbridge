@@ -4,11 +4,13 @@ import {
   Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
-import { Deposit } from '@contracts/FiatDeposit';
+import { FiatDeposit } from '@contracts/FiatDeposit';
 
-export const DepositConverter = {
-  toFirestore: (data: WithFieldValue<Deposit>): DocumentData => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Deposit => {
+export const FiatDepositConverter = {
+  toFirestore: (data: WithFieldValue<FiatDeposit>): DocumentData => data,
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot<DocumentData>
+  ): FiatDeposit => {
     const data = snapshot.data();
 
     return {

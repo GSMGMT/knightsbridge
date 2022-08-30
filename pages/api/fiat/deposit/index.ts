@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next';
-import { object, string, SchemaOf, number, ValidationError } from 'yup';
+import { object, string, SchemaOf, number, ValidationError, array } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
 import { NextApiRequestWithUser, withUser } from '@middlewares/api/withUser';
@@ -8,13 +8,20 @@ import getCurrencyById from '@libs/firebase/functions/fiat/currency/getCurrencyB
 import insertDeposit from '@libs/firebase/functions/fiat/deposit/insertDeposit';
 import { Bank } from '@contracts/Bank';
 import { FiatCurrency } from '@contracts/FiatCurrency';
-import { isPersisted } from '@utils/validator';
+import { isPersisted, parseSortField } from '@utils/validator';
+import { Pagination } from '@utils/types';
+import listFiatDeposits from '@libs/firebase/functions/fiat/deposit/listDeposit';
+import { Roles } from '@contracts/User';
 
 export interface InsertDepositDTO {
   amount: number;
   currencyId: string;
   bankId: string;
 }
+
+type ListDepositsDTO = Pagination & {
+  search?: string | undefined;
+};
 
 const schema: SchemaOf<InsertDepositDTO> = object().shape({
   amount: number().positive().required('Amount is required.'),
@@ -30,6 +37,12 @@ const schema: SchemaOf<InsertDepositDTO> = object().shape({
     .test('bank-exists', 'Could not find any bank with given ID', (bankId) =>
       isPersisted(bankId as string, getBankByUid)
     ),
+});
+
+const listDepositsSchema: SchemaOf<ListDepositsDTO> = object().shape({
+  size: number().max(5000).default(100),
+  sort: array().transform((_, originalValue) => parseSortField(originalValue)),
+  search: string().optional(),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
@@ -76,6 +89,26 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         return res.status(201).json(
           ResponseModel.create(deposit, {
             message: 'Deposit created successfully',
+          })
+        );
+      }
+      case 'GET': {
+        const { size, search, sort } = await listDepositsSchema.validate(
+          req.query
+        );
+
+        const fiatCurrencies = await listFiatDeposits({
+          size,
+          sort,
+          filters: {
+            email: req.user.role === Roles.ADMIN ? search : undefined,
+            userId: req.user.role === Roles.USER ? req.user.uid : undefined,
+          },
+        });
+
+        return res.status(200).json(
+          ResponseModel.create(fiatCurrencies, {
+            message: 'Fiat deposits fetched successfully',
           })
         );
       }

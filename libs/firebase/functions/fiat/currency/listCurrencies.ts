@@ -4,29 +4,40 @@ import {
   limit,
   orderBy,
   query,
-  startAt,
+  QueryConstraint,
 } from 'firebase/firestore';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { firestore } from '@libs/firebase/config';
 import { FiatCurrency } from '@contracts/FiatCurrency';
 import { FiatCurrencyConverter } from '@libs/firebase/converters/fiatCurrencyConverter';
+import { Sort } from '@utils/types';
 
-const listFiatCurrencies = async (
-  pageNumber: number,
-  pageSize: number
-): Promise<FiatCurrency[]> => {
+interface ListFiatCurrencies {
+  size: number;
+  sort: Sort[];
+}
+
+const listFiatCurrencies = async ({
+  size,
+  sort,
+}: ListFiatCurrencies): Promise<FiatCurrency[]> => {
   const FiatCurrencyCollection = collection(
     firestore,
     FirebaseCollections.FIAT_CURRENCIES
   ).withConverter(FiatCurrencyConverter);
 
-  const q = query(
-    FiatCurrencyCollection,
-    orderBy('createdAt'),
-    startAt((pageNumber - 1) * pageSize),
-    limit(pageSize)
-  );
+  const queryConstraints: QueryConstraint[] = [limit(size)];
+
+  if (sort?.length) {
+    queryConstraints.unshift(
+      ...sort.map(({ field, orientation }) => orderBy(field, orientation))
+    );
+  } else {
+    queryConstraints.unshift(orderBy('createdAt'));
+  }
+
+  const q = query(FiatCurrencyCollection, ...queryConstraints);
 
   const querySnapshot = await getDocs(q);
 
