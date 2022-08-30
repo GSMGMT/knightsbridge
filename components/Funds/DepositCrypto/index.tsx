@@ -4,11 +4,12 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
 
-import { api } from '../../../services/api';
 import {
   WalletAddress,
   Coin as PairedCoin,
-} from '../../../services/api/fetchCoins';
+} from '@services/api/app/fetchCoins';
+
+import { api } from '@services/api';
 
 import styles from './DepositCrypto.module.scss';
 

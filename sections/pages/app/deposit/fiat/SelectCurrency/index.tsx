@@ -10,22 +10,19 @@ import cn from 'classnames';
 
 import { Dropdown } from '@components/Dropdown';
 
-// import { api } from '@services/api';
+import { fetchCurrencies } from '@services/api/app/fetchCurrencies';
+import { fetchBanks } from '@services/api/app/fetchBanks';
+
+import { FiatCurrency } from '@contracts/FiatCurrency';
 
 import { getValue } from '@helpers/GetValue';
 import { stringToValue } from '@helpers/StringToValue';
 
+import { createDeposit } from '@services/api/app/deposit/create';
 import { Request } from '..';
 
 import styles from './SelectCurrency.module.scss';
 
-interface Currency {
-  id: string;
-  name: string;
-  code: string;
-  quote: number;
-  symbol: string;
-}
 interface PaymentMethod {
   id: string;
   code: string;
@@ -38,8 +35,19 @@ export const SelectCurrency = ({
   goNext,
   setRequestInfo,
 }: SelectCurrencyProps) => {
-  const [currencies, setCurrencies] = useState<Array<Currency>>([
-    { code: 'USD', name: 'Dollar', id: '', quote: 1, symbol: '$' },
+  const [bankId, setBankId] = useState<string>('');
+  const [currencies, setCurrencies] = useState<Array<FiatCurrency>>([
+    {
+      cmcId: 2781,
+      code: 'USD',
+      logo: '',
+      name: 'Dollar',
+      quote: 1,
+      symbol: '$',
+      uid: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ]);
   const currencyOptions = useMemo(() => {
     const newOptions = currencies.map((currency) => currency.code);
@@ -54,21 +62,11 @@ export const SelectCurrency = ({
   }, [currencies, currency]);
   useEffect(() => {
     (async () => {
-      // const {
-      //   data: { data: fetchedData },
-      // } = await api.get('/api/admin/currency');
+      const fetchedCurrencies = await fetchCurrencies();
+      const [{ uid }] = await fetchBanks();
 
-      const data = [
-        {
-          code: 'USD',
-          id: 'y87234hn',
-          name: 'US Dollar',
-          quote: 1,
-          symbol: '$',
-        },
-      ] as Array<Currency>;
-
-      setCurrencies([...data]);
+      setCurrencies([...fetchedCurrencies]);
+      setBankId(uid);
     })();
   }, []);
 
@@ -129,17 +127,15 @@ export const SelectCurrency = ({
           setFetching(true);
 
           try {
-            // const {
-            //   data: { data },
-            // } = await api.post('/api/fiat/deposit', {
-            //   currencyId: currentCurrency?.id,
-            //   bankId: paymentId,
-            //   amount: value,
-            // });
+            const { uid, referenceNo } = await createDeposit({
+              amount: value,
+              bankId,
+              currencyId: currentCurrency!.uid,
+            })!;
 
             setRequestInfo({
-              id: 'dgffdag8709nba08237',
-              referenceNumber: '7ds6bfsda79fb63',
+              id: uid!,
+              referenceNumber: referenceNo,
               amount: valueInUSD,
               currency: currentCurrency!.code,
             });

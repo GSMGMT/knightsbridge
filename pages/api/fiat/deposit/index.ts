@@ -2,7 +2,7 @@ import { NextApiResponse } from 'next';
 import { object, string, SchemaOf, number, ValidationError } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
-import { NextApiRequestWithUser, withUser } from '@middlewares/withUser';
+import { NextApiRequestWithUser, withUser } from '@middlewares/api/withUser';
 import getBankByUid from '@libs/firebase/functions/fiat/bank/getBankByUid';
 import getCurrencyById from '@libs/firebase/functions/fiat/currency/getCurrencyByUid';
 import insertDeposit from '@libs/firebase/functions/fiat/deposit/insertDeposit';
@@ -10,7 +10,7 @@ import { Bank } from '@contracts/Bank';
 import { FiatCurrency } from '@contracts/FiatCurrency';
 import { isPersisted } from '@utils/validator';
 
-interface InsertDepositDTO {
+export interface InsertDepositDTO {
   amount: number;
   currencyId: string;
   bankId: string;

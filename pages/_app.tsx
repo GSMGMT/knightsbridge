@@ -14,6 +14,7 @@ import '@styles/app.scss';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
+    NProgress.configure({ showSpinner: false });
     const handleRouteStart = () => NProgress.start();
     const handleRouteDone = () => NProgress.done();
 

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { format } from 'date-fns';
 import { MouseEvent, useCallback } from 'react';
 
-import { Users } from '../../../../services/api/fetchUsers';
+import { Users } from '@services/api/app/fetchUsers';
 import { Icon, Icons } from '../../../Icon';
 
 import styles from './User.module.scss';

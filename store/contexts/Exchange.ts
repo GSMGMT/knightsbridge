@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { PairSource } from '@services/api/fetchSources';
+import { PairSource } from '@services/api/app/fetchSources';
 
 export type HandleSelectPair = (pair?: PairSource) => void;
 
