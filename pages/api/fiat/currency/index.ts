@@ -1,14 +1,6 @@
 import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
-import {
-  object,
-  string,
-  mixed,
-  SchemaOf,
-  number,
-  array,
-  ValidationError,
-} from 'yup';
+import { object, string, mixed, SchemaOf, number, array } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
 import { CurrencyType } from '@contracts/Currency';
@@ -19,6 +11,7 @@ import { parseSortField } from '@utils/validator';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { Pagination } from '@utils/types';
 import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
+import { apiErrorHandler } from '@utils/apiErrorHandler';
 
 export const config = {
   api: {
@@ -127,19 +120,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
     }
   } catch (err) {
-    console.error({ err });
-
-    if (err instanceof ValidationError) {
-      const validationError = err as ValidationError;
-
-      return res
-        .status(req.method === 'POST' ? 422 : 400)
-        .json(ResponseModel.create(null, { message: validationError.message }));
-    }
-
-    return res
-      .status(500)
-      .json(ResponseModel.create(null, { message: 'Something went wrong' }));
+    apiErrorHandler(req, res, err);
   }
 }
 
