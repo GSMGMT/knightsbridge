@@ -4,16 +4,18 @@ import {
   Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
-import { Wallet } from '@contracts/Wallet';
+import { Asset } from '@contracts/Wallet';
 
-export const WalletConverter = {
-  toFirestore: (data: WithFieldValue<Wallet>): DocumentData => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Wallet => {
+export const AssetConverter = {
+  toFirestore: (data: WithFieldValue<Asset>): DocumentData => data,
+  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Asset => {
     const data = snapshot.data();
 
     return {
       uid: data.uid,
-      user: data.user,
+      amount: data.amount,
+      currency: data.currency,
+      reserved: data.reserved,
       createdAt: (data.createdAt as Timestamp).toDate(),
       updatedAt: (data.updatedAt as Timestamp).toDate(),
     };

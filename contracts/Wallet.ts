@@ -1,16 +1,19 @@
+import { OmitTimestamp } from '@utils/types';
 import { Currency } from './Currency';
 import { UserData } from './User';
 
-type Asset = {
+export type Asset = {
+  uid: string;
   amount: number;
   reserved: number;
-  currency: Currency;
+  currency: OmitTimestamp<Currency>;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Wallet = {
   uid: string;
   user: UserData;
-  assets: Asset[];
   createdAt: Date;
   updatedAt: Date;
 };

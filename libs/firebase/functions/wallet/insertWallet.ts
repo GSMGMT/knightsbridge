@@ -23,7 +23,6 @@ const insertWallet = async (newWallet: InsertWallet) => {
   await setDoc(WalletDoc, {
     uid,
     ...newWallet,
-    assets: [],
     createdAt: serverTime,
     updatedAt: serverTime,
   });
