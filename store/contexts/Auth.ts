@@ -1,14 +1,13 @@
 import { createContext } from 'react';
 
-import { UserInfo } from 'firebase/auth';
+import { User } from '@contracts/User';
 
-export const defaultValues: UserInfo = {
+export const defaultValues: User = {
   uid: '',
   email: '',
-  displayName: '',
-  phoneNumber: '',
-  photoURL: '',
-  providerId: '',
+  name: '',
+  surname: '',
+  role: '',
 };
 
 export interface ISignUp {
@@ -26,13 +25,15 @@ export interface ISignIn {
 }
 
 export interface IAuthContext {
-  user: UserInfo;
+  user: User;
+  isAdmin: boolean;
   signUp: (user: ISignUp) => Promise<void>;
   signIn: (user: ISignIn) => Promise<void>;
   signOut: () => Promise<void>;
 }
 export const AuthContext = createContext<IAuthContext>({
   user: defaultValues,
+  isAdmin: false,
   signUp: () => Promise.resolve(),
   signIn: () => Promise.resolve(),
   signOut: () => Promise.resolve(),

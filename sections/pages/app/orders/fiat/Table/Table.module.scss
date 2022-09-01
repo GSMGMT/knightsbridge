@@ -1,0 +1,282 @@
+@import '@styles/helpers';
+
+.table {
+  display: table;
+
+  width: 100%;
+
+  @include d {
+    display: block;
+  }
+  &.fetching {
+    opacity: 0.2;
+  }
+}
+.row {
+  position: relative;
+
+  display: table-row;
+
+  color: $n2;
+
+  @include d {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &:first-child {
+    @include d {
+      display: none;
+    }
+    .col {
+      padding: 0 16px 24px;
+      border-bottom: 1px solid $n6;
+
+      vertical-align: top;
+
+      @include caption-bold-2;
+      color: $n4;
+
+      @include dark {
+        border-color: $n3;
+      }
+      &:first-child {
+        width: 56px;
+
+        @include d {
+          padding-left: 0;
+        }
+      }
+      &:last-child {
+        text-align: right;
+
+        @include d {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+  &:not(:first-child) {
+    transition: background 0.2s;
+
+    .col {
+      vertical-align: top;
+      font-weight: 500;
+
+      &:first-child {
+        border-radius: 12px 0 0 12px;
+
+        @include d {
+          border-radius: 0;
+        }
+      }
+      &.receipt {
+        border-radius: 0 12px 12px 0;
+
+        @include d {
+          border-radius: 0;
+        }
+      }
+
+      .subline {
+        color: $n4;
+
+        display: flex;
+
+        @include d {
+          text-indent: 6px;
+        }
+
+        &.email {
+          width: fit-content;
+          border-bottom-width: 1px;
+          border-bottom-style: dotted;
+
+          cursor: copy;
+        }
+      }
+      .receipt {
+        color: currentColor;
+
+        fill: currentColor;
+
+        &.disabled {
+          color: $n4;
+        }
+      }
+    }
+    &:hover {
+      background: $n7;
+
+      @include d {
+        background: none;
+      }
+      @include dark {
+        background: $n2;
+
+        @include d {
+          background: none;
+        }
+      }
+    }
+  }
+  &:not(:last-child) {
+    @include d {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid $n6;
+
+      @include dark {
+        border-color: $n3;
+      }
+    }
+  }
+
+  &.active {
+    padding-bottom: 0;
+
+    @include d {
+      padding-bottom: 60px;
+    }
+    .col {
+      padding-bottom: 60px;
+
+      @include d {
+        padding-bottom: 0px;
+      }
+    }
+
+    .btns {
+      display: flex;
+    }
+  }
+
+  .btns {
+    position: absolute;
+    bottom: 20px;
+    left: 16px;
+
+    @include d {
+      bottom: 10px;
+      left: 0px;
+    }
+
+    display: none;
+
+    flex-direction: row;
+    gap: 8px;
+
+    svg {
+      margin-left: 0 !important;
+    }
+
+    .action {
+      padding: 8px 12px;
+
+      @include button-2;
+    }
+  }
+}
+.col {
+  display: table-cell;
+
+  padding: 20px 16px;
+
+  font-weight: 500;
+
+  @include d {
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+  }
+  @include dark {
+    color: $n8;
+  }
+  &:first-child {
+    @include d {
+      padding-left: 0;
+    }
+  }
+  &:nth-child(2) {
+    @include d {
+      margin-left: auto;
+    }
+  }
+  &.receipt {
+    text-align: right;
+    color: $p1;
+
+    @include d {
+      padding-right: 0;
+    }
+  }
+  @include d {
+    flex: 0 0 100%;
+
+    margin-top: 8px;
+  }
+}
+.item {
+  display: flex;
+  align-items: center;
+}
+.icon {
+  flex-shrink: 0;
+
+  width: 32px;
+  margin-right: 12px;
+
+  img {
+    max-width: 100%;
+  }
+}
+.label {
+  display: none;
+
+  @include d {
+    display: block;
+
+    margin-right: auto;
+
+    @include caption-bold-2;
+    color: $n4;
+  }
+}
+.status {
+  text-transform: capitalize;
+
+  position: relative;
+
+  text-indent: 20px;
+  display: inline-block;
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+
+    background-color: var(--status-color);
+  }
+  &.confirmed {
+    --status-color: #{$p4};
+  }
+  &.pending {
+    --status-color: #{$s3};
+  }
+  &.processing {
+    --status-color: #{$p2};
+  }
+  &.rejected {
+    --status-color: #{$p3};
+  }
+  &.expired {
+    --status-color: #{$p5};
+  }
+}

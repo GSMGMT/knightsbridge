@@ -4,8 +4,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { Bidding } from '@components/Bidding';
 
 import { SelectCurrency } from '@sections/pages/app/deposit/fiat/SelectCurrency';
-import { ImportantNotes } from 'sections/pages/app/deposit/fiat/ImportantNotes';
-import { PaymentDetails } from 'sections/pages/app/deposit/fiat/PaymentDetails';
+import { ImportantNotes } from '@sections/pages/app/deposit/fiat/ImportantNotes';
+import { PaymentDetails } from '@sections/pages/app/deposit/fiat/PaymentDetails';
 
 import { withUser } from '@middlewares/client/withUser';
 

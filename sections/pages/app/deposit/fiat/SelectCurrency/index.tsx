@@ -67,6 +67,7 @@ export const SelectCurrency = ({
 
       setCurrencies([...fetchedCurrencies]);
       setBankId(uid);
+      setCurrency(fetchedCurrencies[0].code);
     })();
   }, []);
 

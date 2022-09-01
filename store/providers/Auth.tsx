@@ -4,15 +4,15 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithEmailAndPassword,
-  UserInfo,
 } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
-import insertUser from '@libs/firebase/functions/users/insertUser';
 import { auth } from '@libs/firebase/config';
+import insertUser from '@libs/firebase/functions/users/insertUser';
 import insertReferral from '@libs/firebase/functions/referral/insertReferral';
+import getUserByUid from '@libs/firebase/functions/users/getUserById';
 
-import { Roles } from '@contracts/User';
+import { Roles, User } from '@contracts/User';
 import { verifyReferral } from '@contracts/Referral';
 
 import {
@@ -31,17 +31,19 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { push } = useRouter();
 
-  const [user, setUser] = useState<UserInfo>({ ...defaultValues });
+  const [user, setUser] = useState<User>({ ...defaultValues });
+  const isAdmin = useMemo(() => user?.role === Roles.ADMIN, [user]);
   useEffect(
     () =>
       auth.onIdTokenChanged(async (newUser) => {
         if (!newUser) {
           setUser({ ...defaultValues });
-          setCookie(undefined, 'token', '', { path: '/' });
+          destroyCookie(undefined, 'token', { path: '/' });
         } else {
           const token = await newUser.getIdToken();
-          const [newUserInfo] = newUser.providerData;
-          setUser({ ...newUserInfo });
+          const { uid } = newUser;
+          const data = await getUserByUid(uid);
+          setUser({ ...data! });
           setCookie(undefined, 'token', token, { path: '/' });
         }
       }),
@@ -85,28 +87,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signIn = async ({ email, password }: ISignIn) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const {
+      user: { uid },
+    } = await signInWithEmailAndPassword(auth, email, password);
+    const data = await getUserByUid(uid);
 
-    const [newUser] = credential.user.providerData;
-    setUser({ ...newUser });
+    setUser({ ...data! });
     push(navigation.app.discover);
   };
 
   const signOut = async () => {
     await auth.signOut();
     setUser({ ...defaultValues });
-    destroyCookie(null, 'token');
     push(navigation.auth.signIn);
   };
 
   const value: IAuthContext = useMemo(
-    () => ({
-      user,
-      signUp,
-      signIn,
-      signOut,
-    }),
-    [user, signUp, signIn, signOut]
+    () => ({ isAdmin, user, signUp, signIn, signOut }),
+    [isAdmin, user, signUp, signIn, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

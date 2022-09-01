@@ -1,4 +1,10 @@
-import { ReactNode, useEffect } from 'react';
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -24,51 +30,75 @@ type ModalProps = Props & {
   children: ReactNode;
   title?: string;
 };
-export function Modal({
+export const Modal: FunctionComponent<ModalProps> = ({
   outerClassName,
-  visible,
+  visible: modalVisible,
   onClose = () => {},
   children,
   title,
   canBack,
   backAction,
-}: ModalProps) {
+}) => {
+  const [mounted, setMounted] = useState<boolean>(false);
+
   useEffect(() => {
-    if (visible) {
+    setMounted(true);
+
+    return () => setMounted(false);
+  }, []);
+
+  useEffect(() => {
+    if (modalVisible) {
       const target = document.querySelector('#modal')!;
       disableBodyScroll(target);
     } else {
       clearAllBodyScrollLocks();
     }
-  }, [visible]);
+  }, [modalVisible]);
 
-  return createPortal(
-    visible && (
-      <div id="modal" className={styles.modal}>
-        <div id="modal-area" className={cn(styles.outer, outerClassName)}>
-          <OutsideClickHandler onOutsideClick={onClose}>
-            {title && (
-              <div className={cn('h4', styles.title)}>
-                {canBack && (
-                  <button
-                    type="button"
-                    onClick={backAction}
-                    className={styles.back}
-                  >
-                    <Icon name="arrow-left" size={32} />
-                  </button>
-                )}
-                <span className={styles.label}>{title}</span>
-              </div>
-            )}
-            {children}
-            <button className={styles.close} onClick={onClose} type="button">
-              <Icon name="close" size={24} />
-            </button>
-          </OutsideClickHandler>
-        </div>
-      </div>
-    ),
-    document.body
+  const visible = useMemo(
+    () => mounted && modalVisible,
+    [modalVisible, mounted]
   );
-}
+
+  return visible
+    ? createPortal(
+        modalVisible && (
+          <div id="modal" className={styles.modal}>
+            <div id="modal-area" className={cn(styles.outer, outerClassName)}>
+              <OutsideClickHandler onOutsideClick={onClose}>
+                {title && (
+                  <div className={cn('h4', styles.title)}>
+                    {canBack && (
+                      <button
+                        type="button"
+                        onClick={backAction}
+                        className={styles.back}
+                      >
+                        <Icon name="arrow-left" size={32} />
+                      </button>
+                    )}
+                    <span className={styles.label}>{title}</span>
+                  </div>
+                )}
+                {children}
+                <button
+                  className={styles.close}
+                  onClick={onClose}
+                  type="button"
+                >
+                  <Icon name="close" size={24} />
+                </button>
+              </OutsideClickHandler>
+            </div>
+          </div>
+        ),
+        document.body
+      )
+    : null;
+};
+Modal.defaultProps = {
+  onClose: () => {},
+  outerClassName: '',
+  title: '',
+};
