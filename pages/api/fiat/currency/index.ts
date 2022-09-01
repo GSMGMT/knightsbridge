@@ -5,13 +5,13 @@ import { object, string, mixed, SchemaOf, number, array } from 'yup';
 import { ResponseModel } from '@contracts/Response';
 import { CurrencyType } from '@contracts/Currency';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
-import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
 import insertCurrency from '@libs/firebase/functions/currency/insertCurrency';
 import { parseSortField } from '@utils/validator';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { Pagination } from '@utils/types';
 import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
+import uploadFileToStorage from '@libs/firebase/functions/uploadFile';
 
 export const config = {
   api: {
@@ -66,7 +66,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         const buffer = await readFile(logo.filepath);
         const filePath = `logo/${logo.newFilename}`;
 
-        const currency = await saveCurrencyLogo(
+        const currency = await uploadFileToStorage(
           {
             buffer,
             filename: logo.newFilename,
