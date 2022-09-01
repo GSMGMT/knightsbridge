@@ -1,17 +1,18 @@
 import { NextApiResponse } from 'next';
-import { object, string, SchemaOf, number, ValidationError, array } from 'yup';
+import { object, string, SchemaOf, number, array } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
+import { Bank } from '@contracts/Bank';
+import { Roles } from '@contracts/User';
+import { Currency } from '@contracts/Currency';
 import { NextApiRequestWithUser, withUser } from '@middlewares/api/withUser';
 import getBankByUid from '@libs/firebase/functions/fiat/bank/getBankByUid';
-import getCurrencyById from '@libs/firebase/functions/fiat/currency/getCurrencyByUid';
 import insertDeposit from '@libs/firebase/functions/fiat/deposit/insertDeposit';
-import { Bank } from '@contracts/Bank';
-import { FiatCurrency } from '@contracts/FiatCurrency';
-import { isPersisted, parseSortField } from '@utils/validator';
-import { Pagination } from '@utils/types';
 import listFiatDeposits from '@libs/firebase/functions/fiat/deposit/listDeposit';
-import { Roles } from '@contracts/User';
+import getCurrencyByUid from '@libs/firebase/functions/currency/getCurrencyByUid';
+import { isPersisted, parseSortField } from '@utils/validator';
+import { apiErrorHandler } from '@utils/apiErrorHandler';
+import { Pagination } from '@utils/types';
 
 export interface InsertDepositDTO {
   amount: number;
@@ -30,10 +31,10 @@ const schema: SchemaOf<InsertDepositDTO> = object().shape({
     .test(
       'currency-exists',
       'Could not find any FIAT currency with given ID',
-      (currencyId) => isPersisted(currencyId as string, getCurrencyById)
+      (currencyId) => isPersisted(currencyId as string, getCurrencyByUid)
     ),
   bankId: string()
-    .required('Symbol is required.')
+    .required('Bank id is required.')
     .test('bank-exists', 'Could not find any bank with given ID', (bankId) =>
       isPersisted(bankId as string, getBankByUid)
     ),
@@ -54,7 +55,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         const [bank, currency] = await Promise.all([
           getBankByUid(bankId).then((result) => result as Bank),
-          getCurrencyById(currencyId).then((result) => result as FiatCurrency),
+          getCurrencyByUid(currencyId).then((result) => result as Currency),
         ]);
 
         const deposit = await insertDeposit({
@@ -72,8 +73,9 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           currency: {
             uid: currency.uid,
             name: currency.name,
-            code: currency.code,
             logo: currency.logo,
+            type: currency.type,
+            sign: currency.sign,
             symbol: currency.symbol,
             cmcId: currency.cmcId,
             quote: currency.quote,
@@ -120,18 +122,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
     }
   } catch (err) {
-    if (err instanceof ValidationError) {
-      const validationError = err as ValidationError;
-
-      return res
-        .status(422)
-        .json(ResponseModel.create(null, { message: validationError.message }));
-    }
-
-    console.log({ err });
-    return res
-      .status(500)
-      .json(ResponseModel.create(null, { message: 'Something went wrong' }));
+    apiErrorHandler(req, res, err);
   }
 }
 

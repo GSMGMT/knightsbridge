@@ -104,6 +104,10 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
 
         if (minutesDiff > MINUTES_TO_EXPIRE) {
+          await updateDeposit(depositId, {
+            status: FIATDepositStatus.EXPIRED,
+          });
+
           return res.status(422).json(
             ResponseModel.create(null, {
               message: 'Expired deposit!',

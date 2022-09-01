@@ -10,3 +10,5 @@ export interface User {
   surname: string;
   role: string;
 }
+
+export type UserData = Omit<User, 'accessToken' | 'refreshToken' | 'role'>;

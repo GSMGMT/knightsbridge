@@ -2,14 +2,16 @@ import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
 import { object, string, mixed, SchemaOf, number, array } from 'yup';
 
-import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
-import parseMultipartForm from '@utils/parseMultipartForm';
 import { ResponseModel } from '@contracts/Response';
+import { CurrencyType } from '@contracts/Currency';
+import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import saveCurrencyLogo from '@libs/firebase/functions/fiat/currency/saveCurrencyLogo';
-import insertCurrency from '@libs/firebase/functions/fiat/currency/insertCurrency';
-import listFiatCurrencies from '@libs/firebase/functions/fiat/currency/listCurrencies';
-import { Pagination } from '@utils/types';
+import insertCurrency from '@libs/firebase/functions/currency/insertCurrency';
 import { parseSortField } from '@utils/validator';
+import parseMultipartForm from '@utils/parseMultipartForm';
+import { Pagination } from '@utils/types';
+import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
+import { apiErrorHandler } from '@utils/apiErrorHandler';
 
 export const config = {
   api: {
@@ -19,38 +21,50 @@ export const config = {
 
 interface InsertCurrencyDTO {
   name: string;
-  code: string;
+  sign?: string;
   logo: any;
   symbol: string;
   cmcId: number;
   quote: number;
+  type: CurrencyType;
+}
+
+interface ListCurrenciesDTO extends Pagination {
+  type?: CurrencyType;
 }
 
 const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
   name: string().required('Name is required.'),
-  code: string().required('Code is required.'),
   logo: mixed().required('File is required'),
   symbol: string().required('Symbol is required.'),
   cmcId: number().required('CMC ID is required.'),
   quote: number().required('Quote is required.'),
+  type: mixed<CurrencyType>()
+    .oneOf(['crypto', 'fiat'])
+    .required('Type is required'),
+  sign: string().when('type', {
+    is: 'fiat',
+    then: string().required('Sign is required.'),
+  }),
 });
 
-const listFiatCurrenciesSchema: SchemaOf<Pagination> = object().shape({
+const listCurrenciesSchema: SchemaOf<ListCurrenciesDTO> = object().shape({
   size: number().max(5000).default(100),
   sort: array().transform((_, originalValue) => parseSortField(originalValue)),
+  type: mixed<CurrencyType>().oneOf(['crypto', 'fiat']),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'POST': {
-        const { cmcId, code, logo, name, quote, symbol } =
+        const { cmcId, sign, logo, name, quote, symbol, type } =
           await parseMultipartForm<InsertCurrencyDTO>(req).then((parsedBody) =>
             schema.validate(parsedBody)
           );
 
         const buffer = await readFile(logo.filepath);
-        const filePath = `fiat/logo/${logo.newFilename}`;
+        const filePath = `logo/${logo.newFilename}`;
 
         const currency = await saveCurrencyLogo(
           {
@@ -62,11 +76,12 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         ).then(() =>
           insertCurrency({
             cmcId,
-            code,
+            sign,
             logo: filePath,
             name,
             quote,
             symbol,
+            type,
           })
         );
 
@@ -81,15 +96,19 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
       }
       case 'GET': {
-        const { size, sort } = await listFiatCurrenciesSchema.validate(
+        const { size, sort, type } = await listCurrenciesSchema.validate(
           req.query
         );
 
-        const fiatCurrencies = await listFiatCurrencies({ size, sort });
+        const currencies = await listCurrencies({
+          size,
+          sort,
+          filters: { type },
+        });
 
         return res.status(200).json(
-          ResponseModel.create(fiatCurrencies, {
-            message: 'Fiat currencies fetched successfully',
+          ResponseModel.create(currencies, {
+            message: 'Currencies fetched successfully',
           })
         );
       }
@@ -101,10 +120,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
     }
   } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json(ResponseModel.create(null, { message: 'Something went wrong' }));
+    apiErrorHandler(req, res, err);
   }
 }
 

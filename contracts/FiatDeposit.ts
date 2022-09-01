@@ -1,7 +1,7 @@
 import { OmitTimestamp } from '@utils/types';
 import { Bank } from './Bank';
-import { FiatCurrency } from './FiatCurrency';
-import { User } from './User';
+import { Currency } from './Currency';
+import { UserData } from './User';
 
 export enum FIATDepositStatus {
   PENDING = 'PENDING',
@@ -17,9 +17,9 @@ export interface FiatDeposit {
   referenceNo: string;
   receipt?: string;
   status: FIATDepositStatus;
-  currency: OmitTimestamp<FiatCurrency>;
+  currency: OmitTimestamp<Currency>;
   bank: OmitTimestamp<Bank>;
-  user: Omit<User, 'accessToken' | 'refreshToken' | 'role'>;
+  user: UserData;
   createdAt: Date;
   updatedAt: Date;
 }

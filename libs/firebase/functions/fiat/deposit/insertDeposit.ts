@@ -6,15 +6,15 @@ import { FirebaseCollections } from '@libs/firebase/collections';
 import { FIATDepositStatus } from '@contracts/FiatDeposit';
 import { FiatDepositConverter } from '@libs/firebase/converters/depositConverter';
 import { nanoid } from 'nanoid';
-import { FiatCurrency } from '@contracts/FiatCurrency';
 import { Bank } from '@contracts/Bank';
 import { User } from '@contracts/User';
 import { OmitTimestamp } from '@utils/types';
+import { Currency } from '@contracts/Currency';
 
 interface InsertDeposit {
   amount: number;
   bank: OmitTimestamp<Bank>;
-  currency: OmitTimestamp<FiatCurrency>;
+  currency: OmitTimestamp<Currency>;
   user: Omit<User, 'role'>;
 }
 
