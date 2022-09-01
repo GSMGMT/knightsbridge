@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactElement } from 'react';
 
-import { Page } from '../components/Page';
+import { Page } from '@components/Page';
 
 interface SignProps {
   children: ReactElement;

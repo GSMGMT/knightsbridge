@@ -43,7 +43,7 @@ export const User = ({ className }: UserProps) => {
           onClick={() => setVisible(!visible)}
           type="button"
         >
-          <Image src={user} alt="Avatar" />
+          <Image src={user} alt="Avatar" className={styles.avatar} />
         </button>
         <div className={styles.body}>
           <div className={styles.menu}>

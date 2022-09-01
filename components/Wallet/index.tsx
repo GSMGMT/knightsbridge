@@ -20,7 +20,7 @@ const navigation: Array<NavigationItem> = [
   {
     title: 'Overview',
     color: '#23262F',
-    url: '/wallet/overview',
+    url: '/wallet',
   },
   {
     title: 'Fiat and Spot',

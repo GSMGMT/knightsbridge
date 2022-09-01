@@ -1,5 +1,6 @@
-import { Page as PageDefault } from '@components/Page';
 import { FunctionComponent, ReactElement } from 'react';
+
+import { Page as PageDefault } from '@components/Page';
 
 interface PageProps {
   children: ReactElement;
