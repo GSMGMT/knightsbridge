@@ -4,7 +4,7 @@ import { ResponseModel } from '@contracts/Response';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 import insertWallet from '@libs/firebase/functions/wallet/insertWallet';
-import updateWallet from '@libs/firebase/functions/wallet/updateWallet';
+import updateWallet from '@libs/firebase/functions/wallet/asset/updateAsset';
 import getWalletByUid from '@libs/firebase/functions/wallet/getWalletByUid';
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
