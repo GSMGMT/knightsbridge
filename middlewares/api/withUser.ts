@@ -18,6 +18,16 @@ type NextApiHandler = (
 export function withUser(handler: NextApiHandler) {
   return async (req: NextApiRequestWithUser, res: NextApiResponse) => {
     try {
+      if (process.env.NODE_ENV === 'development') {
+        if (!process.env.USER_UID) {
+          throw Error('Something went wrong');
+        }
+
+        const user = await getUserByUid(process.env.USER_UID as string);
+        req.user = user as User;
+        return handler(req, res);
+      }
+
       const { token } = req.cookies;
 
       if (!token) {
