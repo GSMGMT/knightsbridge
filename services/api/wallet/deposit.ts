@@ -1,8 +1,11 @@
+import { increment } from 'firebase/firestore';
+
 import getCurrencyByUid from '@libs/firebase/functions/currency/getCurrencyByUid';
 import getAssetByCurrencyUid from '@libs/firebase/functions/wallet/asset/getAssetByCurrencyUid';
 import insertAsset from '@libs/firebase/functions/wallet/asset/insertAsset';
 import updateAsset from '@libs/firebase/functions/wallet/asset/updateAsset';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
+
 import { createWallet } from './createWallet';
 
 interface WalletDeposit {
@@ -27,7 +30,7 @@ export const walletDeposit = async ({
 
   if (asset) {
     await updateAsset(wallet.uid, asset.uid, {
-      amount,
+      amount: increment(amount),
     });
   } else {
     const currency = await getCurrencyByUid(currencyUid);

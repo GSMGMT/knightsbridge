@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
@@ -17,21 +17,24 @@ const insertAsset = async (walletUid: string, newAsset: InsertAsset) => {
   const uid = uuidv4();
   const serverTime = serverTimestamp();
 
-  const WalletAssetCollection = collection(
+  const WalletAssetDoc = doc(
     firestore,
     FirebaseCollections.WALLETS,
     walletUid,
-    'assets'
+    FirebaseCollections.ASSETS,
+    uid
   ).withConverter(AssetConverter);
 
-  const insertedAsset = await addDoc(WalletAssetCollection, {
+  await setDoc(WalletAssetDoc, {
     uid,
     ...newAsset,
     createdAt: serverTime,
     updatedAt: serverTime,
   });
 
-  return insertedAsset;
+  const insertedAsset = await getDoc(WalletAssetDoc);
+
+  return insertedAsset.data();
 };
 
 export default insertAsset;

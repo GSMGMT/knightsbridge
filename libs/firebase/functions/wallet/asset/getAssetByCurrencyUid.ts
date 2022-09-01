@@ -13,7 +13,7 @@ const getAssetByCurrencyUid = async (
     firestore,
     FirebaseCollections.WALLETS,
     walletUid,
-    'assets'
+    FirebaseCollections.ASSETS
   ).withConverter(AssetConverter);
 
   const q = query(DocRef, where('currency.uid', '==', currencyUid));
