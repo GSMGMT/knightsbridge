@@ -16,7 +16,7 @@ import { Sort } from '@utils/types';
 
 interface ListCurrencies {
   size: number;
-  sort: Sort[];
+  sort?: Sort[];
   filters?: {
     type?: CurrencyType;
   };
