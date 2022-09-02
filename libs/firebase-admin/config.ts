@@ -1,4 +1,4 @@
-import admin from 'firebase-admin';
+import admin, { AppOptions } from 'firebase-admin';
 
 if (!admin.apps.length) {
   const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY!.replace(
@@ -6,20 +6,23 @@ if (!admin.apps.length) {
     '\n'
   );
 
-  admin.initializeApp({
+  const options: AppOptions = {
     credential: admin.credential.cert({
       clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
       projectId: process.env.FIREBASE_PROJECT_ID,
       privateKey,
     }),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     databaseURL: process.env.FIREBASE_DATABASE_URL,
-  });
+  };
+  admin.initializeApp(options);
 }
 
 export const adminAuth = admin.auth();
 
 export const { firestore } = admin;
 export const { database } = admin;
+export const { storage } = admin;
 
 export const { increment } = admin.firestore.FieldValue;
 

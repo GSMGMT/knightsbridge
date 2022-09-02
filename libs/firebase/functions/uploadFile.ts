@@ -1,18 +1,19 @@
-import { ref, uploadBytes } from 'firebase/storage';
-
-import { storage } from '@libs/firebase/config';
+import { storage } from '@libs/firebase-admin/config';
 
 type File = {
-  buffer: ArrayBuffer | Uint8Array;
+  buffer: Buffer;
   filename: string;
   mimetype: string;
 };
 
 const uploadFileToStorage = async (file: File, path: string) => {
-  const fileReference = ref(storage, path);
-  await uploadBytes(fileReference, file.buffer, {
-    contentType: file.mimetype,
-  }).then(() => console.log('File upload successfully'));
+  storage()
+    .bucket()
+    .file(path)
+    .save(file.buffer, {
+      contentType: file.mimetype,
+    })
+    .then(() => console.log('File upload successfully'));
 };
 
 export default uploadFileToStorage;
