@@ -17,3 +17,14 @@ if (!admin.apps.length) {
 }
 
 export const adminAuth = admin.auth();
+
+export const { firestore } = admin;
+export const { database } = admin;
+
+export const { increment } = admin.firestore.FieldValue;
+
+export type Timestamp = admin.firestore.Timestamp;
+export type WithFieldValue<T> = admin.firestore.WithFieldValue<T>;
+export type DocumentData = admin.firestore.DocumentData;
+export type QueryDocumentSnapshot =
+  admin.firestore.QueryDocumentSnapshot<admin.firestore.DocumentData>;

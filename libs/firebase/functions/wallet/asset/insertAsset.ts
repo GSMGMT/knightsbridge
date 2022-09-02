@@ -1,11 +1,10 @@
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FirebaseCollections } from '@libs/firebase/collections';
-import { firestore } from '@libs/firebase/config';
 import { Currency } from '@contracts/Currency';
-import { OmitTimestamp } from '@utils/types';
+import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
+import { firestore } from '@libs/firebase-admin/config';
+import { OmitTimestamp } from '@utils/types';
 
 interface InsertAsset {
   amount: number;
@@ -15,26 +14,21 @@ interface InsertAsset {
 
 const insertAsset = async (walletUid: string, newAsset: InsertAsset) => {
   const uid = uuidv4();
-  const serverTime = serverTimestamp();
+  const serverTime = firestore.FieldValue.serverTimestamp();
 
-  const WalletAssetDoc = doc(
-    firestore,
-    FirebaseCollections.WALLETS,
-    walletUid,
-    FirebaseCollections.ASSETS,
-    uid
-  ).withConverter(AssetConverter);
+  const WalletAssetDoc = firestore()
+    .collection(FirebaseCollections.WALLETS)
+    .doc(walletUid)
+    .collection(FirebaseCollections.ASSETS)
+    .doc(uid)
+    .withConverter(AssetConverter);
 
-  await setDoc(WalletAssetDoc, {
+  await WalletAssetDoc.set({
     uid,
     ...newAsset,
     createdAt: serverTime,
     updatedAt: serverTime,
   });
-
-  const insertedAsset = await getDoc(WalletAssetDoc);
-
-  return insertedAsset.data();
 };
 
 export default insertAsset;
