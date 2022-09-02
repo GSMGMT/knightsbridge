@@ -57,5 +57,10 @@ export const navigation = {
     deposit: {
       fiat: '/app/deposit/fiat',
     },
+    wallet: '/app/wallet',
+    orders: {
+      fiat: '/app/orders/fiat',
+    },
   },
+  soon: '/soon',
 };

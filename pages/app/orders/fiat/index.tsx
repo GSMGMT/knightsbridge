@@ -1,30 +1,29 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
+import { GetServerSidePropsContext } from 'next';
 
 import { AuthContext } from '@store/contexts/Auth';
+
+import { withUser } from '@middlewares/client/withUser';
 
 import { Table } from '@sections/pages/app/orders/fiat/Table';
 import { Bulk } from '@sections/pages/app/orders/fiat/Action/Bulk';
 
 import {
-  Currency,
   HandleChangeStatus,
-  Item,
   SortBy,
-  Status,
   Variant,
 } from '@sections/pages/app/orders/fiat/types';
 
 import { Icon } from '@components/Icon';
-import { Calendar } from '@components/Calendar';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
 
-import { api } from '@services/api';
-
 import styles from '@styles/pages/app/orders/fiat/Fiat.module.scss';
+import { listDeposit } from '@services/api/app/deposit/list';
+import { FiatDeposit } from '@contracts/FiatDeposit';
 
 export type HandleSetSortBy = (sortBy: SortBy) => void;
 
@@ -53,20 +52,6 @@ const Bank = () => {
     },
     [pageNumber, fetching]
   );
-  const [totalItems, setTotalItems] = useState<number>(0);
-
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const handleSetDate: (type: 'START' | 'END', date: Date | undefined) => void =
-    useCallback((type, date) => {
-      if (type === 'START') {
-        setStartDate(date);
-      } else if (type === 'END') {
-        setEndDate(date);
-      }
-
-      setPageNumber(1);
-    }, []);
 
   const [sortBy, setSortBy] = useState<SortBy | undefined>(undefined);
   const [sortAsceding, setSortAsceding] = useState<boolean>(true);
@@ -132,43 +117,29 @@ const Bank = () => {
     useState<boolean>(false);
   const handleClose = useCallback(() => setIsTriggeredBulkAction(false), []);
 
-  const [currencies, setCurrencies] = useState<Array<Currency>>([]);
-  const fetchCurrencies: () => Promise<void> = useCallback(async () => {
-    const {
-      data: { data },
-    } = await api.get<{
-      data: Array<{
-        id: string;
-        name: string;
-        code: string;
-        quote: number;
-        logo: string;
-      }>;
-    }>('/api/fiat/currency');
+  const [tableItems, setTableItems] = useState<Array<FiatDeposit>>([]);
+  const filteredTableItems = useMemo(() => {
+    const filterStatus = currentStatus === 'ALL' ? undefined : currentStatus;
 
-    const newCurrencies = data.map(
-      ({ code, id, quote }) =>
-        ({
-          code,
-          id,
-          quote,
-        } as Currency)
+    return tableItems.filter(({ status }) =>
+      filterStatus === undefined ? true : status === filterStatus
     );
-
-    setCurrencies([...newCurrencies]);
-  }, []);
-  useEffect(() => {
-    fetchCurrencies();
-  }, []);
-
-  const [tableItems, setTableItems] = useState<Array<Item>>([]);
+  }, [currentStatus, tableItems]);
+  const visibleTableItems = useMemo<Array<FiatDeposit>>(
+    () =>
+      filteredTableItems.slice(
+        (pageNumber - 1) * pageSize,
+        pageNumber * pageSize
+      ),
+    [pageSize, pageNumber, filteredTableItems]
+  );
+  const totalItems = useMemo(
+    () => filteredTableItems.length,
+    [filteredTableItems]
+  );
   const fetchData = useCallback(async () => {
     setFetching(true);
 
-    const requestStatus = currentStatus === 'ALL' ? undefined : currentStatus;
-
-    const startDateRequest = startDate ? +startDate / 1000 : undefined;
-    const endDateRequest = endDate ? +endDate / 1000 : undefined;
     const emailRequest = email || undefined;
 
     let sortByRequest: string | undefined = sortBy || undefined;
@@ -178,90 +149,39 @@ const Bank = () => {
       }
     }
 
-    const {
-      data: { data, totalCount },
-    } = await api.get('/api/fiat/deposit', {
-      params: {
-        pageSize,
-        pageNumber,
-        status: requestStatus,
-        startDate: startDateRequest,
-        endDate: endDateRequest,
-        email: emailRequest,
-        sort: sortByRequest,
-      },
+    const fetchedDeposits = await listDeposit({
+      sortBy: sortByRequest,
+      email: emailRequest,
     });
 
-    const newTableItems = data.map(
-      ({
-        id,
-        status,
-        amount: quantity,
-        createdAt: date,
-        email: emailItem,
-        surname,
-        name,
-        referenceNo: referenceIdentifier,
-        currencyId,
-        receipt,
-      }: {
-        id: string;
-        status: Status;
-        amount: number;
-        createdAt: string;
-        email: string;
-        surname: string;
-        name: string;
-        referenceNo: string;
-        currencyId: string;
-        receipt: string;
-      }) => {
-        const currentCurrency = currencies.find(
-          (currency) => currency.id === currencyId
-        )!;
+    const deposits = fetchedDeposits.map(({ createdAt, ...data }) => ({
+      ...data,
+      createdAt: new Date(createdAt),
+    }));
 
-        return {
-          status,
-          quantity,
-          currency: { ...currentCurrency },
-          date: new Date(date),
-          method: { name: 'Bank (SWIFT)', type: 'Bangkok Bank' },
-          user: { email: emailItem, name: `${name} ${surname}` },
-          referenceIdentifier,
-          id,
-          receipt,
-        } as Item;
-      }
-    );
-
-    setTotalItems(totalCount);
-    setTableItems([...newTableItems]);
+    setTableItems([...deposits]);
     setFetching(false);
-  }, [
-    pageNumber,
-    currentStatus,
-    currencies,
-    startDate,
-    endDate,
-    email,
-    sortBy,
-    sortAsceding,
-  ]);
+  }, [email, sortBy, sortAsceding]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleChangeItemStatus: HandleChangeStatus = useCallback(
     (status, ...ids) => {
-      const newTableItems = [...tableItems].map(({ ...data }) => {
-        const { status: newStatus, ...newData } = data;
-        const { id: itemId } = newData;
+      const newTableItems: FiatDeposit[] = [...tableItems].map(
+        ({ ...data }) => {
+          const { status: newStatus, ...newData } = data;
+          const { uid: itemId } = newData;
 
-        const isThisToChange = itemId === ids.find((item) => item === itemId);
+          const isThisToChange = itemId === ids.find((item) => item === itemId);
 
-        if (isThisToChange) {
-          return { ...newData, status };
+          if (isThisToChange) {
+            return { ...newData, status } as FiatDeposit;
+          }
+
+          return { ...data } as FiatDeposit;
         }
-
-        return { ...data };
-      });
+      );
       setTableItems([...newTableItems]);
 
       const hasOneSelected = selectedItems.find(
@@ -276,23 +196,6 @@ const Bank = () => {
     },
     [selectedItems, tableItems]
   );
-
-  useEffect(() => {
-    if (currencies.length === 0) return;
-
-    setSelectedItems([]);
-
-    fetchData();
-  }, [
-    pageNumber,
-    currentStatus,
-    startDate,
-    endDate,
-    currencies,
-    email,
-    sortBy,
-    sortAsceding,
-  ]);
 
   const handleChangeStatus: (newStatus: string) => void = useCallback(
     (newStatus) => {
@@ -352,11 +255,6 @@ const Bank = () => {
                   </button>
                 </form>
               )}
-
-              <Calendar
-                className={styles.calendar}
-                handleSetDate={handleSetDate}
-              />
             </div>
             <div className={styles.box}>
               {isAdmin && (
@@ -388,7 +286,7 @@ const Bank = () => {
               {isAdmin ? (
                 <Table
                   className={styles.table}
-                  items={tableItems}
+                  items={visibleTableItems}
                   canAction
                   selectedItems={selectedItems}
                   handleToggleSelection={handleToggleSelection}
@@ -402,7 +300,7 @@ const Bank = () => {
               ) : (
                 <Table
                   className={styles.table}
-                  items={tableItems}
+                  items={visibleTableItems}
                   canAction={false}
                   fetching={fetching}
                   handleSetSortBy={handleSetSortBy}
@@ -413,7 +311,7 @@ const Bank = () => {
             </div>
             <div className={styles['pagination-area']}>
               <div className={styles['pagination-label']}>
-                Showing ({tableItems.length}) of {totalItems}
+                Showing ({visibleTableItems.length}) of {totalItems}
               </div>
               <Pagination
                 currentPage={pageNumber}
@@ -439,4 +337,6 @@ const Bank = () => {
     </>
   );
 };
+export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
+  withUser(ctx);
 export default Bank;

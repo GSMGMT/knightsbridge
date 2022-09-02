@@ -33,14 +33,14 @@ export const Bulk = ({
 
       const {
         data: { data },
-      } = await api.put('/api/admin/deposit/bulk', {
-        ids: selectedItems,
+      } = await api.post('/api/fiat/deposit/evaluate', {
+        depositIds: selectedItems,
         approved: variant === 'CONFIRM',
       });
 
       const itemsAvailableToChange = data
         .filter((item: { success: boolean }) => item.success)
-        .map((item: { id: string }) => item.id);
+        .map((item: { depositId: string }) => item.depositId);
 
       handleChangeItemStatus(
         variant === 'CONFIRM' ? 'CONFIRMED' : 'REJECTED',

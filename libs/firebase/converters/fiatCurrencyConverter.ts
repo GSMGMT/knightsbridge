@@ -4,19 +4,17 @@ import {
   Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
-import { FiatCurrency } from '@contracts/FiatCurrency';
+import { Currency } from '@contracts/Currency';
 
 export const FiatCurrencyConverter = {
-  toFirestore: (data: WithFieldValue<FiatCurrency>): DocumentData => data,
-  fromFirestore: (
-    snapshot: QueryDocumentSnapshot<DocumentData>
-  ): FiatCurrency => {
+  toFirestore: (data: WithFieldValue<Currency>): DocumentData => data,
+  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Currency => {
     const data = snapshot.data();
 
     return {
       uid: data.uid,
       name: data.name,
-      code: data.code,
+      type: data.type,
       logo: data.logo,
       symbol: data.symbol,
       cmcId: data.cmcId,

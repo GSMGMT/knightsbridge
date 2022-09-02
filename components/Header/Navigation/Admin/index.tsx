@@ -1,5 +1,7 @@
 import cn from 'classnames';
 
+import { navigation } from '@navigation';
+
 import styles from '../Navigation.module.scss';
 
 import { INavigation } from '../..';
@@ -7,14 +9,14 @@ import { INavigation } from '../..';
 import { Dropdown } from '../../Dropdown';
 import { NavLink } from '../../../NavLink';
 
-const navigation: INavigation[] = [
+const navigationItems: INavigation[] = [
   {
     title: 'Dashboard',
-    url: '/dashboard',
+    url: navigation.app.discover,
   },
   {
     title: 'Trades',
-    url: '/orders/buy-sell',
+    url: navigation.soon,
   },
   {
     title: 'Deposits',
@@ -22,18 +24,18 @@ const navigation: INavigation[] = [
       {
         title: 'Fiat',
         icon: 'image',
-        url: '/orders/fiat',
+        url: navigation.app.orders.fiat,
       },
       {
         title: 'Crypto',
         icon: 'coin',
-        url: '/orders/crypto',
+        url: navigation.soon,
       },
     ],
   },
   {
     title: 'Coins',
-    url: '/coins/list',
+    url: navigation.soon,
   },
 ];
 
@@ -42,7 +44,7 @@ interface AdminNavigationProps {
 }
 export const AdminNavigation = ({ setVisibleNav }: AdminNavigationProps) => (
   <nav className={styles.nav}>
-    {navigation.map((item) =>
+    {navigationItems.map((item) =>
       item.dropdown ? (
         <Dropdown
           className={styles.dropdown}

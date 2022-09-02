@@ -42,10 +42,7 @@ export const Successfully = ({ requestInfo }: SuccessfullyProps) => (
         <div className={styles.content}>Bank (SWIFT)</div>
       </div>
     </div>
-    <Link
-      className={cn('button', styles.button)}
-      href={navigation.app.discover}
-    >
+    <Link className={cn('button', styles.button)} href={navigation.app.wallet}>
       Wallet
     </Link>
   </div>

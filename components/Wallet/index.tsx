@@ -20,18 +20,18 @@ const navigation: Array<NavigationItem> = [
   {
     title: 'Overview',
     color: '#23262F',
-    url: '/wallet',
+    url: '/app/wallet/',
   },
   {
     title: 'Fiat and Spot',
     color: '#FFD166',
-    url: '/wallet/general',
+    url: '/app/wallet',
     separator: true,
   },
   {
     title: 'Buy and Sell',
     icon: 'wallet',
-    url: '/buy-sell',
+    url: '/app/buy-sell',
   },
 ];
 
@@ -41,6 +41,7 @@ interface WalletProps {
 }
 export const Wallet = ({ className, children }: WalletProps) => {
   const { pathname } = useRouter();
+
   const [visibleMenu, setVisibleMenu] = useState(false);
 
   const activeItem = navigation.find((x) => pathname.includes(x.url!))!;

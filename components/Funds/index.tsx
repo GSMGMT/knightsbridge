@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import cn from 'classnames';
 
 import { Link } from '@components/Link';
+import { Icon } from '@components/Icon';
+
+import { navigation } from '@navigation';
 
 import styles from './Funds.module.scss';
 
-import { Icon } from '../Icon';
 import { Item, ItemI } from './Item';
 
 interface Field {
@@ -50,7 +52,7 @@ export const Funds = ({ items }: FundsProps) => {
             {...register('search')}
           />
         </div>
-        <Link className={styles.link} href="/orders/fiat">
+        <Link className={styles.link} href={navigation.app.orders.fiat}>
           <span>Activity history</span>
           <Icon name="arrow-right" size={24} />
         </Link>
