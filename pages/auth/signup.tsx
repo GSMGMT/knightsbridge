@@ -5,7 +5,7 @@ import { parseCookies } from 'nookies';
 
 import { navigation } from '@navigation';
 
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 const SignUp = () => (
   <Login

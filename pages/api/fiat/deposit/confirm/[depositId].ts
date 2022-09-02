@@ -9,7 +9,7 @@ import { isPersisted } from '@utils/validator';
 import getDepositByUid from '@libs/firebase/functions/fiat/deposit/getDepositByUid';
 import { DateProvider } from '@utils/DateProvider/DateProvider';
 import { DayjsDateProvider } from '@utils/DateProvider/impl/DayJsImpl';
-import uploadFileToStorage from '@libs/firebase/functions/uploadFile';
+import uploadFileToStorage from '@libs/firebase/functions/storage/uploadFile';
 import updateDeposit from '@libs/firebase/functions/fiat/deposit/updateDeposit';
 import { FIATDepositStatus } from '@contracts/FiatDeposit';
 

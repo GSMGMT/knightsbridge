@@ -6,7 +6,7 @@ import {
 } from 'next';
 import { parseCookies } from 'nookies';
 
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 export const withUser: (
   context: GetServerSidePropsContext,

@@ -1,4 +1,4 @@
-import { storage } from '@libs/firebase-admin/config';
+import { storage } from '@libs/firebase/admin-config';
 
 type File = {
   buffer: Buffer;

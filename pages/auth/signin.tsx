@@ -10,7 +10,7 @@ import styles from '@styles/pages/auth/signin.module.scss';
 
 import { navigation } from '@navigation';
 
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 const SignIn = () => (
   <Login

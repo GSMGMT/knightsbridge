@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Currency } from '@contracts/Currency';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
-import { firestore } from '@libs/firebase-admin/config';
+import { firestore } from '@libs/firebase/admin-config';
 import { OmitTimestamp } from '@utils/types';
 
 interface InsertAsset {

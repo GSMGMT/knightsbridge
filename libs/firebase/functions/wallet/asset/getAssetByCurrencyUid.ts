@@ -1,7 +1,7 @@
 import { Asset } from '@contracts/Wallet';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
-import { firestore } from '@libs/firebase-admin/config';
+import { firestore } from '@libs/firebase/admin-config';
 
 const getAssetByCurrencyUid = async (
   walletUid: string,

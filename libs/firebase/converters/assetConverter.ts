@@ -4,7 +4,7 @@ import {
   QueryDocumentSnapshot,
   Timestamp,
   WithFieldValue,
-} from '@libs/firebase-admin/config';
+} from '@libs/firebase/admin-config';
 
 export const AssetConverter = {
   toFirestore: (data: WithFieldValue<Asset>): DocumentData => data,
