@@ -13,7 +13,7 @@ import { Dropdown } from '@components/Dropdown';
 import { fetchCurrencies } from '@services/api/app/fetchCurrencies';
 import { fetchBanks } from '@services/api/app/fetchBanks';
 
-import { FiatCurrency } from '@contracts/FiatCurrency';
+import { Currency } from '@contracts/Currency';
 
 import { getValue } from '@helpers/GetValue';
 import { stringToValue } from '@helpers/StringToValue';
@@ -36,27 +36,29 @@ export const SelectCurrency = ({
   setRequestInfo,
 }: SelectCurrencyProps) => {
   const [bankId, setBankId] = useState<string>('');
-  const [currencies, setCurrencies] = useState<Array<FiatCurrency>>([
+  const [currencies, setCurrencies] = useState<Array<Omit<Currency, 'type'>>>([
     {
       cmcId: 2781,
-      code: 'USD',
       logo: '',
       name: 'Dollar',
       quote: 1,
-      symbol: '$',
+      symbol: 'USD',
+      sign: '$',
       uid: '',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   ]);
   const currencyOptions = useMemo(() => {
-    const newOptions = currencies.map((currency) => currency.code);
+    const newOptions = currencies.map((currency) => currency.symbol);
 
     return [...newOptions];
   }, [currencies]);
   const [currency, setCurrency] = useState<string>(currencyOptions[0]);
   const currentCurrency = useMemo(() => {
-    const selectedCurrency = currencies.find(({ code }) => currency === code);
+    const selectedCurrency = currencies.find(
+      ({ symbol }) => currency === symbol
+    );
 
     return selectedCurrency;
   }, [currencies, currency]);
@@ -67,7 +69,7 @@ export const SelectCurrency = ({
 
       setCurrencies([...fetchedCurrencies]);
       setBankId(uid);
-      setCurrency(fetchedCurrencies[0].code);
+      setCurrency(fetchedCurrencies[0].symbol);
     })();
   }, []);
 
@@ -138,7 +140,7 @@ export const SelectCurrency = ({
               id: uid!,
               referenceNumber: referenceNo,
               amount: valueInUSD,
-              currency: currentCurrency!.code,
+              currency: currentCurrency!.symbol,
             });
 
             goNext();
@@ -206,7 +208,7 @@ export const SelectCurrency = ({
       </div>
       <div className={styles.label}>Amount</div>
       <div className={styles.payment}>
-        <div className={cn('h4', styles.sign)}>{currentCurrency!.symbol}</div>
+        <div className={cn('h4', styles.sign)}>{currentCurrency!.sign}</div>
         <div className={styles.field}>
           <div className={styles.value}>{price}</div>
           <input
@@ -239,7 +241,7 @@ export const SelectCurrency = ({
         ))}
       </div>
       <p className={styles.minimum}>
-        {currentCurrency?.code} {getValue(minAmount)} Minimum amount
+        {currentCurrency?.symbol} {getValue(minAmount)} Minimum amount
       </p>
       <div className={styles.btns}>
         <button

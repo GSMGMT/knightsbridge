@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
+
+import { withUser } from '@middlewares/client/withUser';
 
 import styles from '@styles/pages/app/wallet/Wallet.module.sass';
 
@@ -24,24 +27,34 @@ const FiatSpot = () => {
   const handleFetchPortfolio: () => Promise<void> = useCallback(async () => {
     const {
       data: {
-        data: { assets: fiat },
+        data: { fiat, crypto },
       },
     } = await api.get<{
       data: {
         total: number;
-        assets: Array<{
+        fiat: Array<{
           name: string;
           code: string;
           quote: number;
           amount: number;
           available: number;
           logo: string;
-          id: string;
+          uid: string;
+        }>;
+        crypto: Array<{
+          name: string;
+          code: string;
+          quote: number;
+          amount: number;
+          available: number;
+          logo: string;
+          uid: string;
         }>;
       };
-    }>('/api/fiat/portfolio');
+    }>('/api/portfolio');
+
     const newFiatItems = fiat.map(
-      ({ code, name, quote, amount, logo, available, id }) => {
+      ({ code, name, quote, amount, logo, available, uid: id }) => {
         const currencyOrder = amount - available;
 
         return {
@@ -59,26 +72,8 @@ const FiatSpot = () => {
     );
     setFiatItems([...newFiatItems]);
 
-    const {
-      data: {
-        data: { currencies: crypto },
-      },
-    } = await api.get<{
-      data: {
-        total: number;
-        currencies: Array<{
-          name: string;
-          code: string;
-          quote: number;
-          amount: number;
-          available: number;
-          logo: string;
-          id: string;
-        }>;
-      };
-    }>('/api/crypto/portfolio');
     const newSpotItems = crypto.map(
-      ({ code, name, quote, amount, logo, available, id }) => {
+      ({ code, name, quote, amount, logo, available, uid: id }) => {
         const currencyOrder = amount - available;
 
         return {
@@ -133,4 +128,6 @@ const FiatSpot = () => {
     </div>
   );
 };
+export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
+  withUser(ctx);
 export default FiatSpot;

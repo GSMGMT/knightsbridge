@@ -4,14 +4,18 @@ import { format } from 'date-fns';
 
 import { getValue } from '@helpers/GetValue';
 
+import { FiatDeposit } from '@contracts/FiatDeposit';
+
+import { useCopy } from '@hooks/Copy';
+
+import CheckI from '@public/images/icons/check.svg';
+
 import { Checkbox } from '@components/Checkbox';
 import { Icon } from '@components/Icon';
-import CheckI from '@public/images/icons/check.svg';
-import { useCopy } from '@hooks/Copy';
 import { Single } from '../Action/Single';
 import { Sorting, GeneralSortingProps } from './Sorting';
 
-import { HandleChangeStatus, Item, Variant } from '../types';
+import { HandleChangeStatus, Variant } from '../types';
 
 import styles from './Table.module.scss';
 
@@ -33,7 +37,7 @@ type Props =
 type TableProps = GeneralSortingProps &
   Props & {
     className?: string;
-    items: Array<Item>;
+    items: Array<FiatDeposit>;
     fetching: boolean;
   };
 export function Table({
@@ -85,7 +89,7 @@ export function Table({
     () =>
       items
         .filter(({ status }) => status === validStatusToAction)
-        .map(({ id }) => id),
+        .map(({ uid }) => uid!),
     [items, validStatusToAction]
   );
   const isAllSelected = useMemo(
@@ -102,26 +106,15 @@ export function Table({
 
   const [isSelectedItem, setIsSelectedItem] = useState<boolean>(false);
   const [variant, setVariant] = useState<Variant>('CONFIRM');
-  const [selectedItem, setSelectedItem] = useState<Item>({
-    currency: { code: '', id: '', quote: 0 },
-    quantity: 0,
-    referenceIdentifier: '',
-    status: 'PENDING',
-    user: { email: '', name: '' },
-    id: '',
-    date: new Date(),
-    method: {
-      name: '',
-      type: '',
-    },
-    receipt: '',
-  });
+  const [selectedItem, setSelectedItem] = useState<FiatDeposit | undefined>(
+    undefined
+  );
   const handleClose = useCallback(() => {
     setIsSelectedItem(false);
   }, []);
   const handleAction: (id: string, action: Variant) => void = useCallback(
     (id, action) => {
-      const newSelectedItem = items.find(({ id: idItem }) => idItem === id);
+      const newSelectedItem = items.find(({ uid: idItem }) => idItem === id)!;
 
       if (newSelectedItem) {
         setVariant(action);
@@ -206,14 +199,14 @@ export function Table({
               onClick={
                 item.status === validStatusToAction ? handleClick : undefined
               }
-              key={item.id}
+              key={item.uid}
               data-testid={`table-item-${index + 1}`}
             >
               {canAction && (
                 <div className={styles.col}>
                   <Checkbox
-                    checked={isSelected(item.id)}
-                    onChange={() => handleToggleSelection!(item.id)}
+                    checked={isSelected(item.uid!)}
+                    onChange={() => handleToggleSelection!(item.uid!)}
                     disabled={item.status !== validStatusToAction}
                     data-testid={`select-item-${index + 1}`}
                   />
@@ -221,26 +214,26 @@ export function Table({
               )}
               <div className={styles.col}>
                 <div className={styles.label}>Currency</div>
-                {item.currency.code}
+                {item.currency.symbol}
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>Quantity</div>
-                {getValue(item.quantity)}
+                {getValue(item.amount)}
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>Reference No.</div>
-                {item.referenceIdentifier}
+                {item.referenceNo}
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>Method</div>
-                {item.method.type}
-                <span className={styles.subline}>{item.method.name}</span>
+                Bank
+                <span className={styles.subline}>SWIFT</span>
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>Date</div>
-                {format(item.date, 'dd-MM-yyyy')}
+                {format(item.createdAt, 'dd-MM-yyyy')}
                 <span className={styles.subline}>
-                  {format(new Date(item.date), 'HH:mm:ss')}
+                  {format(new Date(item.createdAt), 'HH:mm:ss')}
                 </span>
               </div>
               {canAction && (
@@ -288,7 +281,7 @@ export function Table({
                       'button-small',
                       styles.action
                     )}
-                    onClick={() => handleAction(item.id, 'CONFIRM')}
+                    onClick={() => handleAction(item.uid!, 'CONFIRM')}
                   >
                     <CheckI />
                     Confirm
@@ -300,7 +293,7 @@ export function Table({
                       'button-small',
                       styles.action
                     )}
-                    onClick={() => handleAction(item.id, 'REJECT')}
+                    onClick={() => handleAction(item.uid!, 'REJECT')}
                   >
                     <Icon name="close" />
                     Reject
@@ -312,7 +305,7 @@ export function Table({
         })}
       </div>
 
-      {canAction && (
+      {canAction && selectedItem && (
         <Single
           item={selectedItem}
           handleClose={handleClose}

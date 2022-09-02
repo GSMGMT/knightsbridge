@@ -12,7 +12,7 @@ import { NavLink } from '../../../NavLink';
 const navigationItems: INavigation[] = [
   {
     title: 'Trade',
-    url: '/app',
+    url: navigation.soon,
   },
   {
     title: 'Deposit',
@@ -25,7 +25,7 @@ const navigationItems: INavigation[] = [
       {
         title: 'Crypto',
         icon: 'coin',
-        url: '/deposit/crypto',
+        url: navigation.soon,
       },
     ],
   },

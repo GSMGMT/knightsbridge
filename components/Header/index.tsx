@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import LogoTextLight from '@public/images/logos/logo-text-light.svg';
@@ -6,6 +6,8 @@ import LogoLight from '@public/images/logos/logo-light.svg';
 import LogoTextDark from '@public/images/logos/logo-text-dark.svg';
 import LogoDark from '@public/images/logos/logo-dark.svg';
 import LogoAdmin from '@public/images/logos/logo-admin.svg';
+
+import { AuthContext } from '@store/contexts/Auth';
 
 import { navigation } from '@navigation';
 
@@ -33,6 +35,8 @@ interface HeaderProps {
   headerWide?: boolean;
 }
 export const Header = ({ headerWide }: HeaderProps) => {
+  const { isAdmin } = useContext(AuthContext);
+
   const [visibleNav, setVisibleNav] = useState(false);
 
   useEffect(() => {
@@ -51,7 +55,7 @@ export const Header = ({ headerWide }: HeaderProps) => {
           href={navigation.app.discover}
           onClick={() => setVisibleNav(false)}
         >
-          {false ? (
+          {isAdmin ? (
             <LogoAdmin alt="Knights Bridge" className={styles.picAdmin} />
           ) : (
             <>
@@ -69,20 +73,20 @@ export const Header = ({ headerWide }: HeaderProps) => {
         <div className={styles.wrapper}>
           <div className={cn(styles.wrap, { [styles.visible]: visibleNav })}>
             <Navigation setVisibleNav={setVisibleNav} />
-            {!false && (
+            {!isAdmin && (
               <NavLink
                 className={cn('button-stroke button-small', styles.button)}
-                href="/wallet/overview"
+                href="/app/wallet"
               >
                 Wallet
               </NavLink>
             )}
           </div>
           <div className={styles.control}>
-            {!false && (
+            {!isAdmin && (
               <NavLink
                 className={cn('button-stroke button-small', styles.button)}
-                href="/wallet/overview"
+                href="/app/wallet"
               >
                 Wallet
               </NavLink>

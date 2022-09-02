@@ -19,5 +19,5 @@ export const apiErrorHandler = (
 
   return res
     .status(500)
-    .json(ResponseModel.create(null, { message: 'Something went wrong' }));
+    .json(ResponseModel.create(null, { message: 'Something went wrong xxx' }));
 };

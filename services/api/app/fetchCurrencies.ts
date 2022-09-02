@@ -1,14 +1,16 @@
-import { FiatCurrency } from '@contracts/FiatCurrency';
+import { Currency } from '@contracts/Currency';
 
 import { api } from '@services/api';
+
+type FiatCurrency = Omit<Currency, 'type'>;
 
 export const fetchCurrencies: () => Promise<Array<FiatCurrency>> = async () => {
   const {
     data: { data },
-  } = await api.get<{ data: Array<FiatCurrency> }>('/api/fiat/currency', {
+  } = await api.get<{ data: Array<Currency> }>('/api/fiat/currency', {
     params: {
-      pageSize: 10,
-      pageNumber: 1,
+      // size: 10,
+      // pageNumber: 1,
     },
   });
 

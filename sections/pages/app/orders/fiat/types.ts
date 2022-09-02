@@ -41,3 +41,5 @@ export type HandleChangeStatus = (
 export type Variant = 'CONFIRM' | 'REJECT';
 
 export type SortBy = 'createdAt' | 'status' | 'amount' | 'referenceNo';
+
+export type HandleSetSortBy = (sortBy: SortBy) => void;
