@@ -1,7 +1,6 @@
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { Bank } from '@contracts/Bank';
@@ -20,8 +19,8 @@ export const BankConverter = {
       bankName: data.bankName,
       branch: data.branch,
       bankAddress: data.bankAddress,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

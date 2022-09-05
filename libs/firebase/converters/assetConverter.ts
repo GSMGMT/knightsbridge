@@ -2,7 +2,6 @@ import { Asset } from '@contracts/Wallet';
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from '@libs/firebase/admin-config';
 
@@ -19,8 +18,8 @@ export const AssetConverter = {
         logo: `${process.env.API_URL}/currency/${data.logo}`,
       },
       reserved: data.reserved,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

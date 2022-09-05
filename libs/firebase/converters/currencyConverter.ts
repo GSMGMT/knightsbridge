@@ -2,7 +2,6 @@ import { Currency } from '@contracts/Currency';
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 
@@ -20,8 +19,8 @@ export const CurrencyConverter = {
       cmcId: data.cmcId,
       quote: data.quote,
       type: data.type,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

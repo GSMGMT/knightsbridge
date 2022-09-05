@@ -1,7 +1,6 @@
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { FiatDeposit } from '@contracts/FiatDeposit';
@@ -22,8 +21,8 @@ export const FiatDepositConverter = {
       status: data.status,
       user: data.user,
       receipt: data.receipt,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };
