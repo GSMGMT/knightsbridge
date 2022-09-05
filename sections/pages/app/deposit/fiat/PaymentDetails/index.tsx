@@ -107,7 +107,7 @@ export const PaymentDetails = ({
   const handleCloseModal = useCallback(() => {
     setSuccess(false);
 
-    push('/wallet/general');
+    push('/app/wallet');
   }, [push]);
 
   return (
