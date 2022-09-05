@@ -67,5 +67,5 @@ const DepositFiat = () => {
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx);
+  withUser(ctx, { freeToAccessBy: 'BOTH' });
 export default DepositFiat;

@@ -129,5 +129,5 @@ const FiatSpot = () => {
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx);
+  withUser(ctx, { freeToAccessBy: 'USER' });
 export default FiatSpot;
