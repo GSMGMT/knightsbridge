@@ -1,6 +1,6 @@
 type Currency = 'CRYPTOCURRENCY' | 'FIAT';
 
-type Aux =
+export type Aux =
   | 'urls'
   | 'logo'
   | 'description'
@@ -10,7 +10,7 @@ type Aux =
   | 'notice'
   | 'status';
 
-type Sort =
+export type Sort =
   | 'name'
   | 'symbol'
   | 'date_added'
@@ -22,6 +22,7 @@ type Sort =
   | 'max_supply'
   | 'num_market_pairs'
   | 'volume_24h'
+  | 'volume_24h_adjusted'
   | 'percent_change_1h'
   | 'percent_change_24h'
   | 'percent_change_7d'
@@ -30,9 +31,9 @@ type Sort =
   | 'volume_30d'
   | 'exchange_score';
 
-type SortDir = 'asc' | 'desc';
+export type SortDir = 'asc' | 'desc';
 
-type Interval =
+export type Interval =
   | 'hourly'
   | 'daily'
   | 'weekly'
@@ -55,7 +56,7 @@ type Interval =
   | '90d'
   | '365d';
 
-type Category =
+export type Category =
   | 'all'
   | 'spot'
   | 'derivatives'
@@ -179,5 +180,5 @@ export type CoinMarketDTO = {
   interval?: Interval;
   category?: Category;
   matched_id?: number;
-  slug?: string[];
+  slug?: string | string[];
 };
