@@ -1,18 +1,11 @@
-import {
-  doc,
-  FieldValue,
-  getDoc,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { firestore, database } from 'firebase-admin';
 
-import { firestore } from '@libs/firebase/config';
-import { FirebaseCollections } from '@libs/firebase/collections';
 import { Asset } from '@contracts/Wallet';
+import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
 
 type UpdateFields = Partial<Omit<Asset, 'createdAt' | 'uid' | 'amount'>> & {
-  amount?: FieldValue;
+  amount?: firestore.FieldValue;
 };
 
 const updateAsset = async (
@@ -20,24 +13,21 @@ const updateAsset = async (
   assetUid: string,
   fieldsToUpdate: UpdateFields
 ) => {
-  const serverTime = serverTimestamp();
+  const serverTime = firestore.FieldValue.serverTimestamp();
 
-  const AssetDoc = doc(
-    firestore,
-    FirebaseCollections.WALLETS,
-    walletUid,
-    FirebaseCollections.ASSETS,
-    assetUid
-  ).withConverter(AssetConverter);
+  const AssetDoc = firestore()
+    .collection(FirebaseCollections.WALLETS)
+    .doc(walletUid)
+    .collection(FirebaseCollections.ASSETS)
+    .doc(assetUid)
+    .withConverter(AssetConverter);
 
-  await updateDoc(AssetDoc, {
-    ...fieldsToUpdate,
-    updatedAt: serverTime,
+  await firestore().runTransaction(async (transaction) => {
+    transaction.update(AssetDoc, {
+      ...fieldsToUpdate,
+      updatedAt: serverTime,
+    });
   });
-
-  const updatedAsset = await getDoc(AssetDoc);
-
-  return updatedAsset.data();
 };
 
 export default updateAsset;

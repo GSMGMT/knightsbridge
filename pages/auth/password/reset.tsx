@@ -10,7 +10,7 @@ import user from '@public/images/user.png';
 
 import { navigation } from '@navigation';
 import { parseCookies } from 'nookies';
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 export const getServerSideProps: GetServerSideProps<{ email: string }> = async (
   ctx

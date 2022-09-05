@@ -11,7 +11,7 @@ import parseMultipartForm from '@utils/parseMultipartForm';
 import { Pagination } from '@utils/types';
 import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
-import uploadFileToStorage from '@libs/firebase/functions/uploadFile';
+import uploadFileToStorage from '@libs/firebase/functions/storage/uploadFile';
 
 export const config = {
   api: {

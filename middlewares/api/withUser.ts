@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 import { ResponseModel } from '@contracts/Response';
 import getUserByUid from '@libs/firebase/functions/users/getUserById';

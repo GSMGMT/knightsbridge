@@ -8,7 +8,7 @@ import { parseCookies } from 'nookies';
 
 import { Roles } from '@contracts/User';
 
-import { adminAuth } from '@libs/firebase-admin/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 import getUserByUid from '@libs/firebase/functions/users/getUserById';
 
 interface PageConfig {

@@ -24,14 +24,14 @@ type Portfolio = {
 export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
   const wallet = await getWalletByUserUid(userUid);
 
-  if (!wallet) {
-    throw Error('Wallet not found!');
-  }
+  let assets = new Map();
 
-  const assets = await getAssetsByWalletUid(wallet.uid).then(
-    (fetchedAssets) =>
-      new Map(fetchedAssets.map((asset) => [asset.currency.uid, asset]))
-  );
+  if (wallet) {
+    assets = await getAssetsByWalletUid(wallet.uid).then(
+      (fetchedAssets) =>
+        new Map(fetchedAssets.map((asset) => [asset.currency.uid, asset]))
+    );
+  }
 
   const currencies = await listCurrencies({ size: 100 });
 

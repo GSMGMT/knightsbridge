@@ -1,7 +1,6 @@
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { FiatDeposit } from '@contracts/FiatDeposit';
@@ -17,13 +16,18 @@ export const FiatDepositConverter = {
       uid: data.uid,
       amount: data.amount,
       bank: data.bank,
-      currency: data.currency,
+      currency: {
+        ...data.currency,
+        logo: `${process.env.API_URL}/currency/${data.currency.logo}`,
+      },
       referenceNo: data.referenceNo,
       status: data.status,
       user: data.user,
-      receipt: data.receipt,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      receipt: data.receipt
+        ? `${process.env.API_URL}/${data.receipt}`
+        : undefined,
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

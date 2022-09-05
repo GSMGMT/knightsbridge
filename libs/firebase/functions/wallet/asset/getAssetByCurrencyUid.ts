@@ -1,26 +1,22 @@
-import { collection, getDocs, query, where } from 'firebase/firestore';
-
-import { FirebaseCollections } from '@libs/firebase/collections';
-import { firestore } from '@libs/firebase/config';
 import { Asset } from '@contracts/Wallet';
+import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
+import { firestore } from '@libs/firebase/admin-config';
 
 const getAssetByCurrencyUid = async (
   walletUid: string,
   currencyUid: string
 ): Promise<Asset | null> => {
-  const DocRef = collection(
-    firestore,
-    FirebaseCollections.WALLETS,
-    walletUid,
-    FirebaseCollections.ASSETS
-  ).withConverter(AssetConverter);
+  const WalletAssetCollection = firestore()
+    .collection(FirebaseCollections.WALLETS)
+    .doc(walletUid)
+    .collection(FirebaseCollections.ASSETS)
+    .where('currency.uid', '==', currencyUid)
+    .withConverter(AssetConverter);
 
-  const q = query(DocRef, where('currency.uid', '==', currencyUid));
+  const querySnapshot = await WalletAssetCollection.get();
 
-  const DocSnap = await getDocs(q);
-
-  return !DocSnap.empty ? DocSnap.docs[0].data() : null;
+  return !querySnapshot.empty ? querySnapshot.docs[0].data() : null;
 };
 
 export default getAssetByCurrencyUid;

@@ -1,19 +1,16 @@
-import { collection, getDocs } from 'firebase/firestore';
-
-import { FirebaseCollections } from '@libs/firebase/collections';
-import { firestore } from '@libs/firebase/config';
 import { Asset } from '@contracts/Wallet';
+import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
+import { firestore } from '@libs/firebase/admin-config';
 
 const getAssetsByWalletUid = async (walletUid: string): Promise<Asset[]> => {
-  const DocRef = collection(
-    firestore,
-    FirebaseCollections.WALLETS,
-    walletUid,
-    FirebaseCollections.ASSETS
-  ).withConverter(AssetConverter);
+  const WalletAssetCollection = firestore()
+    .collection(FirebaseCollections.WALLETS)
+    .doc(walletUid)
+    .collection(FirebaseCollections.ASSETS)
+    .withConverter(AssetConverter);
 
-  const querySnapshot = await getDocs(DocRef);
+  const querySnapshot = await WalletAssetCollection.get();
 
   const assets: Asset[] = [];
 

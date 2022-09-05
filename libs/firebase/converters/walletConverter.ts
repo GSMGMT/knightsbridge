@@ -1,7 +1,6 @@
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
 } from 'firebase/firestore';
 import { Wallet } from '@contracts/Wallet';
@@ -14,8 +13,8 @@ export const WalletConverter = {
     return {
       uid: data.uid,
       user: data.user,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

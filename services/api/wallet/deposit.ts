@@ -1,5 +1,4 @@
-import { increment } from 'firebase/firestore';
-
+import { increment } from '@libs/firebase/admin-config';
 import getCurrencyByUid from '@libs/firebase/functions/currency/getCurrencyByUid';
 import getAssetByCurrencyUid from '@libs/firebase/functions/wallet/asset/getAssetByCurrencyUid';
 import insertAsset from '@libs/firebase/functions/wallet/asset/insertAsset';

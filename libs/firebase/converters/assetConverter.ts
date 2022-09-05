@@ -1,23 +1,25 @@
+import { Asset } from '@contracts/Wallet';
 import {
   DocumentData,
   QueryDocumentSnapshot,
-  Timestamp,
   WithFieldValue,
-} from 'firebase/firestore';
-import { Asset } from '@contracts/Wallet';
+} from '@libs/firebase/admin-config';
 
 export const AssetConverter = {
   toFirestore: (data: WithFieldValue<Asset>): DocumentData => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Asset => {
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Asset => {
     const data = snapshot.data();
 
     return {
       uid: data.uid,
       amount: data.amount,
-      currency: data.currency,
+      currency: {
+        ...data.currency,
+        logo: `${process.env.API_URL}/currency/${data.currency.logo}`,
+      },
       reserved: data.reserved,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     };
   },
 };

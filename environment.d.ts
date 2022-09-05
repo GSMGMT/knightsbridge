@@ -5,6 +5,7 @@ declare global {
       USER_UID?: string;
       PORT?: string;
       PWD: string;
+      API_URL: string;
 
       FIREBASE_API_KEY: string;
       FIREBASE_AUTH_DOMAIN: string;
