@@ -13,7 +13,7 @@ const updateAsset = async (
   assetUid: string,
   fieldsToUpdate: UpdateFields
 ) => {
-  const serverTime = database.ServerValue.TIMESTAMP;
+  const serverTime = firestore.FieldValue.serverTimestamp();
 
   const AssetDoc = firestore()
     .collection(FirebaseCollections.WALLETS)
