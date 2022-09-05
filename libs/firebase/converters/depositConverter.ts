@@ -16,11 +16,16 @@ export const FiatDepositConverter = {
       uid: data.uid,
       amount: data.amount,
       bank: data.bank,
-      currency: data.currency,
+      currency: {
+        ...data.currency,
+        logo: `${process.env.API_URL}/currency/${data.currency.logo}`,
+      },
       referenceNo: data.referenceNo,
       status: data.status,
       user: data.user,
-      receipt: data.receipt,
+      receipt: data.receipt
+        ? `${process.env.API_URL}/${data.receipt}`
+        : undefined,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };

@@ -15,7 +15,7 @@ export const AssetConverter = {
       amount: data.amount,
       currency: {
         ...data.currency,
-        logo: `${process.env.API_URL}/currency/${data.logo}`,
+        logo: `${process.env.API_URL}/currency/${data.currency.logo}`,
       },
       reserved: data.reserved,
       createdAt: data.createdAt?.toDate(),
