@@ -6,5 +6,6 @@ export enum FirebaseCollections {
   CURRENCIES = 'currencies',
   WALLETS = 'wallets',
   ASSETS = 'assets',
-  MARKET_PAIR = 'market_pairs',
+  MARKET_PAIRS = 'market_pairs',
+  EXCHANGES = 'exchanges',
 }

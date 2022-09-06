@@ -7,7 +7,7 @@ const getMarketPairByName = async (
   marketPairName: string
 ): Promise<MarketPair | null> => {
   const MarketPairCollection = firestore()
-    .collection(FirebaseCollections.MARKET_PAIR)
+    .collection(FirebaseCollections.MARKET_PAIRS)
     .where('name', '==', marketPairName)
     .withConverter(MarketPairConverter);
 
