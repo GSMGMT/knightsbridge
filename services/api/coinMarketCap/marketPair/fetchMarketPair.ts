@@ -1,4 +1,5 @@
 import { CmcApiUrls, CoinMarketDTO } from '@contracts/CoinMarket';
+import { MarketPairCmcData } from '@contracts/MarketPair';
 import { parseToUrlQuery } from '@utils/parseToUrlQuery';
 import { fetchCryptoBySlug } from '../crypto/fetchCryptoBySlug';
 import { fetchCryptoBySymbol } from '../crypto/fetchCryptoBySymbol';
@@ -8,7 +9,7 @@ import { requestCoinMarketCap } from '../request';
 export const fetchMarketPair = async (
   payload: CoinMarketDTO,
   search?: string
-) => {
+): Promise<MarketPairCmcData | MarketPairCmcData[]> => {
   if (search) {
     const crypto = await fetchCryptoBySlug(search.split(','))
       .catch(() => fetchCryptoBySymbol(search.split(',')))
@@ -46,16 +47,16 @@ export const fetchMarketPair = async (
     parseToUrlQuery<CoinMarketDTO>(cryptoInfoDTO)
   );
 
-  const marketPairs = data.market_pairs.map((marketPair) => ({
-    marketPairId: marketPair.market_id,
-    marketPairName: marketPair.market_pair,
-    baseId: marketPair.market_pair_base.currency_id,
-    baseType: marketPair.market_pair_base.currency_type,
-    quoteId: marketPair.market_pair_quote.currency_id,
-    quoteType: marketPair.market_pair_quote.currency_type,
-    category: marketPair.category,
-    logo: coinsInfo[marketPair.market_pair_base.currency_id]?.logo,
-  }));
+  const marketPairs: MarketPairCmcData[] = data.market_pairs.map(
+    (marketPair) => ({
+      cmcId: marketPair.market_id,
+      name: marketPair.market_pair,
+      baseCmcId: marketPair.market_pair_base.currency_id,
+      quoteCmcId: marketPair.market_pair_quote.currency_id,
+      category: marketPair.category,
+      logo: coinsInfo[marketPair.market_pair_base.currency_id].logo,
+    })
+  );
 
   return marketPairs;
 };

@@ -118,7 +118,7 @@ type Data = {
     token_address: string;
   };
   quote?: Quote;
-  logo?: string;
+  logo: string;
   date_added?: string;
   last_updated: string;
   quotes?: [
