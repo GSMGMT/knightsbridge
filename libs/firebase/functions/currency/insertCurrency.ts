@@ -1,10 +1,9 @@
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
-import { firestore } from '@libs/firebase/config';
+import { CurrencyType } from '@contracts/Currency';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { CurrencyConverter } from '@libs/firebase/converters/currencyConverter';
-import { CurrencyType } from '@contracts/Currency';
+import { firestore } from '@libs/firebase/admin-config';
 
 interface InsertCurrency {
   name: string;
@@ -18,24 +17,21 @@ interface InsertCurrency {
 
 const insertCurrency = async (newCurrency: InsertCurrency) => {
   const uid = uuidv4();
-  const serverTime = serverTimestamp();
+  const serverTime = firestore.FieldValue.serverTimestamp();
 
-  const CurrencyDoc = doc(
-    firestore,
-    FirebaseCollections.CURRENCIES,
-    uid
-  ).withConverter(CurrencyConverter);
+  const CurrencyDoc = firestore()
+    .collection(FirebaseCollections.CURRENCIES)
+    .doc(uid)
+    .withConverter(CurrencyConverter);
 
-  await setDoc(CurrencyDoc, {
+  await CurrencyDoc.set({
     uid,
     ...newCurrency,
     createdAt: serverTime,
     updatedAt: serverTime,
   });
 
-  const insertedCurrency = await getDoc(CurrencyDoc);
-
-  return insertedCurrency.data();
+  return uid;
 };
 
 export default insertCurrency;
