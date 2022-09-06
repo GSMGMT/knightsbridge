@@ -1,0 +1,159 @@
+@import '@styles/helpers';
+
+@import '@components/Coin/List/CoinList.module';
+@import '@components/Search/Search.module';
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @include m {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.details {
+  margin-right: auto;
+}
+.user {
+  @include body-bold-1;
+}
+
+.title {
+  @include body-bold-1;
+
+  margin-top: 40px;
+}
+
+.table {
+  margin-top: 48px;
+
+  .row {
+    &:first-child {
+      > :nth-child(2) {
+        margin-left: 32px;
+      }
+    }
+    &:not(:first-child) {
+      > :nth-child(2) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      &:hover {
+        @include dark {
+          background-color: $n2;
+        }
+      }
+    }
+  }
+
+  &.fetching {
+    opacity: 0.5;
+  }
+}
+
+.pagination-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 32px;
+
+  row-gap: 32px;
+
+  .pagination-label {
+    color: $n4;
+
+    @include caption-bold-2;
+  }
+}
+
+.filter {
+  margin-top: 48px;
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    margin-right: auto;
+
+    @include a {
+      display: none;
+    }
+  }
+  .link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 6px 12px;
+    border-radius: 16px;
+
+    background: none;
+    transition: all 0.2s;
+
+    @include button-2;
+    color: $n4;
+    text-transform: capitalize;
+
+    .logo {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+
+      object-fit: cover;
+      object-position: center;
+    }
+
+    &:hover {
+      color: $n3;
+
+      @include dark {
+        color: $n8;
+      }
+    }
+    &.active {
+      background: $n3;
+
+      color: $n8;
+
+      @include dark {
+        background: $n3;
+
+        color: $n8;
+      }
+    }
+  }
+
+  .dropdown {
+    display: none;
+
+    @include a {
+      display: block;
+
+      margin-right: auto;
+    }
+    @include t {
+      width: 100%;
+      margin: 0 0 16px;
+    }
+  }
+  .dropdownHead {
+    background: none;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 8px;
+
+  > * {
+    margin: 0 !important;
+  }
+}

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 
+import { navigation as navigationLinks } from '@navigation';
+
 import styles from './Coin.module.scss';
 
 import { Icon, Icons } from '../Icon';
@@ -17,12 +19,12 @@ const navigation: Array<Navigation> = [
   {
     title: 'Coin List',
     icon: 'list',
-    url: '/coins/list',
+    url: navigationLinks.app.coin.list,
   },
   {
     title: 'Register Coin',
     icon: 'plus',
-    url: '/coins/register',
+    url: navigationLinks.app.coin.register,
     separator: true,
   },
 ];
@@ -38,6 +40,7 @@ export const Coin = ({ children }: CoinProps) => {
   const activeLink: Navigation = navigation.find((x) =>
     pathname.includes(x.url)
   )!;
+  console.log({ activeLink });
 
   return (
     <div className={styles.profile}>
@@ -62,7 +65,7 @@ export const Coin = ({ children }: CoinProps) => {
                         [styles.active]: isActive,
                       })
                     }
-                    href="/coins/list"
+                    href={navigationLinks.app.coin.list}
                     onClick={() => setVisible(false)}
                   >
                     <Icon name="list" size={24} />
@@ -70,7 +73,7 @@ export const Coin = ({ children }: CoinProps) => {
                   </NavLink>
                   <NavLink
                     className={cn(styles.link, styles.separator)}
-                    href="/coins/list?register=true"
+                    href={navigationLinks.app.coin.register}
                     onClick={() => setVisible(false)}
                   >
                     <Icon name="plus" size={24} />

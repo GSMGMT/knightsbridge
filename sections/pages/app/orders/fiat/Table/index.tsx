@@ -185,7 +185,7 @@ export function Table({
               Status
             </Sorting>
           </div>
-          <div className={styles.col}>Receipt</div>
+          {canAction && <div className={styles.col}>Receipt</div>}
         </div>
         {items.map((item, index) => {
           const statusx = item.status.toLowerCase();
@@ -252,26 +252,32 @@ export function Table({
                   </span>
                 </div>
               )}
-              <div className={cn(styles.col)}>
+              <div
+                className={cn(styles.col, {
+                  [styles['no-receipt']]: !canAction,
+                })}
+              >
                 <div className={styles.label}>Status</div>
                 <span className={cn(styles.status, status)}>
                   {item.status.toLowerCase()}
                 </span>
               </div>
-              <div className={cn(styles.col, styles.receipt)}>
-                <div className={styles.label}>Receipt</div>
-                <a
-                  href={item.status === 'PENDING' ? undefined : item.receipt}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={cn(styles.receipt, {
-                    [styles.disabled]: item.status === 'PENDING',
-                  })}
-                  aria-disabled={item.status === 'PENDING'}
-                >
-                  <Icon name="receipt" />
-                </a>
-              </div>
+              {canAction && (
+                <div className={cn(styles.col, styles.receipt)}>
+                  <div className={styles.label}>Receipt</div>
+                  <a
+                    href={item.status === 'PENDING' ? undefined : item.receipt}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cn(styles.receipt, {
+                      [styles.disabled]: item.status === 'PENDING',
+                    })}
+                    aria-disabled={item.status === 'PENDING'}
+                  >
+                    <Icon name="receipt" />
+                  </a>
+                </div>
+              )}
               {canAction && (
                 <div className={styles.btns}>
                   <button

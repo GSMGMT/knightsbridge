@@ -69,7 +69,8 @@
           border-radius: 0;
         }
       }
-      &.receipt {
+      &.receipt,
+      &.no-receipt {
         border-radius: 0 12px 12px 0;
 
         @include d {
@@ -202,8 +203,11 @@
       margin-left: auto;
     }
   }
+  &.no-receipt,
   &.receipt {
     text-align: right;
+  }
+  &.receipt {
     color: $p1;
 
     @include d {

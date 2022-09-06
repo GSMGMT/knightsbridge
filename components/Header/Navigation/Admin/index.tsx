@@ -35,7 +35,7 @@ const navigationItems: INavigation[] = [
   },
   {
     title: 'Coins',
-    url: navigation.soon,
+    url: navigation.app.coin.list,
   },
 ];
 

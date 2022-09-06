@@ -1,0 +1,20 @@
+@import '../../../../styles/helpers';
+
+@import '../../../../components/Dropdown/Dropdown.module';
+
+.logo {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.option,
+.selection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}

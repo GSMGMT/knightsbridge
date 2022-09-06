@@ -61,6 +61,12 @@ export const navigation = {
     orders: {
       fiat: '/app/orders/fiat',
     },
+    coin: {
+      list: '/app/coin/list',
+      get register() {
+        return `${this.list}?register=true`;
+      },
+    },
   },
   soon: '/soon',
 };
