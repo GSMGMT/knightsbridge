@@ -7,7 +7,7 @@ export type Currency = {
   logo: string;
   sign?: string;
   cmcId: number;
-  quote: number;
+  quote?: number;
   type: CurrencyType;
   createdAt: Date;
   updatedAt: Date;

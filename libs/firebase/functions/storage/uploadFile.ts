@@ -1,6 +1,6 @@
 import { storage } from '@libs/firebase/admin-config';
 
-type File = {
+export type File = {
   buffer: Buffer;
   filename: string;
   mimetype: string;

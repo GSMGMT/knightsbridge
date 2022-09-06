@@ -11,7 +11,7 @@ interface InsertCurrency {
   logo: string;
   sign?: string;
   cmcId: number;
-  quote: number;
+  quote?: number;
   type: CurrencyType;
 }
 
@@ -31,7 +31,11 @@ const insertCurrency = async (newCurrency: InsertCurrency) => {
     updatedAt: serverTime,
   });
 
-  return uid;
+  const insertedCurrency = await CurrencyDoc.get().then((snapshot) =>
+    snapshot.data()
+  );
+
+  return insertedCurrency;
 };
 
 export default insertCurrency;
