@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import useDarkMode from 'use-dark-mode';
 
+import { Coin } from './Coin';
 import { Page } from './Page';
 import { Sign } from './Sign';
 import { Wallet } from './Wallet';
@@ -19,6 +20,9 @@ export const Layouts = ({ children }: LayoutsProps) => {
   }
   if (path.includes('/app/wallet')) {
     return <Wallet>{children}</Wallet>;
+  }
+  if (path.includes('/app/coin')) {
+    return <Coin>{children}</Coin>;
   }
   if (path.includes('/app')) {
     return <Page>{children}</Page>;
