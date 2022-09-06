@@ -168,10 +168,10 @@ type MarketPair = {
 export type CoinMarketDTO = {
   start?: number;
   limit?: number;
-  symbol?: string[];
-  aux?: Aux[];
+  symbol?: string | string[];
+  aux?: Aux | Aux[];
   convert_id?: number;
-  id?: number[];
+  id?: number | number[];
   sort?: Sort;
   sort_dir?: SortDir;
   time_period?: string;
