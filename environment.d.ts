@@ -7,6 +7,8 @@ declare global {
       PWD: string;
       API_URL: string;
 
+      CMC_API_KEY: string;
+
       FIREBASE_API_KEY: string;
       FIREBASE_AUTH_DOMAIN: string;
       FIREBASE_DATABASE_URL: string;
