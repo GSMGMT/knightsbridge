@@ -99,6 +99,8 @@ export const SelectCurrency = ({
 
     const { quote } = currentCurrency;
 
+    if (!quote) return getValue(value);
+
     const convertedValue = value * quote;
 
     return getValue(convertedValue);
@@ -107,6 +109,8 @@ export const SelectCurrency = ({
   const [fetching, setFetching] = useState<boolean>(false);
   const minAmount = useMemo(() => {
     const { quote } = currentCurrency!;
+
+    if (!quote) return 0;
 
     const min = Number(getValue(20 * quote).replace(/,/g, ''));
 

@@ -48,13 +48,13 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
       amount: currencyAsset?.reserved ?? 0,
     });
 
-    total = total.add(assetAmount.multiply(currency.quote));
+    total = total.add(assetAmount.multiply(currency?.quote ?? 0));
 
     const currencyData: CurrencyData = {
       uid: currency.uid,
       name: currency.name,
       code: currency.symbol,
-      quote: currency.quote,
+      quote: currency?.quote ?? 0,
       logo: currency.logo,
       amount: assetAmount.getAmount(),
       reserved: assetReserved.getAmount(),
