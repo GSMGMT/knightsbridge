@@ -54,7 +54,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         return res.status(200).json(
           ResponseModel.create(banks, {
-            message: 'Bank inserted successfully',
+            message: 'Banks fetched successfully',
           })
         );
       }

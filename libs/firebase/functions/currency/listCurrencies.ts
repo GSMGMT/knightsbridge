@@ -1,15 +1,6 @@
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  QueryConstraint,
-  where,
-} from 'firebase/firestore';
+import { firestore } from '@libs/firebase/admin-config';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
-import { firestore } from '@libs/firebase/config';
 import { CurrencyConverter } from '@libs/firebase/converters/currencyConverter';
 import { Currency, CurrencyType } from '@contracts/Currency';
 import { Sort } from '@utils/types';
@@ -27,28 +18,24 @@ const listCurrencies = async ({
   sort,
   filters,
 }: ListCurrencies): Promise<Currency[]> => {
-  const CurrencyCollection = collection(
-    firestore,
-    FirebaseCollections.CURRENCIES
-  ).withConverter(CurrencyConverter);
-
-  const queryConstraints: QueryConstraint[] = [limit(size)];
+  const CurrencyCollection = firestore()
+    .collection(FirebaseCollections.CURRENCIES)
+    .limit(size)
+    .withConverter(CurrencyConverter);
 
   if (sort?.length) {
-    queryConstraints.unshift(
-      ...sort.map(({ field, orientation }) => orderBy(field, orientation))
+    sort.forEach(({ field, orientation }) =>
+      CurrencyCollection.orderBy(field, orientation)
     );
   } else {
-    queryConstraints.unshift(orderBy('createdAt'));
+    CurrencyCollection.orderBy('createdAt');
   }
 
   if (filters?.type) {
-    queryConstraints.push(where('type', '==', filters.type));
+    CurrencyCollection.where('type', '==', filters.type);
   }
 
-  const q = query(CurrencyCollection, ...queryConstraints);
-
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await CurrencyCollection.get();
 
   const currencies: Currency[] = [];
 

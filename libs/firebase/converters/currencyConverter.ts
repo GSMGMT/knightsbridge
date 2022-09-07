@@ -3,11 +3,11 @@ import {
   DocumentData,
   QueryDocumentSnapshot,
   WithFieldValue,
-} from 'firebase/firestore';
+} from '@libs/firebase/admin-config';
 
 export const CurrencyConverter = {
   toFirestore: (data: WithFieldValue<Currency>): DocumentData => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot<DocumentData>): Currency => {
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Currency => {
     const data = snapshot.data();
 
     return {
