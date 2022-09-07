@@ -4,11 +4,11 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import DatePicker from 'react-datepicker';
 import { endOfDay, format, isThisYear } from 'date-fns';
 
-import { Icon } from '../Icon';
+import { Icon } from '@components/Icon';
+
+import { api } from '@services/api';
 
 import styles from './Export.module.scss';
-
-import { api } from '../../services/api';
 
 interface ExportProps {
   className?: string;

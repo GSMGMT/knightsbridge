@@ -2,9 +2,9 @@ import { useState } from 'react';
 import cn from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
 
-import styles from './Settings.module.scss';
+import { Icon } from '@components/Icon';
 
-import { Icon } from '../../Icon';
+import styles from './Settings.module.scss';
 
 const languages = [
   {

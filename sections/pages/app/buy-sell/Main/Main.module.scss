@@ -1,0 +1,200 @@
+@import '@styles/helpers';
+
+.main {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  padding: 20px;
+  border-radius: 4px;
+
+  background: $n8;
+
+  @include t {
+    display: block;
+
+    margin-bottom: 16px;
+  }
+  @include m {
+    padding: 16px;
+  }
+  @include dark {
+    background: #17181b;
+  }
+}
+.details {
+  display: flex;
+  align-items: center;
+
+  @include t {
+    margin-bottom: 16px;
+  }
+  @include m {
+    display: block;
+
+    margin-bottom: 24px;
+  }
+}
+.box {
+  .content {
+    display: flex;
+    align-items: center;
+
+    @include caption-bold-2;
+    color: $n4;
+
+    svg {
+      margin-right: 4px;
+
+      fill: $n4;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: 32px;
+
+    @include m {
+      margin: 0 0 8px;
+    }
+  }
+}
+.line {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 4px;
+}
+.info {
+  @include body-bold-1;
+  color: $n1;
+
+  @include dark {
+    color: $n8;
+  }
+}
+.category {
+  margin-left: 4px;
+  padding: 7px 8px 5px;
+  border-radius: 12px;
+}
+.price {
+  @include body-bold-1;
+
+  &.negative {
+    color: $p3;
+  }
+  &.positive {
+    color: $p4;
+  }
+}
+.select {
+  width: 32px;
+  height: 32px;
+  border: 2px solid $n6;
+  border-radius: 50%;
+  margin-left: 32px;
+
+  color: $n4;
+
+  fill: currentColor;
+
+  @include dark {
+    border-color: $n3;
+  }
+
+  @include x {
+    margin-left: 12px;
+  }
+
+  @include t {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+}
+.list {
+  display: flex;
+
+  margin-left: auto;
+
+  @include t {
+    margin: 0;
+  }
+  @include m {
+    flex-wrap: wrap;
+
+    margin: -12px 0 0;
+  }
+}
+.item {
+  --space-between: 48px;
+
+  flex: 1;
+  padding-right: calc(var(--space-between) / 2);
+
+  @include d {
+    flex: 0 0 auto;
+    width: auto;
+  }
+  @include t {
+    flex: 1 0 auto;
+  }
+  @include m {
+    flex: 0 0 50%;
+    width: 50%;
+    margin: 12px 0;
+  }
+  .content {
+    font-weight: 500;
+    color: $n1;
+
+    width: max-content;
+
+    @include dark {
+      color: $n8;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: calc(var(--space-between) / 2);
+    border-right: 1px solid $n6;
+
+    @include dark {
+      border-color: $n2;
+    }
+    @include m {
+      margin: 12px 0 0;
+      border: none;
+    }
+  }
+}
+.subtitle {
+  display: flex;
+  align-items: center;
+  margin-block-end: 4px;
+
+  @include caption-2;
+  color: $n4;
+
+  svg {
+    margin-right: 4px;
+
+    fill: $n4;
+  }
+}
+
+.percentage {
+  text-indent: 6px;
+
+  display: inline-block;
+
+  &::after {
+    content: '%';
+  }
+
+  &.positive {
+    color: $p4;
+  }
+  &.negative {
+    color: $p3;
+  }
+}

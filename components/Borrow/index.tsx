@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import cn from 'classnames';
 
-import styles from './Borrow.module.sass';
+import { Icon } from '@components/Icon';
+import { TextInput } from '@components/TextInput';
+import { Dropdown } from '@components/Dropdown';
 
-import { Icon } from '../Icon';
-import { TextInput } from '../TextInput';
-import { Dropdown } from '../Dropdown';
+import styles from './Borrow.module.sass';
 
 const coinOptions = ['ETH Ethereum', 'BTC Bitcoin', 'TRX Tron'];
 

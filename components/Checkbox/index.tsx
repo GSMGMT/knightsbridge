@@ -1,9 +1,9 @@
 import { useId, forwardRef, ReactNode } from 'react';
 import cn from 'classnames';
 
-import styles from './Checkbox.module.scss';
+import { Variant } from '@contracts/Variant';
 
-import { Variant } from '../../contracts/Variant';
+import styles from './Checkbox.module.scss';
 
 interface CheckboxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {

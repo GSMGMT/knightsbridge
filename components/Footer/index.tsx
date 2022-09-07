@@ -3,16 +3,16 @@ import Link from 'next/link';
 import cn from 'classnames';
 import { format } from 'date-fns';
 
-import LogoLight from '../../public/images/logos/logo-light.svg';
-import LogoDark from '../../public/images/logos/logo-dark.svg';
-import LogoTextLight from '../../public/images/logos/logo-text-light.svg';
-import LogoTextDark from '../../public/images/logos/logo-text-dark.svg';
+import LogoLight from '@public/images/logos/logo-light.svg';
+import LogoDark from '@public/images/logos/logo-dark.svg';
+import LogoTextLight from '@public/images/logos/logo-text-light.svg';
+import LogoTextDark from '@public/images/logos/logo-text-dark.svg';
+
+import { Form } from '@components/Form';
+import { Icon, Icons } from '@components/Icon';
+import { NavLink } from '@components/NavLink';
 
 import styles from './Footer.module.scss';
-
-import { Form } from '../Form';
-import { Icon, Icons } from '../Icon';
-import { NavLink } from '../NavLink';
 
 interface MenuItem {
   title: string;

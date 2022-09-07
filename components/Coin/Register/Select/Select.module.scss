@@ -1,7 +1,7 @@
 @import '@styles/helpers';
 
-@import '../../../../components/Search/Search.module';
-@import '../../../../components/Coin/List/CoinList.module';
+@import '@components/Search/Search.module';
+@import '@components/Coin/List/CoinList.module';
 
 .title {
   @include body-bold-1;

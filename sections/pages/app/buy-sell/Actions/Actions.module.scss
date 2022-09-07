@@ -1,0 +1,145 @@
+@import '@styles/helpers';
+
+.actions {
+  margin-top: 4px;
+  padding: 16px 24px;
+  border-radius: 4px;
+
+  background: $n8;
+
+  @include t {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 5;
+
+    margin: 0;
+
+    box-shadow: 0px -16px 64px rgba(15, 15, 15, 0.1);
+  }
+  @include dark {
+    background: #17181b;
+  }
+}
+.head {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 24px;
+
+  @include t {
+    margin-bottom: 16px;
+  }
+}
+.info {
+  @include caption-2;
+  font-weight: 500;
+  color: $n4;
+
+  @include m {
+    display: none;
+  }
+
+  a {
+    margin-left: 8px;
+
+    color: $n2;
+
+    transition: color 0.2s;
+
+    svg {
+      transition: fill 0.2s;
+    }
+    @include dark {
+      color: $n6;
+
+      svg {
+        fill: $n6;
+      }
+    }
+    &:hover {
+      color: $p1;
+
+      svg {
+        fill: $p1;
+      }
+    }
+  }
+}
+.nav {
+  display: flex;
+
+  margin-right: auto;
+}
+.link {
+  display: flex;
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  background: none;
+  transition: all 0.2s;
+
+  @include button-2;
+  color: $n4;
+
+  &:hover {
+    color: $n3;
+
+    @include dark {
+      color: $n6;
+    }
+  }
+  &.active {
+    background: $n6;
+
+    color: $n2;
+
+    @include dark {
+      background: $n3;
+
+      color: $n8;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: 16px;
+  }
+}
+.wrapper {
+  @include t {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 6;
+
+    background: $n8;
+    transition: all 0.3s;
+
+    padding: 16px;
+
+    @include dark {
+      background: $n1;
+    }
+    &.show {
+      transform: translateY(-100%);
+      box-shadow: 0px -16px 64px rgba(15, 15, 15, 0.1);
+    }
+  }
+}
+.btns {
+  display: none;
+
+  @include t {
+    display: flex;
+
+    margin: 0 -6px;
+  }
+  .button {
+    flex: 0 0 calc(50% - 12px);
+
+    width: calc(50% - 12px);
+    margin: 0 6px;
+  }
+}

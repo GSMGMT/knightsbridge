@@ -3,10 +3,9 @@ import cn from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
 
 import { Link } from '@components/Link';
+import { Icon } from '@components/Icon';
 
 import styles from './Notifications.module.scss';
-
-import { Icon } from '../../Icon';
 
 const items = [
   {

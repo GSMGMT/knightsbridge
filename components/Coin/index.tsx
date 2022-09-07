@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 
 import { navigation as navigationLinks } from '@navigation';
 
-import styles from './Coin.module.scss';
+import { Icon, Icons } from '@components/Icon';
+import { NavLink } from '@components/NavLink';
 
-import { Icon, Icons } from '../Icon';
-import { NavLink } from '../NavLink';
+import styles from './Coin.module.scss';
 
 interface Navigation {
   title: string;
@@ -40,7 +40,6 @@ export const Coin = ({ children }: CoinProps) => {
   const activeLink: Navigation = navigation.find((x) =>
     pathname.includes(x.url)
   )!;
-  console.log({ activeLink });
 
   return (
     <div className={styles.profile}>

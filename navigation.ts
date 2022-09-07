@@ -56,10 +56,13 @@ export const navigation = {
     discover: '/app/discover',
     deposit: {
       fiat: '/app/deposit/fiat',
+      crypto: '/app/deposit/crypto',
     },
     wallet: '/app/wallet',
     orders: {
       fiat: '/app/orders/fiat',
+      crypto: '/app/orders/crypto',
+      buySell: '/app/orders/buy-sell',
     },
     coin: {
       list: '/app/coin/list',
@@ -67,6 +70,7 @@ export const navigation = {
         return `${this.list}?register=true`;
       },
     },
+    buySell: '/app/buy-sell',
   },
   soon: '/soon',
 };

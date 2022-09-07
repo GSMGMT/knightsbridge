@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Modal } from '../../Modal';
+import { Modal } from '@components/Modal';
 import { SelectExchange } from './Select/Exchange';
 import { SelectPair } from './Select/Pair';
 

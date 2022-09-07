@@ -10,9 +10,9 @@ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import OutsideClickHandler from 'react-outside-click-handler';
 import cn from 'classnames';
 
-import styles from './Modal.module.sass';
+import { Icon } from '@components/Icon';
 
-import { Icon } from '../Icon';
+import styles from './Modal.module.sass';
 
 type Props =
   | {

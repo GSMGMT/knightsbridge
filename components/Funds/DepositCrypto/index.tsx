@@ -8,17 +8,16 @@ import {
   WalletAddress,
   Coin as PairedCoin,
 } from '@services/api/app/fetchCoins';
-
 import { api } from '@services/api';
 
+import { stringToValue } from '@helpers/StringToValue';
+import { stringToNumber } from '@helpers/StringToNumber';
+
+import { Modal } from '@components/Modal';
+import { TextInput } from '@components/TextInput';
+import { DepositInfo } from '@components/DepositInfo';
+
 import styles from './DepositCrypto.module.scss';
-
-import { stringToValue } from '../../../helpers/StringToValue';
-import { stringToNumber } from '../../../helpers/StringToNumber';
-
-import { Modal } from '../../Modal';
-import { TextInput } from '../../TextInput';
-import { DepositInfo } from '../../DepositInfo';
 
 type Coin = Pick<PairedCoin, 'id' | 'logo' | 'name' | 'symbol' | 'price'>;
 

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import cn from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
 
-import styles from './Dropdown.module.scss';
+import { Icon, Icons } from '@components/Icon';
+import { NavLink } from '@components/NavLink';
 
-import { Icon, Icons } from '../../Icon';
-import { NavLink } from '../../NavLink';
+import styles from './Dropdown.module.scss';
 
 interface MenuItem {
   title: string;

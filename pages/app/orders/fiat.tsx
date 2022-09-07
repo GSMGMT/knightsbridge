@@ -25,7 +25,7 @@ import styles from '@styles/pages/app/orders/fiat/Fiat.module.scss';
 import { listDeposit } from '@services/api/app/deposit/list';
 import { FiatDeposit } from '@contracts/FiatDeposit';
 
-export type HandleSetSortBy = (sortBy: SortBy) => void;
+type HandleSetSortBy = (sortBy: SortBy) => void;
 
 interface InputField {
   email: string;

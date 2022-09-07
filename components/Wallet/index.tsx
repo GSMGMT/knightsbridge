@@ -2,6 +2,8 @@ import { ReactNode, useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 
+import { navigation as navigationLinks } from '@navigation';
+
 import { Link } from '@components/Link';
 import { NavLink } from '@components/NavLink';
 
@@ -20,18 +22,18 @@ const navigation: Array<NavigationItem> = [
   {
     title: 'Overview',
     color: '#23262F',
-    url: '/app/wallet/',
+    url: navigationLinks.app.wallet,
   },
   {
     title: 'Fiat and Spot',
     color: '#FFD166',
-    url: '/app/wallet',
+    url: navigationLinks.app.wallet,
     separator: true,
   },
   {
     title: 'Buy and Sell',
     icon: 'wallet',
-    url: '/app/buy-sell',
+    url: navigationLinks.app.buySell,
   },
 ];
 
@@ -90,7 +92,7 @@ export const Wallet = ({ className, children }: WalletProps) => {
         <div className={styles.btns}>
           <Link
             className={cn('button button-small', styles.button)}
-            href="/deposit/fiat"
+            href={navigationLinks.app.deposit.fiat}
           >
             Deposit
           </Link>

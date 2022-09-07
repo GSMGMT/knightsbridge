@@ -1,9 +1,10 @@
 import { ReactNode, useCallback, useState } from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
+
+import { getValue } from '@helpers/GetValue';
 
 import styles from './Item.module.sass';
-
-import { getValue } from '../../../helpers/GetValue';
 
 export interface ItemI {
   coinId: string;
@@ -53,7 +54,7 @@ export const Item = ({ item, children }: ItemProps) => {
         <div className={styles.col}>
           <div className={styles.currency}>
             <div className={styles.icon}>
-              <img src={item.logo} alt="Currency" />
+              <Image src={item.logo} alt="Currency" width={32} height={32} />
             </div>
             <div className={styles.details}>
               <div className={styles.info}>{item.currency}</div>

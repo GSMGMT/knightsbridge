@@ -2,10 +2,10 @@ import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { clearAllBodyScrollLocks } from 'body-scroll-lock';
 
-import styles from './Page.module.scss';
+import { Header } from '@components/Header';
+import { Footer } from '@components/Footer';
 
-import { Header } from '../Header';
-import { Footer } from '../Footer';
+import styles from './Page.module.scss';
 
 interface PageProps {
   headerHide?: boolean;

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
+import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
+
+import { withUser } from '@middlewares/client/withUser';
 
 import { api } from '@services/api';
 import { AdminPair, fetchAdminCoins } from '@services/api/app/fetchAdminCoins';
@@ -212,4 +215,6 @@ const CoinList = () => {
     </>
   );
 };
+export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
+  withUser(ctx, { freeToAccessBy: 'ADMIN' });
 export default CoinList;

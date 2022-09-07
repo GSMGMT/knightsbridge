@@ -17,7 +17,7 @@ const nextConfig = {
     FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
   },
   images: {
-    domains: ['s2.coinmarketcap.com'],
+    domains: ['s2.coinmarketcap.com', 'localhost'],
   },
   redirects: async () => [
     { source: '/', destination: '/app/discover', permanent: true },

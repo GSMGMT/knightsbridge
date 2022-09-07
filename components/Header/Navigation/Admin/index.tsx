@@ -2,12 +2,12 @@ import cn from 'classnames';
 
 import { navigation } from '@navigation';
 
+import { NavLink } from '@components/NavLink';
+import { Dropdown } from '../../Dropdown';
+
 import styles from '../Navigation.module.scss';
 
 import { INavigation } from '../..';
-
-import { Dropdown } from '../../Dropdown';
-import { NavLink } from '../../../NavLink';
 
 const navigationItems: INavigation[] = [
   {
@@ -16,7 +16,7 @@ const navigationItems: INavigation[] = [
   },
   {
     title: 'Trades',
-    url: navigation.soon,
+    url: navigation.app.orders.buySell,
   },
   {
     title: 'Deposits',
@@ -29,7 +29,7 @@ const navigationItems: INavigation[] = [
       {
         title: 'Crypto',
         icon: 'coin',
-        url: navigation.soon,
+        url: navigation.app.orders.crypto,
       },
     ],
   },

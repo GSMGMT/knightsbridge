@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
+import Image from 'next/image';
 
 import { api } from '@services/api';
 
@@ -206,7 +207,13 @@ export const SelectPair = ({
               tabIndex={-1}
               onClick={() => setSelectedPair(currentPair)}
             >
-              <img className={styles.logo} src={logo} alt={pair} />
+              <Image
+                className={styles.logo}
+                src={logo}
+                alt={pair}
+                width={24}
+                height={24}
+              />
               <div className={styles.pair}>
                 <div className={styles.info}>
                   <span className={styles.name}>{pair}</span>

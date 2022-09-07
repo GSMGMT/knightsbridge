@@ -68,14 +68,14 @@ export const Funds = ({ items }: FundsProps) => {
           <Item item={item} key={index}>
             <Link
               className={cn('button-stroke button-small', styles.button)}
-              href={`/buy-sell?search=${item.currency}`}
+              href={`${navigation.app.buySell}?search=${item.currency}`}
             >
               Buy and Sell
             </Link>
             {item.type === 'FIAT' && (
               <Link
                 className={cn('button-stroke button-small', styles.button)}
-                href="/deposit/fiat"
+                href={navigation.app.deposit.fiat}
               >
                 Deposit
               </Link>

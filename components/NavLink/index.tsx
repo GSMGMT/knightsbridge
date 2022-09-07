@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { FunctionComponent, useMemo } from 'react';
 
-import { Link, LinkProps } from '../Link';
+import { Link, LinkProps } from '@components/Link';
 
 type NavLinkProps = Omit<LinkProps, 'className'> & {
   className?: string | ((args: { isActive: boolean }) => string);

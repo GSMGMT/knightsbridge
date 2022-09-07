@@ -1,0 +1,142 @@
+@import '@styles/helpers';
+
+.box {
+  &.wrong {
+    animation-name: wrong;
+    animation-duration: 0.1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+}
+@keyframes wrong {
+  from {
+    transform: translate(8px, 0px);
+  }
+  50% {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(8px, 0px);
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 16px;
+}
+.title {
+  @include body-bold-1;
+}
+.counter {
+  @include caption-bold-2;
+
+  svg {
+    margin-right: 4px;
+  }
+}
+.field {
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+  border-radius: 12px;
+
+  box-shadow: inset 0 0 0 2px var(--field-border-color, $n6);
+  cursor: pointer;
+
+  transition: all 0.3s;
+
+  @include dark {
+    --field-border-color: #{$n2};
+  }
+  &.exceeded {
+    --field-border-color: #{$p3};
+  }
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
+}
+.input {
+  flex-grow: 1;
+
+  width: 100%;
+  height: 48px;
+  padding: 0 10px;
+
+  background: none;
+
+  text-align: right;
+  @include poppins;
+  font-size: 14px;
+  font-weight: 500;
+  color: $n2;
+
+  @include dark {
+    color: $n8;
+  }
+}
+.label {
+  flex-shrink: 0;
+
+  @include m {
+    max-width: 100px;
+
+    @include text-overflow;
+  }
+}
+.label,
+.currency {
+  font-weight: 500;
+  color: $n4;
+
+  pointer-events: none;
+}
+.currency {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  width: 100px;
+  border-left: 1px solid $n3;
+  margin-left: 24px;
+  padding-left: 24px;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+  span {
+    @include text-overflow;
+  }
+}
+.button {
+  width: 100%;
+}
+.wallet,
+.fee {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+
+  @include caption-bold-2;
+  color: $n3;
+
+  fill: currentColor;
+
+  user-select: none;
+
+  margin-bottom: 12px;
+
+  @include dark {
+    color: $n8;
+  }
+}
+.fee {
+  margin-top: 12px;
+}

@@ -10,9 +10,9 @@ import {
   endOfToday,
 } from 'date-fns';
 
-import styles from './Calendar.module.scss';
+import { Icon } from '@components/Icon';
 
-import { Icon } from '../Icon';
+import styles from './Calendar.module.scss';
 
 interface CalendarProps {
   className: string;

@@ -1,14 +1,13 @@
 import cn from 'classnames';
 import { ReactNode } from 'react';
 
-import LogoLight from '../../public/images/logos/logo-text-light.svg';
-import LogoDark from '../../public/images/logos/logo-text-dark.svg';
+import LogoLight from '@public/images/logos/logo-text-light.svg';
+import LogoDark from '@public/images/logos/logo-text-dark.svg';
+import warrior from '@public/images/warrior.png';
 
-import warrior from '../../public/images/warrior.png';
+import { Link } from '@components/Link';
 
 import styles from './Login.module.scss';
-
-import { Link } from '../Link';
 
 interface LoginProps {
   className?: string;

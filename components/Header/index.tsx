@@ -11,14 +11,14 @@ import { AuthContext } from '@store/contexts/Auth';
 
 import { navigation } from '@navigation';
 
-import styles from './Header.module.scss';
-
-import { Icons } from '../Icon';
-import { Theme } from '../Theme';
-import { User } from './User';
+import { Icons } from '@components/Icon';
+import { Theme } from '@components/Theme';
+import { Link } from '@components/Link';
+import { NavLink } from '@components/NavLink';
 import { Navigation } from './Navigation';
-import { Link } from '../Link';
-import { NavLink } from '../NavLink';
+import { User } from './User';
+
+import styles from './Header.module.scss';
 
 interface DropdownItem {
   title: string;
@@ -85,7 +85,11 @@ export const Header = ({ headerWide }: HeaderProps) => {
           <div className={styles.control}>
             {!isAdmin && (
               <NavLink
-                className={cn('button-stroke button-small', styles.button)}
+                className={({ isActive }) =>
+                  cn('button-stroke button-small', styles.button, {
+                    active: isActive,
+                  })
+                }
                 href="/app/wallet"
               >
                 Wallet

@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
+import Image from 'next/image';
 
 import { Icon } from '@components/Icon';
 
@@ -168,7 +169,13 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
               tabIndex={-1}
               onClick={() => setSelectedExchangeId(id)}
             >
-              <img className={styles.logo} src={logo} alt={name} />
+              <Image
+                className={styles.logo}
+                src={logo}
+                alt={name}
+                width={24}
+                height={24}
+              />
               <span className={styles.name}>{name}</span>
             </div>
           );

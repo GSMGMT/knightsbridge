@@ -3,15 +3,15 @@ import cn from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Image from 'next/image';
 
-import { AuthContext } from '../../../store/contexts/Auth';
+import { AuthContext } from '@store/contexts/Auth';
 
-import user from '../../../public/images/avatar-user.jpg';
+import { Icon, Icons } from '@components/Icon';
+import { Theme } from '@components/Theme';
+import { Link } from '@components/Link';
+
+import user from '@public/images/avatar-user.jpg';
 
 import styles from './User.module.scss';
-
-import { Icon, Icons } from '../../Icon';
-import { Theme } from '../../Theme';
-import { Link } from '../../Link';
 
 interface Item {
   title: string;

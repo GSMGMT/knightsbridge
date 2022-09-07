@@ -1,0 +1,174 @@
+@import '@styles/helpers';
+
+.inner {
+  margin-top: 4px;
+  padding: 16px;
+  border-radius: 4px;
+
+  background: $n8;
+
+  @include dark {
+    background: #17181b;
+  }
+}
+.dropdown {
+  display: none;
+
+  @include m {
+    display: block;
+
+    width: 100%;
+    margin-bottom: 16px;
+  }
+}
+.nav {
+  display: flex;
+
+  margin-bottom: 16px;
+
+  @include m {
+    display: none;
+  }
+}
+.link {
+  display: flex;
+
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  background: none;
+  transition: all 0.2s;
+
+  @include button-2;
+  color: $n4;
+
+  &:hover {
+    color: $n3;
+
+    @include dark {
+      color: $n6;
+    }
+  }
+  &.active {
+    background: $n6;
+
+    color: $n2;
+
+    @include dark {
+      background: $n3;
+
+      color: $n8;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: 16px;
+  }
+}
+.table {
+  display: table;
+
+  width: 100%;
+
+  &.open {
+    .row {
+      &:first-child {
+        .col:last-child {
+          button {
+            color: $p3;
+          }
+        }
+      }
+      .col:last-child {
+        button {
+          margin-left: auto;
+
+          font-family: inherit;
+          font-weight: inherit;
+          font-size: inherit;
+          color: $s3;
+        }
+      }
+    }
+  }
+}
+.row {
+  display: table-row;
+
+  &:first-child {
+    .col {
+      padding-bottom: 10px;
+
+      @include caption-bold-2;
+      color: $n4;
+    }
+  }
+  &:not(:first-child) {
+    .col {
+      @include caption-2;
+      font-weight: 500;
+    }
+  }
+
+  &.buy {
+    .price {
+      color: $p4;
+    }
+  }
+  &.sell {
+    .price {
+      color: $p3;
+    }
+  }
+  &.canceled {
+    .col {
+      color: $n5;
+
+      @include dark {
+        color: $n3;
+      }
+    }
+  }
+}
+.col {
+  display: table-cell;
+
+  color: $n3;
+
+  @include dark {
+    color: $n5;
+  }
+
+  padding: 6px;
+
+  &:first-child {
+    padding-left: 0;
+  }
+  &:last-child {
+    padding-right: 0;
+
+    text-align: right;
+    text-transform: capitalize;
+  }
+
+  @include d {
+    &:nth-child(2) {
+      display: none;
+    }
+  }
+  @include a {
+    &:nth-child(5) {
+      display: none;
+    }
+  }
+  @include s {
+    &:nth-child(4) {
+      display: none;
+    }
+  }
+}
+.positive {
+  color: $p4;
+}
+.negative {
+  color: $p3;
+}

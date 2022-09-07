@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import { FormEventHandler } from 'react';
 
-import styles from './Form.module.scss';
+import { Icon, Icons } from '@components/Icon';
 
-import { Icon, Icons } from '../Icon';
+import styles from './Form.module.scss';
 
 interface FormProps {
   className?: string;

@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import cn from 'classnames';
 import OutsideClickHandler from 'react-outside-click-handler';
+import Image from 'next/image';
 
 import { Icon } from '@components/Icon';
 
-import { ExchangeCategory } from '@pages/app/coin/list';
-
 import styles from './Dropdown.module.scss';
+
+import { Coins } from '../types';
 
 interface DropdownProps {
   className?: string;
@@ -15,16 +16,16 @@ interface DropdownProps {
   classDropdownBody?: string;
   classDropdownOption?: string;
   classDropdownArrow?: string;
-  selectedIndex: number;
-  setSelectedIndex: (newIndex: number) => void;
-  options: ExchangeCategory[];
+  value: string;
+  setValue: (newValue: string) => void;
+  options: Coins;
   label?: string;
 }
 export const Dropdown = ({
   className,
   classLabel,
-  selectedIndex,
-  setSelectedIndex: setValue,
+  value,
+  setValue,
   options,
   label,
   classDropdownHead,
@@ -34,15 +35,16 @@ export const Dropdown = ({
 }: DropdownProps) => {
   const [visible, setVisible] = useState(false);
 
-  const handleClick = (newValue: number) => {
+  const handleClick = (newValue: string) => {
     setValue(newValue);
     setVisible(false);
   };
 
-  const currentOption = useMemo(
-    () => options[selectedIndex],
-    [options, selectedIndex]
-  );
+  const coinSelected = useMemo(() => {
+    const selectedCoin = options.find(({ name }) => name === value);
+
+    return selectedCoin;
+  }, [value, options]);
 
   return (
     <OutsideClickHandler onOutsideClick={() => setVisible(false)}>
@@ -59,32 +61,40 @@ export const Dropdown = ({
           tabIndex={0}
         >
           <div className={styles.selection}>
-            {currentOption.logo && (
-              <img
-                src={currentOption.logo}
-                alt={currentOption.name}
-                className={styles.logo}
-              />
-            )}
-            {currentOption.name}
+            <Image
+              src={coinSelected?.logo!}
+              alt={coinSelected?.name}
+              className={styles.icon}
+              width={24}
+              height={24}
+            />
+            <span>{coinSelected?.symbol}</span>
+            <span className={styles.name}>{coinSelected?.name}</span>
           </div>
           <div className={cn(styles.arrow, classDropdownArrow)}>
             <Icon name="arrow-down" size={24} />
           </div>
         </div>
         <div className={cn(classDropdownBody, styles.body)}>
-          {options.map(({ id, name, logo }, index) => (
+          {options.map((option) => (
             <div
               className={cn(classDropdownOption, styles.option, {
-                [styles.selectioned]: index === selectedIndex,
+                [styles.selectioned]: option.name === value,
               })}
-              onClick={() => handleClick(index)}
-              key={id}
+              onClick={() => handleClick(option.name)}
+              key={option.id}
               role="button"
               tabIndex={0}
             >
-              {logo && <img src={logo} alt={name} className={styles.logo} />}
-              {name}
+              <Image
+                src={option.logo}
+                alt={option.name}
+                className={styles.icon}
+                width={24}
+                height={24}
+              />
+              <span>{option.symbol}</span>
+              <span>{option.name}</span>
             </div>
           ))}
         </div>
