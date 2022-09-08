@@ -31,3 +31,5 @@ export type WithFieldValue<T> = admin.firestore.WithFieldValue<T>;
 export type DocumentData = admin.firestore.DocumentData;
 export type QueryDocumentSnapshot =
   admin.firestore.QueryDocumentSnapshot<admin.firestore.DocumentData>;
+
+export type Query<T> = admin.firestore.Query<T>;

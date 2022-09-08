@@ -1,11 +1,14 @@
 import { NextApiResponse } from 'next';
-import { object, string, SchemaOf, number } from 'yup';
+import { object, string, SchemaOf, number, mixed } from 'yup';
 
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { ResponseModel } from '@contracts/Response';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 import { Roles } from '@contracts/User';
 import { registerMarketPair } from '@services/api/crypto/registerMarketPair';
+import { Pagination } from '@utils/types';
+import { parseSortField } from '@utils/validator';
+import listMarketPairs from '@libs/firebase/functions/marketPair/listMarketPairs';
 
 interface RegisterMarketPairDTO {
   name: string;
@@ -13,6 +16,10 @@ interface RegisterMarketPairDTO {
   baseCmcId: number;
   quoteCmcId: number;
   exchangeCmcId: number;
+}
+
+interface ListMarketPairsDTO extends Pagination {
+  name?: string;
 }
 
 const registerMarketPairSchema: SchemaOf<RegisterMarketPairDTO> =
@@ -23,6 +30,12 @@ const registerMarketPairSchema: SchemaOf<RegisterMarketPairDTO> =
     quoteCmcId: number().required('quoteCmcId is required.'),
     exchangeCmcId: number().required('exchangeCmcId is required.'),
   });
+
+const listMarketPairsSchema: SchemaOf<ListMarketPairsDTO> = object().shape({
+  size: number().max(5000).default(100),
+  sort: mixed().transform((_, originalValue) => parseSortField(originalValue)),
+  name: string().optional(),
+});
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
@@ -43,6 +56,25 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         return res.status(201).json(
           ResponseModel.create(marketPairUid, {
             message: 'Market Pair registered successfully',
+          })
+        );
+      }
+      case 'GET': {
+        const { size, sort, name } = await listMarketPairsSchema.validate(
+          req.query
+        );
+
+        const marketPairUid = await listMarketPairs({
+          size,
+          sort,
+          filters: {
+            name,
+          },
+        });
+
+        return res.status(201).json(
+          ResponseModel.create(marketPairUid, {
+            message: 'Market Pairs fetched successfully',
           })
         );
       }
