@@ -8,4 +8,5 @@ export enum FirebaseCollections {
   ASSETS = 'assets',
   MARKET_PAIRS = 'market_pairs',
   EXCHANGES = 'exchanges',
+  ORDERS = 'orders',
 }
