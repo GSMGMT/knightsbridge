@@ -19,6 +19,8 @@ const insertCurrency = async (newCurrency: InsertCurrency) => {
   const uid = uuidv4();
   const serverTime = firestore.FieldValue.serverTimestamp();
 
+  firestore().settings({ ignoreUndefinedProperties: true });
+
   const CurrencyDoc = firestore()
     .collection(FirebaseCollections.CURRENCIES)
     .doc(uid)
