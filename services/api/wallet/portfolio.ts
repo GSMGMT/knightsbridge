@@ -33,7 +33,9 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
     );
   }
 
-  const currencies = await listCurrencies({ size: 100 });
+  const currencies = await listCurrencies({
+    size: 100,
+  });
 
   let total = DineroFactory({ amount: 0 });
 

@@ -8,8 +8,8 @@ import { Sort } from '@utils/types';
 interface ListCurrencies {
   size: number;
   sort?: Sort;
-  filters: {
-    type: CurrencyType;
+  filters?: {
+    type?: CurrencyType;
   };
 }
 
@@ -18,12 +18,15 @@ const listCurrencies = async ({
   sort,
   filters,
 }: ListCurrencies): Promise<Currency[]> => {
-  const CurrencyCollection = firestore()
+  let CurrencyCollection = firestore()
     .collection(FirebaseCollections.CURRENCIES)
-    .where('type', '==', filters.type)
     .orderBy(sort?.field ?? 'createdAt', sort?.orientation ?? 'asc')
     .limit(size)
     .withConverter(CurrencyConverter);
+
+  if (filters?.type) {
+    CurrencyCollection = CurrencyCollection.where('type', '==', filters.type);
+  }
 
   const querySnapshot = await CurrencyCollection.get();
 
