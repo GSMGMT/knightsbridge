@@ -8,11 +8,13 @@ export async function isPersisted(
   return !!register;
 }
 
-export function parseSortField(sortField: string): Sort[] {
-  return sortField.split(',').map((param: string): Sort => {
+export function parseSortField(sortField: string) {
+  const fields = sortField.split(',').map((param: string): Sort => {
     if (/^-/.test(param)) {
       return { field: param.slice(1), orientation: 'desc' };
     }
     return { field: param, orientation: 'asc' };
   });
+
+  return fields.length === 1 ? fields[0] : fields;
 }

@@ -1,6 +1,6 @@
 import { readFile, unlink } from 'fs/promises';
 import { NextApiResponse } from 'next';
-import { object, string, mixed, SchemaOf, number, array } from 'yup';
+import { object, string, mixed, SchemaOf, number } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
 import { CurrencyType } from '@contracts/Currency';
@@ -30,7 +30,7 @@ interface InsertCurrencyDTO {
 }
 
 interface ListCurrenciesDTO extends Pagination {
-  type?: CurrencyType;
+  type: CurrencyType;
 }
 
 const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
@@ -50,8 +50,10 @@ const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
 
 const listCurrenciesSchema: SchemaOf<ListCurrenciesDTO> = object().shape({
   size: number().max(5000).default(100),
-  sort: array().transform((_, originalValue) => parseSortField(originalValue)),
-  type: mixed<CurrencyType>().oneOf(['crypto', 'fiat']),
+  sort: mixed().transform((_, originalValue) => parseSortField(originalValue)),
+  type: mixed<CurrencyType>()
+    .oneOf(['crypto', 'fiat'])
+    .required(`Type is required. Available values: fiat, crypto`),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {

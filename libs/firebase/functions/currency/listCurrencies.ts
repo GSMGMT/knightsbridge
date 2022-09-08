@@ -7,9 +7,9 @@ import { Sort } from '@utils/types';
 
 interface ListCurrencies {
   size: number;
-  sort?: Sort[];
-  filters?: {
-    type?: CurrencyType;
+  sort?: Sort;
+  filters: {
+    type: CurrencyType;
   };
 }
 
@@ -20,20 +20,10 @@ const listCurrencies = async ({
 }: ListCurrencies): Promise<Currency[]> => {
   const CurrencyCollection = firestore()
     .collection(FirebaseCollections.CURRENCIES)
+    .where('type', '==', filters.type)
+    .orderBy(sort?.field ?? 'createdAt', sort?.orientation ?? 'asc')
     .limit(size)
     .withConverter(CurrencyConverter);
-
-  if (sort?.length) {
-    sort.forEach(({ field, orientation }) =>
-      CurrencyCollection.orderBy(field, orientation)
-    );
-  } else {
-    CurrencyCollection.orderBy('createdAt');
-  }
-
-  if (filters?.type) {
-    CurrencyCollection.where('type', '==', filters.type);
-  }
 
   const querySnapshot = await CurrencyCollection.get();
 
