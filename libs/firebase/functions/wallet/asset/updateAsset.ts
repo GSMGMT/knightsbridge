@@ -1,4 +1,4 @@
-import { firestore, database } from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 
 import { Asset } from '@contracts/Wallet';
 import { FirebaseCollections } from '@libs/firebase/collections';
