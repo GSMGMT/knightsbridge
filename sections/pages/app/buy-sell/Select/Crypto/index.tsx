@@ -34,7 +34,7 @@ export const Crypto = ({
   });
 
   const [coins, setCoins] = useState<
-    Array<Pick<Coin, 'id' | 'logo' | 'name' | 'symbol'>>
+    Array<Pick<Coin, 'uid' | 'logo' | 'name' | 'symbol'>>
   >([]);
   const [selectedCoin, setSelectedCoin] = useState<string | null>(null);
 
@@ -89,10 +89,10 @@ export const Crypto = ({
   const handleNextStep = useCallback(() => {
     if (!selectedCoin) return;
 
-    const coinSelected = coins.find(({ id }) => id === selectedCoin);
+    const coinSelected = coins.find(({ uid: id }) => id === selectedCoin);
 
     setCoinInfo({
-      id: coinSelected!.id,
+      uid: coinSelected!.uid,
       logo: coinSelected!.logo,
       symbol: coinSelected!.symbol,
     });
@@ -132,7 +132,7 @@ export const Crypto = ({
           </button>
         </form>
         <div className={styles.items}>
-          {coins.map(({ name, id, logo, symbol }) => (
+          {coins.map(({ name, uid: id, logo, symbol }) => (
             <div
               className={cn(styles.item, {
                 [styles.selected]: selectedCoin === id,

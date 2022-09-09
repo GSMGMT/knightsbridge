@@ -48,34 +48,24 @@ export const ExchangeProvider = ({ children }: ExchangeProviderProps) => {
   const handleFetchBaseCurrencyWallet: HandleFetchWallet =
     useCallback(async () => {
       const {
-        base: { id, type },
+        base: { id },
       } = pair!;
 
       const {
         data: { data: amount },
-      } = await api.get<{ data: number }>('/api/financial/balance', {
-        params: {
-          currencyId: id,
-          type,
-        },
-      });
+      } = await api.get<{ data: number }>(`/api/currency/${id}/balance`);
 
       setBaseWalletAmount(amount);
     }, [pair]);
   const handleFetchPairCurrencyWallet: HandleFetchWallet =
     useCallback(async () => {
       const {
-        pair: { id, type },
+        pair: { id },
       } = pair!;
 
       const {
         data: { data: amount },
-      } = await api.get<{ data: number }>('/api/financial/balance', {
-        params: {
-          currencyId: id,
-          type,
-        },
-      });
+      } = await api.get<{ data: number }>(`/api/currency/${id}/balance`);
 
       setPairWalletAmount(amount);
     }, [pair]);

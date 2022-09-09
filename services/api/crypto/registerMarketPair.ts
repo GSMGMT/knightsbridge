@@ -89,8 +89,6 @@ const fetchCurrencyByCmcId = async (cmcId: number): Promise<Currency> => {
     })
   );
 
-  console.log({ filePath, newCurrency });
-
   return newCurrency as Currency;
 };
 

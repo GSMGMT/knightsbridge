@@ -92,11 +92,7 @@ const CoinList = () => {
 
         const pair = coinList.find((coin) => coin.id === id)!;
 
-        await api.patch(`/api/admin/market-pair/${id}`, undefined, {
-          params: {
-            enabled: !pair.enabled,
-          },
-        });
+        await api.put(`/api/marketPair/${id}`, { enabled: !pair.enabled });
 
         const newCoinList = coinList.map((coin) => {
           if (coin.id === id) {

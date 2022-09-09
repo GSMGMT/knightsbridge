@@ -6,4 +6,4 @@ export interface DefaultProps {
 
 export type HandleNavigateStep = () => void;
 
-export type CoinInfo = Pick<Coin, 'logo' | 'id' | 'symbol'>;
+export type CoinInfo = Pick<Coin, 'logo' | 'uid' | 'symbol'>;

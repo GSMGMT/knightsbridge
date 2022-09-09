@@ -86,7 +86,7 @@ export const ConfirmDeposit = ({
           },
         } = await api.post<{ data: { id: string } }>('/api/crypto/deposit', {
           amount,
-          cryptoId: coinSelected.id,
+          cryptoId: coinSelected.uid,
           addressId: networkSelected.id,
           transactionHash: hash,
         });

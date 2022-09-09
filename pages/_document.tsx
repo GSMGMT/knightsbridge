@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { ReactElement } from 'react';
 import Document, {
   Html,

@@ -19,7 +19,7 @@ import { DepositInfo } from '@components/DepositInfo';
 
 import styles from './DepositCrypto.module.scss';
 
-type Coin = Pick<PairedCoin, 'id' | 'logo' | 'name' | 'symbol' | 'price'>;
+type Coin = Pick<PairedCoin, 'uid' | 'logo' | 'name' | 'symbol' | 'price'>;
 
 const schema = yup.object().shape({
   amount: yup
@@ -94,7 +94,7 @@ export const DepositCrypto = ({
 
       try {
         await api.post<{ data: { id: string } }>('/api/crypto/deposit', {
-          cryptoId: selectedCoin.id,
+          cryptoId: selectedCoin.uid,
           transactionHash: hash,
           amount: amountValue,
         });

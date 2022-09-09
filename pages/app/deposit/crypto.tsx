@@ -38,17 +38,17 @@ const DepositCrypto = () => {
   const coins: Coins = useMemo(
     () =>
       pairedCoins.map(
-        ({ id, logo, name, symbol, price }) =>
-          ({ id, logo, name, symbol, price } as Coin)
+        ({ uid, logo, name, symbol, price }) =>
+          ({ uid, logo, name, symbol, price } as Coin)
       ),
     [pairedCoins]
   );
   const addresses: Addresses = useMemo(
     () =>
       pairedCoins.map(
-        ({ id, walletAddresses }) =>
+        ({ uid, walletAddresses }) =>
           ({
-            id,
+            uid,
             walletAddresses,
           } as Address)
       ),

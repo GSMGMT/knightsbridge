@@ -8,7 +8,7 @@ export interface WalletAddress {
   network: string;
 }
 export interface Coin {
-  id: string;
+  uid: string;
   name: string;
   symbol: string;
   slug: string;
@@ -37,7 +37,7 @@ export const fetchCoins: (args: RequestArgs) => Promise<Response> = async ({
     } = await api.get<{
       data: Response['coins'];
       totalCount: Response['totalCount'];
-    }>('/api/crypto/list', {
+    }>('/api/currency', {
       params: {
         hasAddress,
         ...params,
@@ -45,9 +45,9 @@ export const fetchCoins: (args: RequestArgs) => Promise<Response> = async ({
     });
 
     newCoins = data.map(
-      ({ id, logo, name, price, slug, symbol, walletAddresses }) =>
+      ({ uid, logo, name, price, slug, symbol, walletAddresses }) =>
         ({
-          id,
+          uid,
           logo,
           name,
           price,

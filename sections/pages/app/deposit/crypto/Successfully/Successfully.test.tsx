@@ -9,7 +9,7 @@ describe('Successfully component', () => {
       <Successfully
         amount={100}
         coin={{
-          id: '',
+          uid: '',
           logo: '',
           name: '',
           price: 2,
@@ -33,7 +33,7 @@ describe('Successfully component', () => {
       <Successfully
         amount={100}
         coin={{
-          id: '',
+          uid: '',
           logo: '',
           name: '',
           price: 2,
