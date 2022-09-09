@@ -23,3 +23,5 @@ export type MarketPairCmcData = {
   quoteType: string;
   logo: string;
 };
+
+export type MarketPairUpdateQuery = Partial<Pick<MarketPair, 'enabled'>>;
