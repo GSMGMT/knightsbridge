@@ -18,13 +18,13 @@ interface InsertOrder {
   fee: number;
 }
 
-const insertOrder = async (walletUid: string, newOrder: InsertOrder) => {
+const insertOrder = async (orderUid: string, newOrder: InsertOrder) => {
   const uid = uuidv4();
   const serverTime = firestore.FieldValue.serverTimestamp();
 
   const OrderDoc = firestore()
-    .collection(FirebaseCollections.WALLETS)
-    .doc(walletUid)
+    .collection(FirebaseCollections.ORDERS)
+    .doc(orderUid)
     .withConverter(OrderConverter);
 
   await OrderDoc.set({
