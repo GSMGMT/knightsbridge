@@ -64,7 +64,7 @@ export const SelectCurrency = ({
   }, [currencies, currency]);
   useEffect(() => {
     (async () => {
-      const fetchedCurrencies = await fetchCurrencies();
+      const fetchedCurrencies = await fetchCurrencies({ type: 'fiat' });
       const [{ uid }] = await fetchBanks();
 
       setCurrencies([...fetchedCurrencies]);
