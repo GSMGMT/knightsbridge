@@ -73,7 +73,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           },
         });
 
-        return res.status(201).json(
+        return res.status(200).json(
           ResponseModel.create(marketPairUid, {
             message: 'Market Pairs fetched successfully',
           })
