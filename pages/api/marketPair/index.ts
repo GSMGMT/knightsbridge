@@ -69,6 +69,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           sort,
           filters: {
             name,
+            onlyEnabled: req.user.role !== Roles.ADMIN,
           },
         });
 

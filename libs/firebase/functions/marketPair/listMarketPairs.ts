@@ -9,6 +9,7 @@ interface ListMarketPairs {
   sort?: Sort;
   filters: {
     name?: string;
+    onlyEnabled?: boolean;
   };
 }
 
@@ -19,6 +20,10 @@ const listMarketPairs = async ({ size, sort, filters }: ListMarketPairs) => {
 
   if (filters.name) {
     MarketPairQuery = MarketPairQuery.where('name', '==', filters.name);
+  }
+
+  if (filters.onlyEnabled) {
+    MarketPairQuery = MarketPairQuery.where('enabled', '==', true);
   }
 
   MarketPairQuery = MarketPairQuery.orderBy(
