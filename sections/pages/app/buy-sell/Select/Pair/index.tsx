@@ -38,7 +38,7 @@ export const Pair = ({
     defaultValues: { search: '' },
   });
 
-  const coinId = useMemo(() => coinInfo.id, [coinInfo]);
+  const coinId = useMemo(() => coinInfo.uid, [coinInfo]);
 
   const [pairs, setPairs] = useState<Pairs>([]);
   const [selectedPair, setSelectedPair] = useState<string | null>(null);

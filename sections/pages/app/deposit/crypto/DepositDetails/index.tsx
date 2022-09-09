@@ -53,7 +53,7 @@ export const DepositDetails = ({
     if (!currentCurrency) return [];
 
     const { walletAddresses } = addresses.find(
-      ({ id }) => id === currentCurrency.id
+      ({ uid: id }) => id === currentCurrency.uid
     )!;
 
     const networksCurrentAddres = walletAddresses?.map(
@@ -154,7 +154,7 @@ export const DepositDetails = ({
       } = await api.get<{ data: number }>('/api/financial/balance', {
         params: {
           type: 'CRYPTOCURRENCY',
-          currencyId: coins[coinSelectedIndex].id,
+          currencyId: coins[coinSelectedIndex].uid,
         },
       });
 

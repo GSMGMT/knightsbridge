@@ -23,7 +23,7 @@ export const fetchPairs: (args: RequestArgs) => Promise<Response> = async ({
     const {
       data: { data, totalCount },
     } = await api.get<{ data: Pairs; totalCount: number }>(
-      `/api/crypto/${cryptoId}/market-pair/list`,
+      `/api/currency/${cryptoId}/marketPairs`,
       {
         params,
       }

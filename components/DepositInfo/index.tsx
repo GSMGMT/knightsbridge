@@ -11,7 +11,7 @@ import { useCopy } from '@hooks/Copy';
 
 import styles from './DepositInfo.module.scss';
 
-type Coin = Pick<PairedCoin, 'id' | 'logo' | 'name' | 'symbol' | 'price'>;
+type Coin = Pick<PairedCoin, 'uid' | 'logo' | 'name' | 'symbol' | 'price'>;
 
 interface DepositInfoProps {
   coin: Coin;

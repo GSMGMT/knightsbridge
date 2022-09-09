@@ -140,12 +140,18 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
     setPercentage(newPercentage);
   }, [cryptoAmountValue, baseWalletAmount]);
 
+  useEffect(() => {
+    (async () => {
+      await handleFetchBaseCurrencyWallet();
+    })();
+  }, [pair]);
+
   const handleSell: () => Promise<void> = useCallback(async () => {
     try {
       setFetching(true);
 
-      await api.post('/api/order/create', {
-        type: 'SELL',
+      await api.post('/api/order', {
+        type: 'sell',
         marketPairId: id,
         amount: cryptoAmountValue,
       });

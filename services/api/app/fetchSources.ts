@@ -25,7 +25,9 @@ export interface PairSource {
 }
 export type PairsSources = Array<PairSource>;
 
-type RequestArgs = Omit<Request, 'startDate' | 'endDate'>;
+type RequestArgs = Omit<Request, 'startDate' | 'endDate'> & {
+  name?: string;
+};
 interface Response {
   pairsSources: PairsSources;
   totalCount: number;
@@ -42,44 +44,54 @@ export const fetchPairsSources: (
       data: { data, totalCount },
     } = await api.get<{
       data: Array<{
-        id: string;
+        uid: string;
         exchange: {
           name: string;
           logo: string;
         };
-        marketPair: string;
-        marketPairId: number;
-        price: number;
+        name: string;
+        cmcId: number;
         base: {
           name: string;
           cmcId?: number;
           logo: string;
+          uid: string;
+          type: string;
         };
-        baseId: string;
-        baseType: string;
-        quoteId: string;
-        quoteType: string;
+        quote: {
+          uid: string;
+          type: string;
+        };
         enabled: boolean;
       }>;
       totalCount: number;
-    }>('/api/crypto/market-pair/list', {
+    }>('/api/marketPair', {
       params,
     });
 
+    const prices = await Promise.all(
+      data.map(async (pair) => {
+        const price = await api.get<{ data: number }>(
+          `/api/marketPair/${pair.uid}/price`
+        );
+
+        return price.data.data;
+      })
+    );
+
     newPairsSources = data.map(
-      ({
-        id,
-        base: { name, cmcId, logo },
-        exchange: { ...source },
-        marketPairId,
-        marketPair,
-        baseId,
-        baseType,
-        quoteId: pairId,
-        quoteType: pairType,
-        price,
-        enabled,
-      }) => {
+      (
+        {
+          uid: id,
+          base: { name, cmcId, logo, uid: baseId, type: baseType },
+          exchange: { ...source },
+          cmcId: marketPairId,
+          name: marketPair,
+          quote: { uid: pairId, type: pairType },
+          enabled,
+        },
+        index
+      ) => {
         const [baseSlug, pairSlug] = marketPair.split('/');
 
         return {
@@ -87,18 +99,18 @@ export const fetchPairsSources: (
           marketPair: name,
           source,
           marketPairId,
-          price,
+          price: prices[index],
           base: {
             id: baseId,
             slug: baseSlug,
-            type: baseType === 'FIAT' ? 'FIAT' : 'CRYPTOCURRENCY',
+            type: baseType === 'fiat' ? 'FIAT' : 'CRYPTOCURRENCY',
             logo,
             cmcId,
           },
           pair: {
             id: pairId,
             slug: pairSlug,
-            type: pairType === 'FIAT' ? 'FIAT' : 'CRYPTOCURRENCY',
+            type: pairType === 'fiat' ? 'FIAT' : 'CRYPTOCURRENCY',
           },
           enabled,
         } as PairSource;

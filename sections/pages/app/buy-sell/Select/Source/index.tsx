@@ -51,7 +51,7 @@ export const Source = ({
       await handleRequest({
         pageSize: 10,
         pageNumber,
-        search: pair,
+        name: pair,
       });
 
     let newPairs = [];

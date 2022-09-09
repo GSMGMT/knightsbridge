@@ -82,7 +82,7 @@ export const Dropdown = ({
                 [styles.selectioned]: option.name === value,
               })}
               onClick={() => handleClick(option.name)}
-              key={option.id}
+              key={option.uid}
               role="button"
               tabIndex={0}
             >
