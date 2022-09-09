@@ -46,24 +46,23 @@ const CoinList = () => {
   );
 
   const [coinList, setCoinList] = useState<Array<AdminPair>>([]);
+  const totalItems = useMemo(() => coinList.length, [coinList]);
 
   const [fetching, setFetching] = useState<boolean>(false);
 
-  const pageSize = useMemo(() => 10, []);
-  const [totalItems, setTotalItems] = useState<number>(0);
+  const pageSize = useMemo(() => 2, []);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageNumberShowing, setPageNumberShowing] = useState<number>(1);
-  useEffect(() => {
-    if (fetching) return;
 
-    setPageNumberShowing(pageNumber);
-  }, [pageNumber, fetching]);
+  const filteredItems = useMemo(
+    () => coinList.slice(pageSize * (pageNumber - 1), pageSize * pageNumber),
+    [coinList, pageSize, pageNumber]
+  );
+
   const handleChangePage: (newPage: number) => void = useCallback(
     (newPage) => {
       if (fetching) return;
 
       setPageNumber(newPage);
-      setFetching(true);
     },
     [fetching]
   );
@@ -72,21 +71,19 @@ const CoinList = () => {
     try {
       setFetching(true);
 
-      const { pairs, totalCount } = await fetchAdminCoins({
+      const { pairs } = await fetchAdminCoins({
         search,
-        pageNumber,
       });
 
       setCoinList([...pairs]);
-      setTotalItems(totalCount);
     } finally {
       setFetching(false);
     }
-  }, [search, pageNumber]);
+  }, [search]);
 
   useEffect(() => {
     fetchCoinList();
-  }, [search, pageNumber]);
+  }, [fetchCoinList]);
 
   const handleSwitchEnabled: (id: string) => Promise<void> = useCallback(
     async (id) => {
@@ -150,7 +147,7 @@ const CoinList = () => {
             <span>Enabled</span>
             <span>Source</span>
           </div>
-          {coinList.map((coin, index) => {
+          {filteredItems.map((coin, index) => {
             const {
               marketPairId,
               source: { logo: exchangeLogo, name: exchangeName },
@@ -162,7 +159,7 @@ const CoinList = () => {
 
             return (
               <div key={marketPairId} className={styles.row}>
-                <span>{(pageNumberShowing - 1) * pageSize + index + 1}</span>
+                <span>{(pageNumber - 1) * pageSize + index + 1}</span>
                 <div>
                   <Image
                     src={logo}

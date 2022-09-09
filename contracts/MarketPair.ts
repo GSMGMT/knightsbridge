@@ -18,6 +18,8 @@ export type MarketPairCmcData = {
   name: string;
   cmcId: number;
   baseCmcId: number;
+  baseType: string;
   quoteCmcId: number;
+  quoteType: string;
   logo: string;
 };

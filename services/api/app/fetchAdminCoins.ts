@@ -30,26 +30,28 @@ export const fetchAdminCoins: (args?: {
     },
   } = await api.get<{
     data: Array<{
-      id: string;
+      uid: string;
       exchange: {
         name: string;
         logo: string;
       };
-      marketPair: string;
-      marketPairId: number;
+      name: string;
+      cmcId: number;
       price: number;
       base: {
+        uid: string;
+        type: string;
         name: string;
         logo: string;
       };
-      baseId: string;
-      baseType: string;
-      quoteId: string;
-      quoteType: string;
+      quote: {
+        uid: string;
+        type: string;
+      };
       enabled: boolean;
     }>;
     totalCount: number;
-  }>('/api/crypto/market-pair/list', {
+  }>('/api/marketPair', {
     params: {
       pageNumber,
       pageSize: 10,
@@ -58,11 +60,11 @@ export const fetchAdminCoins: (args?: {
   });
   const cryptoCurrencies: AdminPair[] = cryptoCurrenciesFetched.map(
     ({
-      id,
+      uid: id,
       base: { logo },
       exchange: { ...source },
-      marketPairId,
-      marketPair,
+      cmcId: marketPairId,
+      name: marketPair,
       enabled,
     }) =>
       ({

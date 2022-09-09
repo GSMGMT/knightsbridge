@@ -55,16 +55,13 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
 
       const {
         data: { data },
-      } = await api.get<{ data: Array<Exchange> }>(
-        '/api/data-analytics/coin-market/exchange/list',
-        {
-          params: {
-            pageNumber,
-            pageSize: 10,
-            search,
-          },
-        }
-      );
+      } = await api.get<{ data: Array<Exchange> }>('/api/cmc/exchange', {
+        params: {
+          start: pageNumber,
+          size: 10,
+          search,
+        },
+      });
 
       if (data.length < 10) {
         setHasMore(false);
@@ -115,7 +112,7 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
   const canSubmit = useMemo(() => !!selectedExchangeId, [selectedExchangeId]);
   const handleSelectCoin: () => void = useCallback(() => {
     const selectedExchange = exchanges.find(
-      ({ cmcId: id }) => id === selectedExchangeId
+      ({ id }) => id === selectedExchangeId
     );
 
     if (selectedExchange) {
@@ -158,7 +155,7 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
           <span>&nbsp;</span>
           <span>Name</span>
         </div>
-        {exchanges.map(({ cmcId: id, logo, name }) => {
+        {exchanges.map(({ id, logo, name }) => {
           const isSelected = id === selectedExchangeId;
 
           return (

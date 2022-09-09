@@ -30,6 +30,8 @@ export const SelectPair = ({
   closeModal,
   fetchPairs,
 }: SelectPairProps) => {
+  const exchangeId = useMemo(() => currentExchange.id, [currentExchange]);
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pageNumber, setPageNumber] = useState<number>(1);
   const handleLoadMoreExchanges = useCallback(() => {
@@ -64,30 +66,29 @@ export const SelectPair = ({
         data: { data },
       } = await api.get<{
         data: Array<{
-          marketPairId: number;
-          marketPairName: string;
-          baseId: number;
+          cmcId: number;
+          name: string;
+          baseCmcId: number;
           baseType: string;
-          quoteId: number;
+          quoteCmcId: number;
           quoteType: string;
           logo: string;
         }>;
-      }>('/api/data-analytics/coin-market/market-pair/list', {
+      }>(`/api/cmc/exchange/${exchangeId}/marketPairs`, {
         params: {
-          pageNumber: 1,
-          pageSize: 1,
-          exchangeId: currentExchange.cmcId,
+          start: 1,
+          size: 1,
         },
       });
 
       const newPairs = data.map(
         ({
-          marketPairId: id,
+          cmcId: id,
           logo,
-          marketPairName: name,
-          baseId,
+          name,
+          baseCmcId: baseId,
           baseType,
-          quoteId,
+          quoteCmcId: quoteId,
           quoteType,
         }) =>
           ({
@@ -109,7 +110,7 @@ export const SelectPair = ({
     } finally {
       setFetching(false);
     }
-  }, [fetching]);
+  }, [fetching, exchangeId]);
   useEffect(() => {
     fetchCoinCmc();
   }, []);
@@ -148,21 +149,20 @@ export const SelectPair = ({
       base: { id: baseId, type: baseType },
       pair: { id: quoteId, type: quoteType },
     } = selectedPair!;
-    const { cmcId: exchangeId } = currentExchange;
 
-    await api.post('/api/coin/register', {
-      marketPairId,
-      marketPairName,
-      baseId,
+    await api.post('/api/marketPair', {
+      name: marketPairName,
+      cmcId: marketPairId,
+      baseCmcId: baseId,
       baseType: baseType.toUpperCase(),
-      quoteId,
+      quoteCmcId: quoteId,
       quoteType: quoteType.toUpperCase(),
-      exchangeId,
+      exchangeCmcId: exchangeId,
     });
 
     fetchPairs();
     closeModal();
-  }, [canSubmit, selectedPair, currentExchange, closeModal]);
+  }, [canSubmit, selectedPair, currentExchange, closeModal, exchangeId]);
 
   return (
     <div className={styles.area}>

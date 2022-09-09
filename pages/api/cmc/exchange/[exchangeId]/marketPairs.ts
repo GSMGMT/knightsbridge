@@ -35,14 +35,14 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           );
         }
 
-        const { search, size, start } = await listMarketPairSchema.validate(
-          req.query
-        );
+        const { search, size, start, exchangeId } =
+          await listMarketPairSchema.validate(req.query);
 
         const exchanges = await fetchMarketPair(
           {
             start: start * 10 - 9,
             limit: size,
+            id: exchangeId,
           },
           search
         );

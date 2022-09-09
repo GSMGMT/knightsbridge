@@ -52,7 +52,9 @@ export const fetchMarketPair = async (
       cmcId: marketPair.market_id,
       name: marketPair.market_pair,
       baseCmcId: marketPair.market_pair_base.currency_id,
+      baseType: marketPair.market_pair_base.currency_type,
       quoteCmcId: marketPair.market_pair_quote.currency_id,
+      quoteType: marketPair.market_pair_quote.currency_type,
       category: marketPair.category,
       logo: coinsInfo[marketPair.market_pair_base.currency_id].logo,
     })

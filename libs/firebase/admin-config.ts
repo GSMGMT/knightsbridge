@@ -1,4 +1,5 @@
 import admin, { AppOptions } from 'firebase-admin';
+import {} from 'firebase-admin/firestore';
 
 if (!admin.apps.length) {
   const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY!.replace(
@@ -16,6 +17,7 @@ if (!admin.apps.length) {
     databaseURL: process.env.FIREBASE_DATABASE_URL,
   };
   admin.initializeApp(options);
+  admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
 export const adminAuth = admin.auth();

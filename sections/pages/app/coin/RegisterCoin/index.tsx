@@ -32,9 +32,10 @@ export const RegisterCoin = ({ fetchPairs }: RegisterCoinProps) => {
   }, [modalVisible]);
 
   const [currentExchange, setCurrentExchange] = useState<Exchange>({
-    cmcId: '',
+    id: '',
     name: '',
     logo: '',
+    slug: '',
   });
   const handleSelectExchange: (newExchange: Exchange) => void = useCallback(
     ({ ...newExchange }) => {

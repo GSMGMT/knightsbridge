@@ -1,7 +1,8 @@
 export interface Exchange {
-  cmcId: string;
+  id: string;
   logo: string;
   name: string;
+  slug: string;
 }
 
 export interface Pair {
