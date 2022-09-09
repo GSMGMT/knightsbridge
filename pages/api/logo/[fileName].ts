@@ -41,4 +41,5 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   }
 }
 
-export default withUser(handler);
+// export default withUser(handler);
+export default handler;
