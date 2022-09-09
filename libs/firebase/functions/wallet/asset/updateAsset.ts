@@ -4,8 +4,11 @@ import { Asset } from '@contracts/Wallet';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
 
-type UpdateFields = Partial<Omit<Asset, 'createdAt' | 'uid' | 'amount'>> & {
+type UpdateFields = Partial<
+  Omit<Asset, 'createdAt' | 'uid' | 'amount' | 'reserved'>
+> & {
   amount?: firestore.FieldValue;
+  reserved?: firestore.FieldValue;
 };
 
 const updateAsset = async (

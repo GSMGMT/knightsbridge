@@ -86,7 +86,7 @@ export const createOrder = async ({
   }
 
   await updateAsset(wallet.uid, desiredAsset.uid, {
-    amount: increment(desireAmount),
+    reserved: increment(desireAmount),
   });
 
   return insertOrder(wallet.uid, {
