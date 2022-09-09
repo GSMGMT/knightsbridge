@@ -3,7 +3,7 @@ import { object, string, SchemaOf } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
 import getFileFromStorage from '@libs/firebase/functions/storage/getFile';
-import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
+import { NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 
 interface FetchLogo {
