@@ -41,8 +41,15 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           );
         }
 
-        const evaluatePromise = depositIds.map((depositId) =>
-          evaluateDeposit({ approved, depositId })
+        const evaluationResults = [];
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const depositId of depositIds) {
+          // eslint-disable-next-line no-await-in-loop
+          const evaluationResult = await evaluateDeposit({
+            approved,
+            depositId,
+          })
             .then(() => ({
               depositId,
               success: true,
@@ -52,13 +59,13 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
               depositId,
               success: false,
               message: error.message ?? 'Error while approving deposit.',
-            }))
-        );
+            }));
 
-        const result = await Promise.all(evaluatePromise);
+          evaluationResults.push(evaluationResult);
+        }
 
         return res.status(200).json(
-          ResponseModel.create(result, {
+          ResponseModel.create(evaluationResults, {
             message: 'Deposits evaluation completed.',
           })
         );
