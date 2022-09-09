@@ -15,7 +15,7 @@ export const ExchangeConverter = {
       cmcId: data.cmcId,
       name: data.name,
       slug: data.slug,
-      logo: data.logo,
+      logo: `${process.env.API_URL}/${data.logo}`,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };

@@ -31,6 +31,8 @@ const insertMarketPair = async (newMarketPair: InsertMarketPair) => {
     createdAt: serverTime,
     updatedAt: serverTime,
   });
+
+  return uid;
 };
 
 export default insertMarketPair;

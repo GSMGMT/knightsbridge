@@ -129,6 +129,7 @@ type Data = {
   cmc_rank: number;
   rank: number;
   market_pairs: MarketPair[];
+  category?: string;
 };
 
 type Quote = {

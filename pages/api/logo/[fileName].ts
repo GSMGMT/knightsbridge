@@ -6,12 +6,12 @@ import getFileFromStorage from '@libs/firebase/functions/storage/getFile';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 
-interface FetchCurrencyLogo {
+interface FetchLogo {
   fileName: string;
 }
 
-const paramSchema: SchemaOf<FetchCurrencyLogo> = object().shape({
-  fileName: string().required('Currency file name is required.'),
+const paramSchema: SchemaOf<FetchLogo> = object().shape({
+  fileName: string().required('file name is required.'),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {

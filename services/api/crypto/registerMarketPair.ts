@@ -23,6 +23,14 @@ interface RegisterMarketPair {
   exchangeCmcId: number;
 }
 
+const removeApiUrl = <T>(data: T & { logo: string }) => {
+  const [, logo] = data.logo.split(`${process.env.API_URL}/`);
+  return {
+    ...data,
+    logo,
+  };
+};
+
 const fetchLogoFromCoinMarket = async (url: string): Promise<File> => {
   const { data: logoBinary, headers } = await axios.get(url, {
     responseType: 'arraybuffer',
@@ -53,10 +61,14 @@ const fetchCurrencyByCmcId = async (cmcId: number): Promise<Currency> => {
     })
   );
 
-  const cryptoFromCmc = data[cmcId];
+  const currencyFromCmc = data[cmcId];
+
+  if (currencyFromCmc.category?.toUpperCase() === 'FIAT') {
+    throw Error('Fiat currency not registered in the system');
+  }
 
   const { buffer, filename, mimetype } = await fetchLogoFromCoinMarket(
-    cryptoFromCmc.logo
+    currencyFromCmc.logo
   );
   const filePath = `logo/${filename}`;
 
@@ -71,8 +83,8 @@ const fetchCurrencyByCmcId = async (cmcId: number): Promise<Currency> => {
     insertCurrency({
       cmcId,
       logo: filePath,
-      name: cryptoFromCmc.name,
-      symbol: cryptoFromCmc.symbol,
+      name: currencyFromCmc.name,
+      symbol: currencyFromCmc.symbol,
       type: 'crypto',
     })
   );
@@ -114,7 +126,7 @@ const fetchExchange = async (cmcId: number): Promise<Exchange> => {
   ).then(() =>
     insertExchange({
       cmcId,
-      logo: exchangeFromCmc.logo,
+      logo: filePath,
       name: exchangeFromCmc.name,
       slug: exchangeFromCmc.slug,
     })
@@ -137,15 +149,39 @@ export const registerMarketPair = async ({
   }
 
   const [baseCurrency, quoteCurrency, exchange] = await Promise.all([
-    fetchCurrencyByCmcId(baseCmcId),
-    fetchCurrencyByCmcId(quoteCmcId),
-    fetchExchange(exchangeCmcId),
+    fetchCurrencyByCmcId(baseCmcId).then(removeApiUrl<Currency>),
+    fetchCurrencyByCmcId(quoteCmcId).then(removeApiUrl<Currency>),
+    fetchExchange(exchangeCmcId).then(removeApiUrl<Exchange>),
   ]);
 
   const marketPair = await insertMarketPair({
-    base: baseCurrency,
-    quote: quoteCurrency,
-    exchange,
+    base: {
+      cmcId: baseCurrency.cmcId,
+      logo: baseCurrency.logo,
+      name: baseCurrency.name,
+      symbol: baseCurrency.symbol,
+      type: baseCurrency.type,
+      uid: baseCurrency.uid,
+      quote: baseCurrency.quote,
+      sign: baseCurrency.sign,
+    },
+    quote: {
+      cmcId: quoteCurrency.cmcId,
+      logo: quoteCurrency.logo,
+      name: quoteCurrency.name,
+      symbol: quoteCurrency.symbol,
+      type: quoteCurrency.type,
+      uid: quoteCurrency.uid,
+      quote: quoteCurrency.quote,
+      sign: quoteCurrency.sign,
+    },
+    exchange: {
+      cmcId: exchange.cmcId,
+      logo: exchange.logo,
+      name: exchange.name,
+      slug: exchange.slug,
+      uid: exchange.uid,
+    },
     cmcId,
     name,
   });

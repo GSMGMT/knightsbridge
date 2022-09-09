@@ -18,7 +18,7 @@ export const FiatDepositConverter = {
       bank: data.bank,
       currency: {
         ...data.currency,
-        logo: `${process.env.API_URL}/currency/${data.currency.logo}`,
+        logo: `${process.env.API_URL}/${data.currency.logo}`,
       },
       referenceNo: data.referenceNo,
       status: data.status,
