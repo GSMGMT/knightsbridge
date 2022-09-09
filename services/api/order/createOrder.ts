@@ -7,6 +7,7 @@ import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserU
 import { increment } from '@libs/firebase/admin-config';
 import insertOrder from '@libs/firebase/functions/order/insertOrder';
 import { getPairPrice } from '../coinMarketCap/marketPair/getMarketPairPrice';
+import { createWallet } from '../wallet/createWallet';
 
 interface CreateOrder {
   user: User;
@@ -32,7 +33,9 @@ export const createOrder = async ({
   }
 
   const feePromise = getFeeByType('GLOBAL');
-  const walletPromise = getWalletByUserUid(user.uid);
+  const walletPromise = getWalletByUserUid(user.uid).then(
+    (wallet) => wallet || createWallet(user.uid)
+  );
 
   const [wallet, fee] = await Promise.all([walletPromise, feePromise]);
 
