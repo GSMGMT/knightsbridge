@@ -9,13 +9,7 @@ import { Dropdown } from '@components/Dropdown';
 import { OpenTable } from './Open';
 import { HistoryTable } from './History';
 
-import {
-  HandleSetSortBy,
-  Order,
-  OrderStatus,
-  SortBy,
-  TypeOrder,
-} from './types';
+import { HandleSetSortBy, Order, OrderStatus, SortBy } from './types';
 
 import styles from './Table.module.scss';
 
@@ -102,34 +96,33 @@ export const Table = () => {
         data: { data },
       } = await api.get<{
         data: Array<{
-          id: string;
+          uid: string;
           createdAt: string;
-          type: TypeOrder;
+          type: 'buy' | 'sell';
           marketPair: {
-            marketPair: string;
-            price: number;
+            name: string;
           };
           amount: number;
           price: number;
           status: OrderStatus;
           total: number;
         }>;
-      }>('/api/order/list', {
+      }>('/api/order', {
         params: {
-          status: 'PROCESSING,APPROVED,CANCELED,REJECTED',
           sort: sortByRequest,
+          size: 100,
         },
       });
 
       const newOrders = data.map(
         ({
-          id,
+          uid: id,
           amount,
           price,
           status,
           type,
           createdAt,
-          marketPair: { marketPair: asset },
+          marketPair: { name: asset },
           total,
         }) =>
           ({
@@ -139,7 +132,7 @@ export const Table = () => {
             amount,
             total,
             status,
-            type,
+            type: type === 'buy' ? 'BUY' : 'SELL',
             price,
           } as Order)
       );

@@ -89,7 +89,7 @@ export const createOrder = async ({
     reserved: increment(desireAmount),
   });
 
-  return insertOrder(wallet.uid, {
+  return insertOrder({
     amount,
     fee: fee.percentage,
     marketPair,

@@ -18,16 +18,16 @@ interface InsertOrder {
   fee: number;
 }
 
-const insertOrder = async (orderUid: string, newOrder: InsertOrder) => {
+const insertOrder = async (newOrder: InsertOrder) => {
   const uid = uuidv4();
   const serverTime = firestore.FieldValue.serverTimestamp();
 
   const OrderDoc = firestore()
     .collection(FirebaseCollections.ORDERS)
-    .doc(orderUid)
+    .doc(uid)
     .withConverter(OrderConverter);
 
-  await OrderDoc.set({
+  await OrderDoc.create({
     uid,
     ...newOrder,
     status: OrderStatus.PROCESSING,

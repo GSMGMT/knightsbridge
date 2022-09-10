@@ -20,7 +20,6 @@ import {
   Item,
   SortBy,
   Status,
-  Type,
   Variant,
 } from '@sections/pages/app/orders/buy-sell/types';
 
@@ -148,18 +147,19 @@ const BuySell = () => {
     }
 
     const {
-      data: { data, totalCount },
+      data: { data },
     } = await api.get<{
-      totalCount: number;
       data: Array<{
-        id: string;
-        name: string;
-        surname: string;
-        email: string;
-        amount: number;
+        uid: string;
         createdAt: string;
+        amount: number;
+        user: {
+          name: string;
+          surname: string;
+          email: string;
+        };
         marketPair: {
-          marketPair: string;
+          name: string;
           exchange: {
             name: string;
           };
@@ -168,9 +168,9 @@ const BuySell = () => {
         price: number;
         status: Status;
         total: number;
-        type: Type;
+        type: 'buy' | 'sell';
       }>;
-    }>('/api/admin/order', {
+    }>('/api/order', {
       params: {
         pageSize,
         pageNumber,
@@ -184,10 +184,10 @@ const BuySell = () => {
 
     const newTableItems = data.map(
       ({
-        id,
+        uid: id,
         amount,
         marketPair: {
-          marketPair: pairName,
+          name: pairName,
           exchange: { name: exchangeName },
         },
         fee,
@@ -195,9 +195,7 @@ const BuySell = () => {
         price,
         total,
         type,
-        email: userEmail,
-        name,
-        surname,
+        user: { email: userEmail, name, surname },
         createdAt,
       }) =>
         ({
@@ -210,12 +208,12 @@ const BuySell = () => {
           price,
           status,
           total,
-          type,
+          type: type === 'buy' ? 'BUY' : 'SELL',
           user: { email: userEmail, name: `${name} ${surname}` },
         } as Item)
     );
 
-    setTotalItems(totalCount);
+    setTotalItems(newTableItems.length);
     setTableItems([...newTableItems]);
     setFetching(false);
   }, [
