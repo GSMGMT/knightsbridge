@@ -50,7 +50,7 @@ const CoinList = () => {
 
   const [fetching, setFetching] = useState<boolean>(false);
 
-  const pageSize = useMemo(() => 2, []);
+  const pageSize = useMemo(() => 10, []);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const filteredItems = useMemo(
@@ -192,7 +192,7 @@ const CoinList = () => {
 
         <div className={styles['pagination-area']}>
           <div className={styles['pagination-label']}>
-            Showing ({coinList.length}) of {totalItems}
+            Showing ({filteredItems.length}) of {totalItems}
           </div>
 
           <Pagination

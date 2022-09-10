@@ -39,8 +39,6 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           updateMarketPairSchema.validate(req.body),
         ]);
 
-        console.log({ marketPairId });
-
         await updateMarketPair(marketPairId, data);
 
         return res.status(200).json(
