@@ -113,7 +113,7 @@ const CoinList = () => {
 
   return (
     <>
-      <Feature feature="coin_list">
+      <Feature feature="coin_list" restrict="PAGE">
         <div>
           <div className={styles.head}>
             <div className={styles.details}>
@@ -211,7 +211,7 @@ const CoinList = () => {
         </div>
       </Feature>
 
-      <Feature feature="coin_register">
+      <Feature feature="coin_register" restrict="COMPONENT">
         <RegisterCoin fetchPairs={fetchCoinList} />
       </Feature>
     </>
