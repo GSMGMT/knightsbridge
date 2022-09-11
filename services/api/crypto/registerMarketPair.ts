@@ -140,7 +140,7 @@ export const registerMarketPair = async ({
   quoteCmcId,
   exchangeCmcId,
 }: RegisterMarketPair) => {
-  const foundMarketPair = await getMarketPairByName(name);
+  const foundMarketPair = await getMarketPairByName(cmcId, exchangeCmcId);
 
   if (foundMarketPair) {
     throw Error('Market pair already registered');

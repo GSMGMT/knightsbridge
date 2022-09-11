@@ -11,6 +11,7 @@ import { AuthProvider } from '@store/providers/Auth';
 
 import 'nprogress/nprogress.css';
 import '@styles/app.scss';
+import { FlagsProvider } from '@store/providers/Flags';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -30,15 +31,17 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <AuthProvider>
-      <Head>
-        <title>Welcome to knightsbridge!</title>
-      </Head>
-      <Layouts>
-        <Component {...pageProps} />
-      </Layouts>
-      <Toaster />
-    </AuthProvider>
+    <FlagsProvider defaults={{ deposit_fiat: false, sign_in: false }}>
+      <AuthProvider>
+        <Head>
+          <title>KnightsBridge</title>
+        </Head>
+        <Layouts>
+          <Component {...pageProps} />
+        </Layouts>
+        <Toaster />
+      </AuthProvider>
+    </FlagsProvider>
   );
 };
 export default App;

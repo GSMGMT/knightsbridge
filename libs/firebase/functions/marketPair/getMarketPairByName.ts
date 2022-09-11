@@ -4,11 +4,13 @@ import { FirebaseCollections } from '@libs/firebase/collections';
 import { MarketPairConverter } from '@libs/firebase/converters/marketPairConverter';
 
 const getMarketPairByName = async (
-  marketPairName: string
+  marketPairCmcId: number,
+  exchangeCmcId: number
 ): Promise<MarketPair | null> => {
   const MarketPairCollection = firestore()
     .collection(FirebaseCollections.MARKET_PAIRS)
-    .where('name', '==', marketPairName)
+    .where('cmcId', '==', marketPairCmcId)
+    .where('exchange.cmcId', '==', exchangeCmcId)
     .withConverter(MarketPairConverter);
 
   const querySnapshot = await MarketPairCollection.get();

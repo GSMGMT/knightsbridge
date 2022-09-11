@@ -25,9 +25,13 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         const availablePairs = await getMarketPairsByBaseUid(currencyId).then(
           (pairs) => pairs.map((pair) => pair.name)
         );
+        let pairsWithoutDuplicates: Array<string> = [];
+        pairsWithoutDuplicates = availablePairs.filter(
+          (pair, index) => availablePairs.indexOf(pair) === index
+        );
 
         return res.status(200).json(
-          ResponseModel.create(availablePairs, {
+          ResponseModel.create(pairsWithoutDuplicates, {
             message: 'Available pairs fetched successfully',
           })
         );
