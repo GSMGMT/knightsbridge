@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
 
+import { Features } from '@contracts/Features';
+
 import LogoTextLight from '@public/images/logos/logo-text-light.svg';
 import LogoLight from '@public/images/logos/logo-light.svg';
 import LogoTextDark from '@public/images/logos/logo-text-dark.svg';
@@ -24,12 +26,22 @@ interface DropdownItem {
   title: string;
   icon: Icons;
   url: string;
+  feature: Features;
 }
-export interface INavigation {
+type NavigationAction =
+  | {
+      url: string;
+      feature: Features;
+      dropdown?: never;
+    }
+  | {
+      url?: never;
+      feature?: never;
+      dropdown: DropdownItem[];
+    };
+export type INavigation = NavigationAction & {
   title: string;
-  url?: string;
-  dropdown?: DropdownItem[];
-}
+};
 
 interface HeaderProps {
   headerWide?: boolean;

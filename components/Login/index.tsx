@@ -1,5 +1,9 @@
+import { ReactNode, useMemo } from 'react';
 import cn from 'classnames';
-import { ReactNode } from 'react';
+
+import { useFeature } from '@hooks/Feature';
+
+import { Features } from '@contracts/Features';
 
 import LogoLight from '@public/images/logos/logo-text-light.svg';
 import LogoDark from '@public/images/logos/logo-text-dark.svg';
@@ -9,14 +13,23 @@ import { Link } from '@components/Link';
 
 import styles from './Login.module.scss';
 
-interface LoginProps {
+type Action =
+  | {
+      linkText: string;
+      linkUrl: string;
+      feature: Features;
+    }
+  | {
+      linkText?: never;
+      linkUrl?: never;
+      feature?: never;
+    };
+type LoginProps = Action & {
   className?: string;
   content?: string;
-  linkText?: string;
-  linkUrl?: string;
   children: ReactNode;
   sideImage?: string;
-}
+};
 export const Login = ({
   className,
   content,
@@ -24,36 +37,47 @@ export const Login = ({
   linkUrl,
   children,
   sideImage,
-}: LoginProps) => (
-  <div className={cn(className, styles.login)}>
-    <div
-      className={styles.col}
-      style={{
-        backgroundImage: `url('${sideImage}')`,
-      }}
-    >
-      <Link className={styles.logo} href="/">
-        <LogoDark className={styles.dark} />
-        <LogoLight className={styles.light} />
-      </Link>
+  feature,
+}: LoginProps) => {
+  const { isEnabled } = useFeature();
+
+  const canAction = useMemo(() => {
+    if (!feature) return false;
+
+    return isEnabled(feature);
+  }, [isEnabled, feature]);
+
+  return (
+    <div className={cn(className, styles.login)}>
+      <div
+        className={styles.col}
+        style={{
+          backgroundImage: `url('${sideImage}')`,
+        }}
+      >
+        <Link className={styles.logo} href="/">
+          <LogoDark className={styles.dark} />
+          <LogoLight className={styles.light} />
+        </Link>
+      </div>
+      <div className={styles.col}>
+        {canAction && (content || linkText) && (
+          <div className={styles.head}>
+            <span>{content}</span>
+            {linkText && (
+              <Link className={styles.link} href={linkUrl}>
+                {linkText}
+              </Link>
+            )}
+          </div>
+        )}
+        <div className={styles.wrap}>{children}</div>
+      </div>
     </div>
-    <div className={styles.col}>
-      {content && linkText && linkUrl && (
-        <div className={styles.head}>
-          <span>{content}</span>
-          <Link className={styles.link} href={linkUrl}>
-            {linkText}
-          </Link>
-        </div>
-      )}
-      <div className={styles.wrap}>{children}</div>
-    </div>
-  </div>
-);
+  );
+};
 Login.defaultProps = {
   className: undefined,
   sideImage: warrior.src,
   content: undefined,
-  linkText: undefined,
-  linkUrl: undefined,
 };

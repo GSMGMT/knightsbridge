@@ -12,6 +12,7 @@ import { useRequest } from '@hooks/Request';
 import { useTitle } from '@hooks/Title';
 
 import { Bidding } from '@components/Bidding';
+import { Feature } from '@components/Feature';
 import {
   Address,
   Addresses,
@@ -99,31 +100,33 @@ const DepositCrypto = () => {
   }, [activeIndex]);
 
   return (
-    <Bidding title="Deposit crypto" items={steps} activeIndex={activeIndex}>
-      {!fetching && (
-        <>
-          {activeIndex === 0 && (
-            <DepositDetails
-              goNext={handleNextStep}
-              coins={coins}
-              addresses={addresses}
-              setAmount={setAmount}
-              setCoinSelectedIndex={setCoinSelectedIndex}
-              setNetworkSelectedIndex={setNetworkSelectedIndex}
-            />
-          )}
-          {activeIndex === 1 && (
-            <ConfirmDeposit
-              amount={amount}
-              coinSelected={coinSelected}
-              networkSelected={networkSelected}
-              goNext={handleNextStep}
-              goBack={handleBackStep}
-            />
-          )}
-        </>
-      )}
-    </Bidding>
+    <Feature feature="deposit_crypto">
+      <Bidding title="Deposit crypto" items={steps} activeIndex={activeIndex}>
+        {!fetching && (
+          <>
+            {activeIndex === 0 && (
+              <DepositDetails
+                goNext={handleNextStep}
+                coins={coins}
+                addresses={addresses}
+                setAmount={setAmount}
+                setCoinSelectedIndex={setCoinSelectedIndex}
+                setNetworkSelectedIndex={setNetworkSelectedIndex}
+              />
+            )}
+            {activeIndex === 1 && (
+              <ConfirmDeposit
+                amount={amount}
+                coinSelected={coinSelected}
+                networkSelected={networkSelected}
+                goNext={handleNextStep}
+                goBack={handleBackStep}
+              />
+            )}
+          </>
+        )}
+      </Bidding>
+    </Feature>
   );
 };
 export default DepositCrypto;

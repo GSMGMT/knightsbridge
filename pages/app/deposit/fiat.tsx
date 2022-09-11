@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useCallback, useMemo, useState } from 'react';
 
 import { Bidding } from '@components/Bidding';
+import { Feature } from '@components/Feature';
 
 import { SelectCurrency } from '@sections/pages/app/deposit/fiat/SelectCurrency';
 import { ImportantNotes } from '@sections/pages/app/deposit/fiat/ImportantNotes';
@@ -44,26 +45,28 @@ const DepositFiat = () => {
   }, []);
 
   return (
-    <Bidding title="Deposit fiat" items={steps} activeIndex={activeIndex}>
-      {activeIndex === 0 && (
-        <SelectCurrency
-          goNext={handleNextStep}
-          setRequestInfo={setRequestInfo}
-        />
-      )}
-      {activeIndex === 1 && (
-        <ImportantNotes
-          referenceNumber={referenceNumber}
-          goNext={handleNextStep}
-        />
-      )}
-      {activeIndex === 2 && (
-        <PaymentDetails
-          requestInfo={requestInfo}
-          handleBackToBegining={handleBackToBegining}
-        />
-      )}
-    </Bidding>
+    <Feature feature="deposit_fiat">
+      <Bidding title="Deposit fiat" items={steps} activeIndex={activeIndex}>
+        {activeIndex === 0 && (
+          <SelectCurrency
+            goNext={handleNextStep}
+            setRequestInfo={setRequestInfo}
+          />
+        )}
+        {activeIndex === 1 && (
+          <ImportantNotes
+            referenceNumber={referenceNumber}
+            goNext={handleNextStep}
+          />
+        )}
+        {activeIndex === 2 && (
+          <PaymentDetails
+            requestInfo={requestInfo}
+            handleBackToBegining={handleBackToBegining}
+          />
+        )}
+      </Bidding>
+    </Feature>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

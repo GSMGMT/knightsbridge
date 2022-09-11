@@ -1,7 +1,9 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { verifyPasswordResetCode } from 'firebase/auth';
+import { parseCookies } from 'nookies';
 
 import { auth } from '@libs/firebase/config';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 import { Form } from '@sections/pages/auth/reset/Form';
 import { Login } from '@components/Login';
@@ -9,8 +11,6 @@ import { Login } from '@components/Login';
 import user from '@public/images/user.png';
 
 import { navigation } from '@navigation';
-import { parseCookies } from 'nookies';
-import { adminAuth } from '@libs/firebase/admin-config';
 
 export const getServerSideProps: GetServerSideProps<{ email: string }> = async (
   ctx
@@ -45,6 +45,7 @@ const Reset = ({
     linkText="Sign up for free"
     linkUrl={navigation.auth.signUp}
     sideImage={user.src}
+    feature="sign_up"
   >
     <Form email={email} />
   </Login>

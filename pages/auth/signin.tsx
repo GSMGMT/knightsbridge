@@ -2,6 +2,7 @@ import { parseCookies } from 'nookies';
 import { GetServerSideProps } from 'next';
 import cn from 'classnames';
 
+import { Feature } from '@components/Feature';
 import { Security } from '@components/Security';
 import { Login } from '@components/Login';
 import { Form } from '@sections/pages/auth/singin/Form';
@@ -13,24 +14,27 @@ import { navigation } from '@navigation';
 import { adminAuth } from '@libs/firebase/admin-config';
 
 const SignIn = () => (
-  <Login
-    content="Don’t have an account?"
-    linkText="Sign up for free"
-    linkUrl={navigation.auth.signUp}
-  >
-    <div className={styles.login}>
-      <div className={styles.top}>
-        <h3 className={cn('h3', styles.title)}>Sign in to Knights</h3>
+  <Feature feature="sign_in">
+    <Login
+      content="Don’t have an account?"
+      linkText="Sign up for free"
+      linkUrl={navigation.auth.signUp}
+      feature="sign_up"
+    >
+      <div className={styles.login}>
+        <div className={styles.top}>
+          <h3 className={cn('h3', styles.title)}>Sign in to Knights</h3>
 
-        <div className={styles.info}>
-          Please ensure you are visiting the correct url.
+          <div className={styles.info}>
+            Please ensure you are visiting the correct url.
+          </div>
+
+          <Security />
         </div>
-
-        <Security />
+        <Form />
       </div>
-      <Form />
-    </div>
-  </Login>
+    </Login>
+  </Feature>
 );
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {

@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import {
   fetchAndActivate,
   getAll,
@@ -7,24 +7,24 @@ import {
 import { getApp } from 'firebase/app';
 import { useSsr } from 'usehooks-ts';
 
-import { FlagsContext } from '@store/contexts/Flags';
+import { Flags, FlagsContext, defaultFlags } from '@store/contexts/Flags';
+import { Features } from '@contracts/Features';
 
 interface FlagsProviderProps {
   children: ReactElement;
-  defaults: { [key: string]: boolean };
 }
-export const FlagsProvider = ({ defaults, children }: FlagsProviderProps) => {
-  const [flags, setFlags] = useState(defaults);
+export const FlagsProvider = ({ children }: FlagsProviderProps) => {
+  const [flags, setFlags] = useState<Flags>(defaultFlags);
 
   const [, setLoading] = useState(false);
 
   const { isBrowser } = useSsr();
 
   useEffect(() => {
-    const isLoadingNow = isBrowser && flags === defaults;
+    const isLoadingNow = isBrowser && flags === defaultFlags;
 
     setLoading(isLoadingNow);
-  }, [isBrowser, flags, defaults]);
+  }, [isBrowser, flags, defaultFlags]);
 
   useEffect(() => {
     if (isBrowser) {
@@ -34,27 +34,32 @@ export const FlagsProvider = ({ defaults, children }: FlagsProviderProps) => {
         minimumFetchIntervalMillis: 1000,
         fetchTimeoutMillis: 1000,
       };
-      remoteConfig.defaultConfig = defaults;
+      remoteConfig.defaultConfig = defaultFlags;
 
       fetchAndActivate(remoteConfig)
-        .then((activated) => {
-          if (!activated) console.log('not activated');
-
-          return getAll(remoteConfig);
-        })
+        .then(() => getAll(remoteConfig))
         .then((remoteFlags) => {
           const newFlags = { ...flags };
 
           // eslint-disable-next-line no-restricted-syntax
           for (const [key, config] of Object.entries(remoteFlags)) {
-            newFlags[key] = config.asBoolean();
+            const keyConfig = key as Features;
+
+            newFlags[keyConfig] = config.asBoolean();
           }
           setFlags(newFlags);
         });
     }
   }, [isBrowser]);
 
+  const value = useMemo(
+    () => ({
+      flags,
+    }),
+    [flags]
+  );
+
   return (
-    <FlagsContext.Provider value={flags}>{children}</FlagsContext.Provider>
+    <FlagsContext.Provider value={value}>{children}</FlagsContext.Provider>
   );
 };

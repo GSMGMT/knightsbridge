@@ -22,6 +22,7 @@ import { Calendar } from '@components/Calendar';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
+import { Feature } from '@components/Feature';
 import { Table } from '@sections/pages/app/orders/crypto/Table';
 import { Bulk } from '@sections/pages/app/orders/crypto/Action/Bulk';
 
@@ -272,7 +273,7 @@ const Crypto = () => {
   );
 
   return (
-    <>
+    <Feature feature="deposit_crypto">
       <div className={styles.activity}>
         <div className={cn('container', styles.container)}>
           <div className={styles.body}>
@@ -373,16 +374,16 @@ const Crypto = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <Bulk
-        handleChangeItemStatus={handleChangeItemStatus}
-        isTriggeredBulk={isTriggeredBulkAction}
-        handleClose={handleClose}
-        selectedItems={selectedItems}
-        variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
-      />
-    </>
+        <Bulk
+          handleChangeItemStatus={handleChangeItemStatus}
+          isTriggeredBulk={isTriggeredBulkAction}
+          handleClose={handleClose}
+          selectedItems={selectedItems}
+          variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
+        />
+      </div>
+    </Feature>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

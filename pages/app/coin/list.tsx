@@ -16,6 +16,7 @@ import { Icon } from '@components/Icon';
 import { Switch } from '@components/Switch';
 
 import { RegisterCoin } from '@sections/pages/app/coin/RegisterCoin';
+import { Feature } from '@components/Feature';
 
 interface Exchange {
   name: string;
@@ -112,99 +113,107 @@ const CoinList = () => {
 
   return (
     <>
-      <div>
-        <div className={styles.head}>
-          <div className={styles.details}>
-            <div className={styles.user}>Coin List</div>
-          </div>
+      <Feature feature="coin_list">
+        <div>
+          <div className={styles.head}>
+            <div className={styles.details}>
+              <div className={styles.user}>Coin List</div>
+            </div>
 
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Search coin"
-              autoComplete="off"
-              {...register('search')}
-            />
-            <button className={styles.result} type="submit" disabled={fetching}>
-              <Icon
-                name="search"
-                size={20}
-                className={cn({ [styles.loading]: fetching })}
+            <form className={styles.form} onSubmit={handleSubmit}>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Search coin"
+                autoComplete="off"
+                {...register('search')}
               />
-            </button>
-          </form>
-        </div>
-
-        <div className={cn(styles.table, { [styles.fetching]: fetching })}>
-          <div className={styles.row}>
-            <span>#</span>
-            <span>Name</span>
-            <span>Enabled</span>
-            <span>Source</span>
+              <button
+                className={styles.result}
+                type="submit"
+                disabled={fetching}
+              >
+                <Icon
+                  name="search"
+                  size={20}
+                  className={cn({ [styles.loading]: fetching })}
+                />
+              </button>
+            </form>
           </div>
-          {filteredItems.map((coin, index) => {
-            const {
-              marketPairId,
-              source: { logo: exchangeLogo, name: exchangeName },
-              marketPair,
-              logo,
-              enabled,
-              id,
-            } = coin;
 
-            return (
-              <div key={marketPairId} className={styles.row}>
-                <span>{(pageNumber - 1) * pageSize + index + 1}</span>
-                <div>
-                  <Image
-                    src={logo}
-                    alt={marketPair}
-                    className={styles.logo}
-                    width={24}
-                    height={24}
-                  />
-                  <div className={styles.info}>
-                    <span className={styles.name}>{marketPair}</span>
-                    <span className={styles.code}>{exchangeName}</span>
+          <div className={cn(styles.table, { [styles.fetching]: fetching })}>
+            <div className={styles.row}>
+              <span>#</span>
+              <span>Name</span>
+              <span>Enabled</span>
+              <span>Source</span>
+            </div>
+            {filteredItems.map((coin, index) => {
+              const {
+                marketPairId,
+                source: { logo: exchangeLogo, name: exchangeName },
+                marketPair,
+                logo,
+                enabled,
+                id,
+              } = coin;
+
+              return (
+                <div key={marketPairId} className={styles.row}>
+                  <span>{(pageNumber - 1) * pageSize + index + 1}</span>
+                  <div>
+                    <Image
+                      src={logo}
+                      alt={marketPair}
+                      className={styles.logo}
+                      width={24}
+                      height={24}
+                    />
+                    <div className={styles.info}>
+                      <span className={styles.name}>{marketPair}</span>
+                      <span className={styles.code}>{exchangeName}</span>
+                    </div>
+                  </div>
+                  <span>
+                    <Switch
+                      checked={enabled}
+                      onChange={() => handleSwitchEnabled(id)}
+                    />
+                  </span>
+                  <div>
+                    <Image
+                      className={styles.logo}
+                      src={exchangeLogo}
+                      alt={exchangeName}
+                      title={exchangeName}
+                      width={24}
+                      height={24}
+                    />
                   </div>
                 </div>
-                <span>
-                  <Switch
-                    checked={enabled}
-                    onChange={() => handleSwitchEnabled(id)}
-                  />
-                </span>
-                <div>
-                  <Image
-                    className={styles.logo}
-                    src={exchangeLogo}
-                    alt={exchangeName}
-                    title={exchangeName}
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className={styles['pagination-area']}>
-          <div className={styles['pagination-label']}>
-            Showing ({filteredItems.length}) of {totalItems}
+              );
+            })}
           </div>
 
-          <Pagination
-            currentPage={pageNumber}
-            pageSize={pageSize}
-            totalItems={totalItems}
-            handleChangePage={handleChangePage}
-          />
-        </div>
-      </div>
+          <div className={styles['pagination-area']}>
+            <div className={styles['pagination-label']}>
+              Showing ({filteredItems.length}) of {totalItems}
+            </div>
 
-      <RegisterCoin fetchPairs={fetchCoinList} />
+            <Pagination
+              currentPage={pageNumber}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              handleChangePage={handleChangePage}
+            />
+          </div>
+        </div>
+      </Feature>
+
+      <Feature feature="coin_register">
+        <RegisterCoin fetchPairs={fetchCoinList} />
+      </Feature>
     </>
   );
 };

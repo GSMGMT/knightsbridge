@@ -12,6 +12,7 @@ import { Calendar } from '@components/Calendar';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
+import { Feature } from '@components/Feature';
 import { Table } from '@sections/pages/app/orders/buy-sell/Table';
 import { Bulk } from '@sections/pages/app/orders/buy-sell/Action/Bulk';
 
@@ -282,7 +283,7 @@ const BuySell = () => {
   );
 
   return (
-    <>
+    <Feature feature="buy_sell">
       <div className={styles.activity}>
         <div className={cn('container', styles.container)}>
           <div className={styles.body}>
@@ -383,16 +384,16 @@ const BuySell = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <Bulk
-        handleChangeItemStatus={handleChangeItemStatus}
-        isTriggeredBulk={isTriggeredBulkAction}
-        handleClose={handleClose}
-        selectedItems={selectedItems}
-        variant={bulkAction === 'APPROVE' ? 'APPROVE' : 'REJECT'}
-      />
-    </>
+        <Bulk
+          handleChangeItemStatus={handleChangeItemStatus}
+          isTriggeredBulk={isTriggeredBulkAction}
+          handleClose={handleClose}
+          selectedItems={selectedItems}
+          variant={bulkAction === 'APPROVE' ? 'APPROVE' : 'REJECT'}
+        />
+      </div>
+    </Feature>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

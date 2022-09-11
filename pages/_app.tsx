@@ -31,7 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <FlagsProvider defaults={{ deposit_fiat: false, sign_in: false }}>
+    <FlagsProvider>
       <AuthProvider>
         <Head>
           <title>KnightsBridge</title>

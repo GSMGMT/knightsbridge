@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import useDarkMode from 'use-dark-mode';
 
 import { TextInput } from '@components/TextInput';
+import { Feature } from '@components/Feature';
 // import { Recaptcha } from '@components/Recaptcha';
 import { Link } from '@components/Link';
 
@@ -143,11 +144,13 @@ export const Form = () => {
       >
         Continue
       </button>
-      <div className={styles.foot}>
-        <Link className={styles.link} href={navigation.auth.signIn}>
-          Nevermind, I got it
-        </Link>
-      </div>
+      <Feature feature="sign_in" restrict="COMPONENT">
+        <div className={styles.foot}>
+          <Link className={styles.link} href={navigation.auth.signIn}>
+            Nevermind, I got it
+          </Link>
+        </div>
+      </Feature>
     </form>
   );
 };

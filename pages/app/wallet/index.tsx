@@ -8,6 +8,7 @@ import styles from '@styles/pages/app/wallet/Wallet.module.sass';
 import { Main } from '@sections/pages/app/wallet/Main';
 import { Funds } from '@components/Funds';
 import { ItemI } from '@components/Funds/Item';
+import { Feature } from '@components/Feature';
 
 import { useTitle } from '@hooks/Title';
 
@@ -115,17 +116,19 @@ const FiatSpot = () => {
   }, [spotItems]);
 
   return (
-    <div>
-      <Main fiatAmount={fiatAmount} cryptoAmount={cryptoAmount} />
-      <div className={styles.list}>
-        <div className={styles.item}>
-          <div className={styles.head}>Funds</div>
-          <div className={styles.body}>
-            <Funds items={items} />
+    <Feature feature="wallet">
+      <div>
+        <Main fiatAmount={fiatAmount} cryptoAmount={cryptoAmount} />
+        <div className={styles.list}>
+          <div className={styles.item}>
+            <div className={styles.head}>Funds</div>
+            <div className={styles.body}>
+              <Funds items={items} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Feature>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

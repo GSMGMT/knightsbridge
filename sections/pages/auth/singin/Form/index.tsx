@@ -8,8 +8,9 @@ import * as yup from 'yup';
 import { AuthContext } from '@store/contexts/Auth';
 
 import { TextInput } from '@components/TextInput';
-// import { Recaptcha } from '@components/Recaptcha';
+import { Feature } from '@components/Feature';
 import { Checkbox } from '@components/Checkbox';
+// import { Recaptcha } from '@components/Recaptcha';
 
 import { navigation } from '@navigation';
 
@@ -126,11 +127,13 @@ export const Form = () => {
         data-testid="password-input"
         {...register('password', { required: true })}
       />
-      <div className={styles.foot}>
-        <Link href={navigation.auth.password.forgot}>
-          <a className={styles.link}>Forgot password?</a>
-        </Link>
-      </div>
+      <Feature feature="forgot_password" restrict="COMPONENT">
+        <div className={styles.foot}>
+          <Link href={navigation.auth.password.forgot}>
+            <a className={styles.link}>Forgot password?</a>
+          </Link>
+        </div>
+      </Feature>
       <Checkbox className={styles.check} {...register('remember')}>
         <span>Remember me</span>
       </Checkbox>

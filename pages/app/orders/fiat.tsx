@@ -10,6 +10,8 @@ import { withUser } from '@middlewares/client/withUser';
 import { Table } from '@sections/pages/app/orders/fiat/Table';
 import { Bulk } from '@sections/pages/app/orders/fiat/Action/Bulk';
 
+import { FiatDeposit } from '@contracts/FiatDeposit';
+
 import {
   HandleChangeStatus,
   SortBy,
@@ -20,10 +22,11 @@ import { Icon } from '@components/Icon';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
+import { Feature } from '@components/Feature';
+
+import { listDeposit } from '@services/api/app/deposit/list';
 
 import styles from '@styles/pages/app/orders/fiat/Fiat.module.scss';
-import { listDeposit } from '@services/api/app/deposit/list';
-import { FiatDeposit } from '@contracts/FiatDeposit';
 
 type HandleSetSortBy = (sortBy: SortBy) => void;
 
@@ -209,7 +212,7 @@ const Bank = () => {
   );
 
   return (
-    <>
+    <Feature feature="deposit_fiat">
       <div className={styles.activity}>
         <div className={cn('container', styles.container)}>
           <div className={styles.body}>
@@ -323,18 +326,18 @@ const Bank = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {isAdmin && (
-        <Bulk
-          handleChangeItemStatus={handleChangeItemStatus}
-          isTriggeredBulk={isTriggeredBulkAction}
-          handleClose={handleClose}
-          selectedItems={selectedItems}
-          variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
-        />
-      )}
-    </>
+        {isAdmin && (
+          <Bulk
+            handleChangeItemStatus={handleChangeItemStatus}
+            isTriggeredBulk={isTriggeredBulkAction}
+            handleClose={handleClose}
+            selectedItems={selectedItems}
+            variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
+          />
+        )}
+      </div>
+    </Feature>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

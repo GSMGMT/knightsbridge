@@ -44,6 +44,7 @@ const Verify = () => (
     content="Don’t have an account?"
     linkText="Sign up for free"
     linkUrl={navigation.auth.signUp}
+    feature="sign_up"
   >
     <div className={styles.login}>
       <div className={styles.top}>
