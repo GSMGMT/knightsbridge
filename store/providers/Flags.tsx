@@ -7,7 +7,10 @@ import {
 import { getApp } from 'firebase/app';
 import { useSsr } from 'usehooks-ts';
 
+import { Loading } from '@components/Loading';
+
 import { Flags, FlagsContext, defaultFlags } from '@store/contexts/Flags';
+
 import { Features } from '@contracts/Features';
 
 interface FlagsProviderProps {
@@ -16,7 +19,7 @@ interface FlagsProviderProps {
 export const FlagsProvider = ({ children }: FlagsProviderProps) => {
   const [flags, setFlags] = useState<Flags>(defaultFlags);
 
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { isBrowser } = useSsr();
 
@@ -41,12 +44,12 @@ export const FlagsProvider = ({ children }: FlagsProviderProps) => {
         .then((remoteFlags) => {
           const newFlags = { ...flags };
 
-          // eslint-disable-next-line no-restricted-syntax
-          for (const [key, config] of Object.entries(remoteFlags)) {
+          Object.entries(remoteFlags).forEach(([key, config]) => {
             const keyConfig = key as Features;
 
             newFlags[keyConfig] = config.asBoolean();
-          }
+          });
+
           setFlags(newFlags);
         });
     }
@@ -60,6 +63,8 @@ export const FlagsProvider = ({ children }: FlagsProviderProps) => {
   );
 
   return (
-    <FlagsContext.Provider value={value}>{children}</FlagsContext.Provider>
+    <FlagsContext.Provider value={value}>
+      {loading ? <Loading /> : children}
+    </FlagsContext.Provider>
   );
 };
