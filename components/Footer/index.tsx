@@ -1,7 +1,13 @@
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useMemo, useState } from 'react';
 import Link from 'next/link';
 import cn from 'classnames';
 import { format } from 'date-fns';
+
+import { useFeature } from '@hooks/Feature';
+
+import { navigation } from '@navigation';
+
+import { Features } from '@contracts/Features';
 
 import LogoLight from '@public/images/logos/logo-light.svg';
 import LogoDark from '@public/images/logos/logo-dark.svg';
@@ -17,15 +23,18 @@ import styles from './Footer.module.scss';
 interface MenuItem {
   title: string;
   url: string;
+  feature?: Features;
 }
-const menu: MenuItem[] = [
+const menuDefault: MenuItem[] = [
   {
     title: 'Deposit',
-    url: '/deposit/fiat',
+    url: navigation.app.deposit.fiat,
+    feature: 'deposit_fiat',
   },
   {
     title: 'Buy/Sell',
-    url: '/buy-sell',
+    url: navigation.app.buySell,
+    feature: 'buy_sell',
   },
   {
     title: 'Contact',
@@ -53,6 +62,22 @@ export const Footer = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
   };
+
+  const { isEnabled } = useFeature();
+
+  const menu = useMemo(() => {
+    const items: MenuItem[] = [];
+
+    menuDefault.forEach((item) => {
+      if (item.feature && isEnabled(item.feature)) {
+        items.push(item);
+      } else if (!item.feature) {
+        items.push(item);
+      }
+    });
+
+    return items;
+  }, [menuDefault, isEnabled]);
 
   return (
     <footer className={styles.footer}>
@@ -100,8 +125,10 @@ export const Footer = () => {
             <div className={styles.col}>
               <div className={styles.category}>contact</div>
               <div className={styles.info}>
-                <a href="/">jack@knights.app</a>
-                <p>t.me/KnightsDAOX</p>
+                <a href="mailto:help@knights.app">help@knights.app</a>
+                <a href="//t.me/KnightsDAO" target="_blank" rel="noreferrer">
+                  t.me/KnightsDAO
+                </a>
               </div>
             </div>
             <div className={styles.col}>
