@@ -50,7 +50,6 @@ export const cancelOrder = async (orderIds: string | string[]) => {
       }).then(() =>
         updateAsset(wallet.uid, asset.uid, {
           reserved: increment(-total),
-          amount: increment(total),
         })
       );
     })
