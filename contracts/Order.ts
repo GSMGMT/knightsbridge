@@ -23,3 +23,5 @@ export type Order = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type OrderUpdateQuery = Partial<Pick<Order, 'status'>>;

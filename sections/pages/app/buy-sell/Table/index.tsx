@@ -98,6 +98,7 @@ export const Table = () => {
         data: Array<{
           uid: string;
           createdAt: string;
+          updatedAt: string;
           type: 'buy' | 'sell';
           marketPair: {
             name: string;
@@ -121,13 +122,15 @@ export const Table = () => {
           price,
           status,
           type,
+          updatedAt,
           createdAt,
           marketPair: { name: asset },
           total,
         }) =>
           ({
-            id,
+            uid: id,
             createdAt: new Date(createdAt),
+            updatedAt: new Date(updatedAt),
             asset,
             amount,
             total,
@@ -166,7 +169,7 @@ export const Table = () => {
       let newOrders = [...allOrders];
 
       newOrders = newOrders.map(({ ...data }) => {
-        const { id } = data;
+        const { uid: id } = data;
         const { status, ...oldData } = data;
 
         return id === orderId

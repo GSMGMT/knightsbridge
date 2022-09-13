@@ -26,7 +26,9 @@ export const Single = ({
     try {
       setFetching(true);
 
-      await api.patch(`/api/order/${orderId}/cancel`);
+      await api.put('/api/order/cancel', {
+        orderIds: orderId,
+      });
 
       handleCancelSingleOrder(orderId);
 

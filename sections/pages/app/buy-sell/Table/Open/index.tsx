@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { format } from 'date-fns';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { getValue } from '@helpers/GetValue';
 
@@ -30,6 +30,8 @@ export const OpenTable = ({
     [isTriggeredBulk]
   );
 
+  const ordersIds = useMemo(() => orders.map((order) => order.uid), [orders]);
+
   const [isTriggeredSingle, setIsTriggeredSingle] = useState<boolean>(false);
   const handleCloseTriggeredSingle = useCallback(() => {
     setIsTriggeredSingle(false);
@@ -38,8 +40,8 @@ export const OpenTable = ({
     useState<string>('');
   const handleToggleSingle: (orderId: string) => void = useCallback(
     (orderId) => {
-      setIsTriggeredSingle(true);
       setIdOrderTriggeredSingle(orderId);
+      setIsTriggeredSingle(true);
     },
     [isTriggeredSingle]
   );
@@ -101,7 +103,7 @@ export const OpenTable = ({
               <div className={styles.col}>
                 <button
                   type="button"
-                  onClick={() => handleToggleSingle(order.id)}
+                  onClick={() => handleToggleSingle(order.uid)}
                 >
                   Cancel
                 </button>
@@ -115,6 +117,7 @@ export const OpenTable = ({
         isTriggeredBulk={isTriggeredBulk}
         handleClose={handleToggleBulk}
         handleCancelAllOrders={handleCancelAllOrders}
+        ordersIds={ordersIds}
       />
       <Single
         isTriggeredSingle={isTriggeredSingle}

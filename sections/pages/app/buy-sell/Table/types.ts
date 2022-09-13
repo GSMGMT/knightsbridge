@@ -3,9 +3,10 @@ export type TypeOrder = 'BUY' | 'SELL';
 export type OrderStatus = 'PROCESSING' | 'APPROVED' | 'REJECTED' | 'CANCELED';
 
 export interface Order {
-  id: string;
+  uid: string;
   type: TypeOrder;
   createdAt: Date;
+  updatedAt: Date;
   asset: string;
   price: number;
   amount: number;

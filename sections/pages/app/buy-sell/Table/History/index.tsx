@@ -64,7 +64,7 @@ export const HistoryTable = ({ orders, ...sorting }: HistoryTableProps) => (
         >
           <div className={styles.col}>{transaction.type}</div>
           <div className={styles.col}>
-            {format(transaction.createdAt, 'dd-MM-yyyy HH:mm:ss')}
+            {format(transaction.updatedAt, 'dd-MM-yyyy HH:mm:ss')}
           </div>
           <div className={styles.col}>{transaction.asset}</div>
           <div className={cn(styles.col, styles.price)}>

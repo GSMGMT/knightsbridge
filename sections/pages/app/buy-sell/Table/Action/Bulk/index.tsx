@@ -11,11 +11,13 @@ interface BulkProps {
   handleClose: () => void;
   isTriggeredBulk: boolean;
   handleCancelAllOrders: () => void;
+  ordersIds: Array<string>;
 }
 export const Bulk = ({
   handleClose,
   isTriggeredBulk,
   handleCancelAllOrders,
+  ordersIds,
 }: BulkProps) => {
   const [fetching, setFetching] = useState<boolean>(false);
 
@@ -23,7 +25,10 @@ export const Bulk = ({
     try {
       setFetching(true);
 
-      await api.put('/api/order/cancel-all');
+      await api.put('/api/order/cancel', {
+        multiple: true,
+        orderIds: ordersIds,
+      });
 
       handleCancelAllOrders();
 
@@ -31,7 +36,7 @@ export const Bulk = ({
     } finally {
       setFetching(false);
     }
-  }, [handleClose, handleCancelAllOrders]);
+  }, [handleClose, handleCancelAllOrders, ordersIds]);
 
   const handleCloseModal = useCallback(() => {
     if (!fetching) {
