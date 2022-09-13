@@ -91,12 +91,12 @@ const CoinList = () => {
       try {
         setFetching(true);
 
-        const pair = coinList.find((coin) => coin.id === id)!;
+        const pair = coinList.find((coin) => coin.uid === id)!;
 
         await api.put(`/api/marketPair/${id}`, { enabled: !pair.enabled });
 
         const newCoinList = coinList.map((coin) => {
-          if (coin.id === id) {
+          if (coin.uid === id) {
             return { ...coin, enabled: !coin.enabled };
           }
 
@@ -151,16 +151,15 @@ const CoinList = () => {
             </div>
             {filteredItems.map((coin, index) => {
               const {
-                marketPairId,
                 source: { logo: exchangeLogo, name: exchangeName },
                 marketPair,
                 logo,
                 enabled,
-                id,
+                uid,
               } = coin;
 
               return (
-                <div key={marketPairId} className={styles.row}>
+                <div key={uid} className={styles.row}>
                   <span>{(pageNumber - 1) * pageSize + index + 1}</span>
                   <div>
                     <Image
@@ -178,7 +177,7 @@ const CoinList = () => {
                   <span>
                     <Switch
                       checked={enabled}
-                      onChange={() => handleSwitchEnabled(id)}
+                      onChange={() => handleSwitchEnabled(uid)}
                     />
                   </span>
                   <div>

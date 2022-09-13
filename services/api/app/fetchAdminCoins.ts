@@ -1,7 +1,7 @@
 import { api } from '@services/api';
 
 export interface AdminPair {
-  id: string;
+  uid: string;
   source: {
     name: string;
     logo: string;
@@ -68,7 +68,7 @@ export const fetchAdminCoins: (args?: {
       enabled,
     }) =>
       ({
-        id,
+        uid: id,
         source,
         marketPairId,
         marketPair,
