@@ -131,6 +131,10 @@ const BuySell = () => {
   const handleClose = useCallback(() => setIsTriggeredBulkAction(false), []);
 
   const [tableItems, setTableItems] = useState<Array<Item>>([]);
+  const visibleTableItems = useMemo(
+    () => tableItems.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
+    [tableItems, pageSize, pageNumber]
+  );
   const fetchData = useCallback(async () => {
     setFetching(true);
 
@@ -173,8 +177,6 @@ const BuySell = () => {
       }>;
     }>('/api/order', {
       params: {
-        pageSize,
-        pageNumber,
         status: requestStatus,
         startDate: startDateRequest,
         endDate: endDateRequest,
@@ -217,15 +219,7 @@ const BuySell = () => {
     setTotalItems(newTableItems.length);
     setTableItems([...newTableItems]);
     setFetching(false);
-  }, [
-    pageNumber,
-    currentStatus,
-    startDate,
-    endDate,
-    email,
-    sortBy,
-    sortAsceding,
-  ]);
+  }, [currentStatus, startDate, endDate, email, sortBy, sortAsceding]);
 
   const handleChangeItemStatus: HandleChangeStatus = useCallback(
     (status, ...ids) => {
@@ -260,16 +254,7 @@ const BuySell = () => {
     setSelectedItems([]);
 
     fetchData();
-  }, [
-    pageNumber,
-    currentStatus,
-    startDate,
-    endDate,
-
-    email,
-    sortBy,
-    sortAsceding,
-  ]);
+  }, [currentStatus, startDate, endDate, email, sortBy, sortAsceding]);
 
   const handleChangeStatus: (newStatus: string) => void = useCallback(
     (newStatus) => {
@@ -358,7 +343,7 @@ const BuySell = () => {
               </div>
               <Table
                 className={styles.table}
-                items={tableItems}
+                items={visibleTableItems}
                 canAction
                 selectedItems={selectedItems}
                 handleToggleSelection={handleToggleSelection}

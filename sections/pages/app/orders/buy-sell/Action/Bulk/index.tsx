@@ -33,14 +33,17 @@ export const Bulk = ({
 
       const {
         data: { data },
-      } = await api.put('/api/admin/order/bulk', {
-        ids: selectedItems,
+      } = await api.put<{
+        data: Array<{ uid: string; success: boolean }>;
+      }>('/api/order/evaluate', {
+        orderIds: selectedItems,
         approved: variant === 'APPROVE',
+        multiple: true,
       });
 
       const itemsAvailableToChange = data
-        .filter((item: { success: boolean }) => item.success)
-        .map((item: { id: string }) => item.id);
+        .filter((item) => item.success)
+        .map((item) => item.uid);
 
       handleChangeItemStatus(
         variant === 'APPROVE' ? 'APPROVED' : 'REJECTED',

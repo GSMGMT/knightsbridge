@@ -5,6 +5,7 @@ import { FirebaseCollections } from '@libs/firebase/collections';
 import { AssetConverter } from '@libs/firebase/converters/assetConverter';
 import { firestore } from '@libs/firebase/admin-config';
 import { OmitTimestamp } from '@utils/types';
+import { Asset } from '@contracts/Wallet';
 
 interface InsertAsset {
   amount: number;
@@ -12,7 +13,10 @@ interface InsertAsset {
   currency: OmitTimestamp<Currency>;
 }
 
-const insertAsset = async (walletUid: string, newAsset: InsertAsset) => {
+const insertAsset: (
+  walletUid: string,
+  newAsset: InsertAsset
+) => Promise<Asset | undefined> = async (walletUid, newAsset) => {
   const uid = uuidv4();
   const serverTime = firestore.FieldValue.serverTimestamp();
 
@@ -29,6 +33,8 @@ const insertAsset = async (walletUid: string, newAsset: InsertAsset) => {
     createdAt: serverTime,
     updatedAt: serverTime,
   });
+
+  return (await WalletAssetDoc.get()).data();
 };
 
 export default insertAsset;

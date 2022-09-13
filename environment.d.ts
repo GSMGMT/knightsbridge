@@ -7,6 +7,8 @@ declare global {
       PWD: string;
       API_URL: string;
 
+      ADMIN: string;
+
       CMC_API_KEY: string;
 
       FIREBASE_API_KEY: string;
@@ -24,4 +26,4 @@ declare global {
   }
 }
 
-export { global }
+export { global };

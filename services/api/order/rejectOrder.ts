@@ -8,8 +8,13 @@ import getAssetByCurrencyUid from '@libs/firebase/functions/wallet/asset/getAsse
 import updateAsset from '@libs/firebase/functions/wallet/asset/updateAsset';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
 
-export const cancelOrder = async (orderIds: string | string[]) => {
+export const rejectOrder = async (orderIds: string | string[]) => {
   const orderIdsArray = Array.isArray(orderIds) ? orderIds : [orderIds];
+
+  const ordersUpdateStatus = orderIdsArray.map((uid) => ({
+    uid,
+    success: false,
+  }));
 
   const orders = await Promise.all(
     orderIdsArray.map((orderId) => getOrderByUid(orderId))
@@ -22,46 +27,42 @@ export const cancelOrder = async (orderIds: string | string[]) => {
     throw Error('Order is not processing');
   }
 
-  return Promise.all(
-    orders.map(
-      async ({
+  await Promise.all(
+    orders.map(async (order) => {
+      const {
         uid: orderUid,
         type: orderType,
         marketPair,
         user: { uid: userUid },
         total,
-      }) => {
-        let refoundCurrencyUid: string;
+      } = order;
 
-        if (orderType === 'buy') {
-          refoundCurrencyUid = marketPair.quote.uid;
-        } else {
-          refoundCurrencyUid = marketPair.base.uid;
-        }
+      let refoundCurrencyUid: string;
 
-        const wallet = await getWalletByUserUid(userUid);
-
-        if (!wallet) {
-          throw Error('Wallet not found');
-        }
-
-        const asset = await getAssetByCurrencyUid(
-          wallet.uid,
-          refoundCurrencyUid
-        );
-
-        if (!asset) {
-          throw Error('Wallet not found');
-        }
-
-        return updateOrder(orderUid, {
-          status: OrderStatus.CANCELED,
-        }).then(() =>
-          updateAsset(wallet.uid, asset.uid, {
-            reserved: increment(-total),
-          })
-        );
+      if (orderType === 'buy') {
+        refoundCurrencyUid = marketPair.quote.uid;
+      } else {
+        refoundCurrencyUid = marketPair.base.uid;
       }
-    )
+
+      const wallet = (await getWalletByUserUid(userUid))!;
+
+      const asset = (await getAssetByCurrencyUid(
+        wallet.uid,
+        refoundCurrencyUid
+      ))!;
+
+      await updateOrder(orderUid, {
+        status: OrderStatus.REJECTED,
+      });
+
+      updateAsset(wallet.uid, asset.uid, {
+        reserved: increment(-total),
+      });
+
+      ordersUpdateStatus.find(({ uid }) => uid === orderUid)!.success = true;
+    })
   );
+
+  return [...ordersUpdateStatus];
 };

@@ -34,9 +34,10 @@ export const Single = ({
     try {
       setFetching(true);
 
-      await api.put(
-        `/api/admin/order/${item.id}?approved=${variant === 'APPROVE'}`
-      );
+      await api.put(`/api/order/evaluate`, {
+        orderIds: item.id,
+        approved: variant === 'APPROVE',
+      });
 
       handleChangeItemStatus(
         variant === 'APPROVE' ? 'APPROVED' : 'REJECTED',
