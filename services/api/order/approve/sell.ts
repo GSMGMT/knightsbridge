@@ -89,19 +89,16 @@ export const approveOrderSell = async (order: Order) => {
   const valueToUser = total * (1 - fee);
 
   await Promise.all([
-    await updateAsset(userWallet.uid, userQuoteAsset.uid, {
-      amount: increment(valueToUser),
-    }),
-
     await updateAsset(userWallet.uid, userBaseAsset.uid, {
       amount: increment(-amount),
       reserved: increment(-amount),
     }),
-
+    await updateAsset(userWallet.uid, userQuoteAsset.uid, {
+      amount: increment(valueToUser),
+    }),
     await updateAsset(adminWallet.uid, adminAsset.uid, {
       amount: increment(valueToAdmin),
     }),
-
     await updateOrder(orderUid, {
       status: OrderStatus.APPROVED,
     }),

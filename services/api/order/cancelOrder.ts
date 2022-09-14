@@ -30,13 +30,17 @@ export const cancelOrder = async (orderIds: string | string[]) => {
         marketPair,
         user: { uid: userUid },
         total,
+        amount,
       }) => {
         let refoundCurrencyUid: string;
+        let refoundAmount: number;
 
         if (orderType === 'buy') {
           refoundCurrencyUid = marketPair.quote.uid;
+          refoundAmount = total;
         } else {
           refoundCurrencyUid = marketPair.base.uid;
+          refoundAmount = amount;
         }
 
         const wallet = await getWalletByUserUid(userUid);
@@ -51,14 +55,14 @@ export const cancelOrder = async (orderIds: string | string[]) => {
         );
 
         if (!asset) {
-          throw Error('Wallet not found');
+          throw Error('Asset not found');
         }
 
         return updateOrder(orderUid, {
           status: OrderStatus.CANCELED,
         }).then(() =>
           updateAsset(wallet.uid, asset.uid, {
-            reserved: increment(-total),
+            reserved: increment(-refoundAmount),
           })
         );
       }

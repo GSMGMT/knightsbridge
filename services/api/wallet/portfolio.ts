@@ -1,9 +1,7 @@
-import DineroFactory from 'dinero.js';
-
 import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
 import getAssetsByWalletUid from '@libs/firebase/functions/wallet/asset/getAssetsByWalletUid';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
-import { dineroFromFloat, getNumberDecimalQuantity } from '@utils/dinero';
+import { Asset } from '@contracts/Wallet';
 
 type CurrencyData = {
   uid: string;
@@ -25,12 +23,11 @@ type Portfolio = {
 export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
   const wallet = await getWalletByUserUid(userUid);
 
-  let assets = new Map();
+  let assets: Asset[] = [];
 
   if (wallet) {
     assets = await getAssetsByWalletUid(wallet.uid).then(
-      (fetchedAssets) =>
-        new Map(fetchedAssets.map((asset) => [asset.currency.uid, asset]))
+      (fetchedAssets) => fetchedAssets.filter((asset) => asset.amount > 0) ?? []
     );
   }
 
@@ -38,27 +35,21 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
     size: 100,
   });
 
-  let total = DineroFactory({ amount: 0, precision: 0 });
+  let total = 0;
 
   const fiatCurrency: CurrencyData[] = [];
   const cryptoCurrency: CurrencyData[] = [];
 
   currencies.forEach((currency) => {
-    const currencyAsset = assets.get(currency.uid);
+    const currencyAsset = assets.find(
+      (asset) => currency.uid === asset.currency.uid
+    );
 
     const currencyAmount = currencyAsset?.amount ?? 0;
-    const amountDigits = getNumberDecimalQuantity(currencyAmount);
-    const assetAmount = DineroFactory(
-      dineroFromFloat(currencyAmount, amountDigits)
-    );
 
     const currencyReservedAmount = currencyAsset?.reserved ?? 0;
-    const reservedDigits = getNumberDecimalQuantity(currencyReservedAmount);
-    const assetReserved = DineroFactory(
-      dineroFromFloat(currencyReservedAmount, reservedDigits)
-    );
 
-    total = total.add(assetAmount.multiply(currency?.quote ?? 0));
+    total += currencyAmount;
 
     const currencyData: CurrencyData = {
       uid: currency.uid,
@@ -66,9 +57,9 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
       code: currency.symbol,
       quote: currency?.quote ?? 0,
       logo: currency.logo,
-      amount: assetAmount.toUnit(),
-      reserved: assetReserved.toUnit(),
-      available: assetAmount.subtract(assetReserved).toUnit(),
+      amount: currencyAmount,
+      reserved: currencyReservedAmount,
+      available: currencyAmount - currencyReservedAmount,
     };
 
     if (currency.type === 'crypto') {
@@ -81,6 +72,6 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
   return {
     fiat: fiatCurrency,
     crypto: cryptoCurrency,
-    total: total.toUnit(),
+    total,
   };
 };

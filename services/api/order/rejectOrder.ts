@@ -35,14 +35,18 @@ export const rejectOrder = async (orderIds: string | string[]) => {
         marketPair,
         user: { uid: userUid },
         total,
+        amount,
       } = order;
 
       let refoundCurrencyUid: string;
+      let refoundAmount: number;
 
       if (orderType === 'buy') {
         refoundCurrencyUid = marketPair.quote.uid;
+        refoundAmount = total;
       } else {
         refoundCurrencyUid = marketPair.base.uid;
+        refoundAmount = amount;
       }
 
       const wallet = (await getWalletByUserUid(userUid))!;
@@ -57,7 +61,7 @@ export const rejectOrder = async (orderIds: string | string[]) => {
       });
 
       updateAsset(wallet.uid, asset.uid, {
-        reserved: increment(-total),
+        reserved: increment(-refoundAmount),
       });
 
       ordersUpdateStatus.find(({ uid }) => uid === orderUid)!.success = true;
