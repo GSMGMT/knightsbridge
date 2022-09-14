@@ -24,7 +24,7 @@ export const withUser: (
   pageConfig,
   handler
 ) => {
-  const { freeToAccessBy = 'BOTH' } = pageConfig || {};
+  let { freeToAccessBy = 'BOTH' } = pageConfig || {};
 
   try {
     const { token } = parseCookies(ctx);
@@ -32,6 +32,10 @@ export const withUser: (
 
     if (freeToAccessBy !== 'BOTH') {
       const { role } = (await getUserByUid(uid))!;
+
+      if (freeToAccessBy === Roles.SUPERADMIN) {
+        freeToAccessBy = Roles.ADMIN;
+      }
 
       if (role !== freeToAccessBy) {
         return {

@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { push } = useRouter();
 
   const [user, setUser] = useState<User>({ ...defaultValues });
-  const isAdmin = useMemo(() => user?.role === Roles.ADMIN, [user]);
+  const isAdmin = useMemo(() => user?.role !== Roles.USER, [user]);
   useEffect(
     () =>
       auth.onIdTokenChanged(async (newUser) => {

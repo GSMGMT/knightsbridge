@@ -41,7 +41,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'POST': {
-        if (req.user.role !== Roles.ADMIN) {
+        if (req.user.role === Roles.USER) {
           return res.status(403).json(
             ResponseModel.create(null, {
               message: 'Unauthorized',
@@ -69,7 +69,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           sort,
           filters: {
             name,
-            onlyEnabled: req.user.role !== Roles.ADMIN,
+            onlyEnabled: req.user.role === Roles.USER,
           },
         });
 

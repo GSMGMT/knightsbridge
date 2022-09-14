@@ -26,7 +26,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'PUT': {
-        if (req.user.role !== Roles.ADMIN) {
+        if (req.user.role === Roles.USER) {
           return res.status(403).json(
             ResponseModel.create(null, {
               message: 'Unauthorized',

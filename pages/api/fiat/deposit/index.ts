@@ -103,7 +103,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           size,
           sort,
           filters: {
-            email: req.user.role === Roles.ADMIN ? search : undefined,
+            email: req.user.role !== Roles.USER ? search : undefined,
             userId: req.user.role === Roles.USER ? req.user.uid : undefined,
           },
         });
