@@ -69,6 +69,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
             bankName: bank.bankName,
             branch: bank.branch,
             bankAddress: bank.bankAddress,
+            paymentMethod: bank.paymentMethod,
           },
           currency: {
             uid: currency.uid,
