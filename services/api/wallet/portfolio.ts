@@ -55,7 +55,7 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
       uid: currency.uid,
       name: currency.name,
       code: currency.symbol,
-      quote: currency?.quote ?? 0,
+      quote: currency?.quote ?? 1,
       logo: currency.logo,
       amount: currencyAmount,
       reserved: currencyReservedAmount,
