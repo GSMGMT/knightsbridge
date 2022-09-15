@@ -7,6 +7,7 @@ export interface Bank {
   bankName: string;
   branch: string;
   bankAddress: string;
+  paymentMethod: string;
   createdAt: Date;
   updatedAt: Date;
 }

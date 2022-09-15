@@ -3,10 +3,9 @@ import { useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 import { useCopy } from '@hooks/Copy';
-
-// import { api } from '@services/api';
 
 import { Icon } from '@components/Icon';
 import { Modal } from '@components/Modal';
@@ -14,7 +13,7 @@ import CheckI from '@public/images/icons/check.svg';
 import { depositConfirm } from '@services/api/app/deposit/confirm';
 import { Successfully } from '../Successfully';
 
-import { Request } from '..';
+import { Request } from '../types';
 
 import styles from './PaymentDetails.module.scss';
 
@@ -38,20 +37,7 @@ export const PaymentDetails = ({
 
   const [success, setSuccess] = useState<boolean>(false);
 
-  const bankInfo = useMemo(
-    () => ({
-      bankId: '12345678',
-      accountName: 'KNIGHTSBRIDGE CO., LTD',
-      accountNumber: '096-0-72882-2',
-      address:
-        '622 EMPORIUM TOWER, SUKHUMVIT ROAD, KLONGTON, KLONGTOEY, BANGKOK 10110 THAILAND',
-      swiftCode: 'BKK BTH BK XXX',
-      branch: 'EMPORIUM BRANCH',
-      bankAddress: '333 SILOM ROAD, BANGRAK, BANGKOK 10500 THAILAND',
-      bankName: 'BANGKOK BANK',
-    }),
-    []
-  );
+  const bankInfo = useMemo(() => requestInfo.bank, [requestInfo]);
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     multiple: false,
@@ -59,6 +45,16 @@ export const PaymentDetails = ({
       'image/jpeg': [],
       'image/png': [],
       'application/pdf': [],
+    },
+    maxSize: 4096 * 1024,
+    onDropRejected([
+      {
+        errors: [{ code: codeError }],
+      },
+    ]) {
+      if (codeError === 'file-too-large') {
+        toast.error('File size is too large. Max size is 4MB');
+      }
     },
   });
   const file = useMemo(() => acceptedFiles[0], [acceptedFiles]);

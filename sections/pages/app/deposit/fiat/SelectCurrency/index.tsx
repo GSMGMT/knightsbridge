@@ -2,7 +2,6 @@ import {
   ChangeEventHandler,
   FormEvent,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -10,45 +9,28 @@ import cn from 'classnames';
 
 import { Dropdown } from '@components/Dropdown';
 
-import { fetchCurrencies } from '@services/api/app/fetchCurrencies';
-import { fetchBanks } from '@services/api/app/fetchBanks';
-
-import { Currency } from '@contracts/Currency';
+import { FiatCurrency, Bank } from '@pages/app/deposit/fiat';
 
 import { getValue } from '@helpers/GetValue';
 import { stringToValue } from '@helpers/StringToValue';
 
 import { createDeposit } from '@services/api/app/deposit/create';
-import { Request } from '..';
+import { Request } from '../types';
 
 import styles from './SelectCurrency.module.scss';
 
-interface PaymentMethod {
-  id: string;
-  code: string;
-}
 interface SelectCurrencyProps {
   goNext: () => void;
   setRequestInfo: (requestInfo: Request) => void;
+  currencies: FiatCurrency[];
+  banks: Bank[];
 }
 export const SelectCurrency = ({
   goNext,
   setRequestInfo,
+  banks,
+  currencies,
 }: SelectCurrencyProps) => {
-  const [bankId, setBankId] = useState<string>('');
-  const [currencies, setCurrencies] = useState<Array<Omit<Currency, 'type'>>>([
-    {
-      cmcId: 2781,
-      logo: '',
-      name: 'Dollar',
-      quote: 1,
-      symbol: 'USD',
-      sign: '$',
-      uid: '',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]);
   const currencyOptions = useMemo(() => {
     const newOptions = currencies.map((currency) => currency.symbol);
 
@@ -62,31 +44,20 @@ export const SelectCurrency = ({
 
     return selectedCurrency;
   }, [currencies, currency]);
-  useEffect(() => {
-    (async () => {
-      const fetchedCurrencies = await fetchCurrencies({ type: 'fiat' });
-      const [{ uid }] = await fetchBanks();
 
-      setCurrencies([...fetchedCurrencies]);
-      setBankId(uid);
-      setCurrency(fetchedCurrencies[0].symbol);
-    })();
-  }, []);
-
-  const [paymentMethods] = useState<Array<PaymentMethod>>([
-    { code: 'Bank (SWIFT)', id: '12345678' },
-  ]);
   const paymentOptions = useMemo(() => {
-    const newOptions = paymentMethods.map((payment) => payment.code);
+    const newOptions = banks.map((payment) => payment.paymentMethod);
 
     return [...newOptions];
-  }, [paymentMethods]);
+  }, [banks]);
   const [payment, setPayment] = useState<string>(paymentOptions[0]);
-  const paymentId = useMemo(() => {
-    const selectedPayment = paymentMethods.find(({ code }) => payment === code);
+  const currentPayment = useMemo(() => {
+    const selectedPayment = banks.find(
+      ({ paymentMethod }) => payment === paymentMethod
+    );
 
-    return selectedPayment?.id;
-  }, [paymentMethods, payment]);
+    return selectedPayment;
+  }, [banks, payment]);
 
   const [price, setPrice] = useState<string>('50');
   const value = useMemo(() => {
@@ -122,7 +93,7 @@ export const SelectCurrency = ({
     return newValue >= minAmount;
   }, [value, minAmount]);
   const canSubmit = useMemo(
-    () => !fetching && canProceed,
+    () => !fetching && canProceed && !!currentCurrency && !!currentPayment,
     [fetching, canProceed]
   );
   const handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void> =
@@ -130,13 +101,13 @@ export const SelectCurrency = ({
       async (event) => {
         event.preventDefault();
 
-        if (canProceed) {
+        if (canProceed && canSubmit) {
           setFetching(true);
 
           try {
             const { uid, referenceNo } = await createDeposit({
               amount: value,
-              bankId,
+              bankId: currentPayment!.uid,
               currencyId: currentCurrency!.uid,
             })!;
 
@@ -144,7 +115,8 @@ export const SelectCurrency = ({
               id: uid!,
               referenceNumber: referenceNo,
               amount: valueInUSD,
-              currency: currentCurrency!.symbol,
+              currency: currentCurrency!,
+              bank: currentPayment!,
             });
 
             goNext();
@@ -157,7 +129,7 @@ export const SelectCurrency = ({
         canProceed,
         currentCurrency,
         goNext,
-        paymentId,
+        currentPayment,
         setRequestInfo,
         value,
         valueInUSD,

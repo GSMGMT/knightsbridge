@@ -1,5 +1,5 @@
-import { GetServerSidePropsContext } from 'next';
-import { useCallback, useMemo, useState } from 'react';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import { Bidding } from '@components/Bidding';
 import { Feature } from '@components/Feature';
@@ -10,30 +10,61 @@ import { PaymentDetails } from '@sections/pages/app/deposit/fiat/PaymentDetails'
 
 import { withUser } from '@middlewares/client/withUser';
 
+import { Currency } from '@contracts/Currency';
+import { Bank as DefaultBank } from '@contracts/Bank';
+
+import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
+import listBanks from '@libs/firebase/functions/fiat/bank/listBanks';
+import { Request } from '@sections/pages/app/deposit/fiat/types';
+
+export type FiatCurrency = Omit<Currency, 'createdAt' | 'updatedAt'>;
+export type Bank = Omit<DefaultBank, 'createdAt' | 'updatedAt'>;
+
 const steps = [
   { title: 'Select currency', slug: 'currency' },
   { title: 'Important notes', slug: 'notes' },
   { title: 'Payment details', slug: 'details' },
 ];
 
-export interface Request {
-  id: string;
-  referenceNumber: string;
-  amount: string;
-  currency: string;
-}
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
+  withUser<{
+    currencies: FiatCurrency[];
+    banks: Bank[];
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
+    const currencies: FiatCurrency[] = (
+      await listCurrencies({
+        filters: { type: 'fiat' },
+        size: 100,
+      })
+    ).map(({ createdAt, updatedAt, ...data }) => ({ ...data }));
+    const banks: Bank[] = (
+      await listBanks({
+        size: 100,
+        sort: [
+          {
+            field: 'uid',
+            orientation: 'asc',
+          },
+        ],
+      })
+    ).map(({ createdAt, updatedAt, ...data }) => ({ ...data }));
 
-const DepositFiat = () => {
-  const [requestInfo, setRequestInfo] = useState<Request>({
-    id: '',
-    referenceNumber: '',
-    amount: '',
-    currency: '',
+    return {
+      props: {
+        currencies,
+        banks,
+      },
+    };
   });
-  const referenceNumber = useMemo(
-    () => requestInfo.referenceNumber,
-    [requestInfo]
-  );
+const DepositFiat: FunctionComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ currencies, banks }) => {
+  const [requestInfo, setRequestInfo] = useState<Request | undefined>();
+  const referenceNumber = useMemo(() => {
+    const currentReferenceNumber = requestInfo?.referenceNumber || '';
+
+    return currentReferenceNumber;
+  }, [requestInfo]);
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -51,24 +82,26 @@ const DepositFiat = () => {
           <SelectCurrency
             goNext={handleNextStep}
             setRequestInfo={setRequestInfo}
+            banks={banks}
+            currencies={currencies}
           />
         )}
-        {activeIndex === 1 && (
-          <ImportantNotes
-            referenceNumber={referenceNumber}
-            goNext={handleNextStep}
-          />
-        )}
-        {activeIndex === 2 && (
-          <PaymentDetails
-            requestInfo={requestInfo}
-            handleBackToBegining={handleBackToBegining}
-          />
-        )}
+        {requestInfo &&
+          (activeIndex === 1 ? (
+            <ImportantNotes
+              referenceNumber={referenceNumber}
+              goNext={handleNextStep}
+            />
+          ) : (
+            activeIndex === 2 && (
+              <PaymentDetails
+                requestInfo={requestInfo}
+                handleBackToBegining={handleBackToBegining}
+              />
+            )
+          ))}
       </Bidding>
     </Feature>
   );
 };
-export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx, { freeToAccessBy: 'USER' });
 export default DepositFiat;

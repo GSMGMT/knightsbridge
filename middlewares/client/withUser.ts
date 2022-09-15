@@ -15,15 +15,11 @@ interface PageConfig {
   freeToAccessBy?: keyof typeof Roles | 'BOTH';
 }
 
-export const withUser: (
-  context: GetServerSidePropsContext,
+export async function withUser<T extends {}>(
+  ctx: GetServerSidePropsContext,
   pageConfig?: PageConfig,
-  handler?: GetServerSideProps
-) => GetServerSideProps | Promise<GetServerSidePropsResult<{}>> = async (
-  ctx,
-  pageConfig,
-  handler
-) => {
+  handler?: GetServerSideProps<T>
+): Promise<GetServerSidePropsResult<T>> {
   let { freeToAccessBy = 'BOTH' } = pageConfig || {};
 
   try {
@@ -49,7 +45,7 @@ export const withUser: (
 
     if (!handler) {
       return {
-        props: {},
+        props: {} as T,
       };
     }
 
@@ -59,4 +55,4 @@ export const withUser: (
       redirect: { destination: navigation.auth.signIn, permanent: false },
     };
   }
-};
+}

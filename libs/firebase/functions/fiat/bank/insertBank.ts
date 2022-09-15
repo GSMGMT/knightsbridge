@@ -14,6 +14,7 @@ interface InsertBank {
   bankName: string;
   branch: string;
   bankAddress: string;
+  paymentMethod: string;
 }
 
 const insertBank = async (newBank: InsertBank): Promise<Bank | undefined> => {

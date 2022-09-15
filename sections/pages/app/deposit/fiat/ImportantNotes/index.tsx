@@ -17,7 +17,7 @@ export const ImportantNotes = ({
 }: ImportantNoteProps) => {
   const { user } = useContext(AuthContext);
 
-  const name = useMemo(() => `John Dao`, [user]);
+  const name = useMemo(() => `${user.name} ${user.surname}`, [user]);
 
   const handleClickButton: MouseEventHandler<HTMLButtonElement> = () =>
     goNext();

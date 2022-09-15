@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { PaymentDetails } from '.';
 
-import { Request } from '..';
+import { Request } from '../types';
 
 const REQUEST_INFO: Request = {
   id: 'sdsad',

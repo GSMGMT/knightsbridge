@@ -16,6 +16,7 @@ interface InsertBankDTO {
   bankName: string;
   branch: string;
   bankAddress: string;
+  paymentMethod: string;
 }
 
 const insertBankSchema: SchemaOf<InsertBankDTO> = object().shape({
@@ -26,6 +27,7 @@ const insertBankSchema: SchemaOf<InsertBankDTO> = object().shape({
   bankName: string().required('Bank name is required.'),
   branch: string().required('Branch ID is required.'),
   bankAddress: string().required('Bank address is required.'),
+  paymentMethod: string().required('Payment method is required.'),
 });
 
 const listBanksSchema: SchemaOf<Pagination> = object().shape({

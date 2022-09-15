@@ -4,7 +4,7 @@ import { navigation } from '@navigation';
 
 import { Link } from '@components/Link';
 
-import { Request } from '..';
+import { Request } from '../types';
 
 import styles from './Successfully.module.scss';
 
@@ -22,7 +22,7 @@ export const Successfully = ({ requestInfo }: SuccessfullyProps) => (
     <div className={styles.info}>
       You successfully created a deposit request{' '}
       <span data-testid="amount">
-        {requestInfo.amount} {requestInfo.currency}
+        {requestInfo.amount} {requestInfo.currency.symbol}
       </span>{' '}
       to Knightsbridge
     </div>
@@ -39,7 +39,7 @@ export const Successfully = ({ requestInfo }: SuccessfullyProps) => (
       </div>
       <div className={styles.item}>
         <div className={styles.category}>Deposit method</div>
-        <div className={styles.content}>Bank (SWIFT)</div>
+        <div className={styles.content}>{requestInfo.bank.paymentMethod}</div>
       </div>
     </div>
     <Link className={cn('button', styles.button)} href={navigation.app.wallet}>

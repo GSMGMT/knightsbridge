@@ -19,6 +19,7 @@ export const BankConverter = {
       bankName: data.bankName,
       branch: data.branch,
       bankAddress: data.bankAddress,
+      paymentMethod: data.paymentMethod,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };
