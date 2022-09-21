@@ -13,11 +13,13 @@ export const FiatCurrencyConverter = {
     return {
       uid: data.uid,
       name: data.name,
-      type: data.type,
-      logo: data.logo,
       symbol: data.symbol,
+      logo: `${process.env.API_URL}/${data.logo}`,
       cmcId: data.cmcId,
       quote: data.quote,
+      type: data.type,
+      sign: data.sign,
+      deposit: data.deposit,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };

@@ -18,8 +18,8 @@ export const CurrencyConverter = {
       cmcId: data.cmcId,
       quote: data.quote ?? null,
       type: data.type,
-      sign: data.type === 'fiat' ? data.sign : null,
-      deposit: data.type === 'crypto' ? data.deposit : null,
+      sign: data.sign,
+      deposit: data.deposit,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };
