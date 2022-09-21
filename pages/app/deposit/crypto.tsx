@@ -25,6 +25,7 @@ import {
 } from '@sections/pages/app/deposit/crypto/types';
 import { DepositDetails } from '@sections/pages/app/deposit/crypto/DepositDetails';
 import { ConfirmDeposit } from '@sections/pages/app/deposit/crypto/ConfirmDeposit';
+import { fetchCryptoPrice } from '@services/api/coinMarketCap/crypto/getCryptoPrice';
 
 const steps = [
   { title: 'Deposit details', slug: 'details' },
@@ -35,23 +36,34 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
   withUser<{
     currencies: Coins;
   }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const currencies: Coin[] = (
-      await listCurrenciesWithAddresses({
-        size: 100,
-      })
-    ).map(({ logo, name, symbol, uid, quote, walletAddresses: addresses }) => {
-      const walletAddresses =
-        addresses?.map(({ createdAt, updatedAt, ...address }) => address) ?? [];
-
-      return {
-        uid,
-        logo,
-        name,
-        symbol,
-        quote,
-        walletAddresses,
-      } as Coin;
+    const fetchedCurrencies = await listCurrenciesWithAddresses({
+      size: 100,
     });
+
+    const currencies: Coins = fetchedCurrencies.map(
+      ({ logo, name, symbol, uid, walletAddresses: addresses }) => {
+        const walletAddresses =
+          addresses?.map(({ createdAt, updatedAt, ...address }) => address) ??
+          [];
+
+        return {
+          uid,
+          logo,
+          name,
+          symbol,
+          quote: 1,
+          walletAddresses,
+        } as Coin;
+      }
+    );
+
+    for await (const fetchedCurrency of fetchedCurrencies) {
+      const price = await fetchCryptoPrice(fetchedCurrency.cmcId);
+
+      currencies.find(
+        (currency) => currency.uid === fetchedCurrency.uid
+      )!.quote = price;
+    }
 
     return {
       props: {

@@ -87,7 +87,7 @@ export enum CmcApiUrls {
 
 export type CmcApiResponse = {
   status: Status;
-  data: Data & Data[];
+  data: Data & Data[] & { [id: number]: Data };
 };
 
 type Status = {
@@ -132,18 +132,24 @@ type Data = {
   category?: string;
 };
 
+type DollarQuote = {
+  timestamp: string;
+  price: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
+  total_market_cap: number;
+};
+
 type Quote = {
-  2781: {
-    timestamp: string;
+  2781: DollarQuote;
+  USD: DollarQuote;
+  exchange_reported: {
     price: number;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    volume: number;
-    percent_change_24h: number;
-    percent_change_7d: number;
-    total_market_cap: number;
   };
 };
 

@@ -12,7 +12,7 @@ export const requestCoinMarketCap = async (
     url += `?${param}`;
   }
 
-  const { data } = await axios.get(url, {
+  const { data } = await axios.get<CmcApiResponse>(url, {
     headers: {
       'X-CMC_PRO_API_KEY': process.env.CMC_API_KEY,
     },

@@ -4,10 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
 
-import {
-  WalletAddress,
-  Coin as PairedCoin,
-} from '@services/api/app/fetchCoins';
+import { Coin, Address } from '@sections/pages/app/deposit/crypto/types';
 import { api } from '@services/api';
 
 import { stringToValue } from '@helpers/StringToValue';
@@ -18,8 +15,6 @@ import { TextInput } from '@components/TextInput';
 import { DepositInfo } from '@components/DepositInfo';
 
 import styles from './DepositCrypto.module.scss';
-
-type Coin = Pick<PairedCoin, 'uid' | 'logo' | 'name' | 'symbol' | 'price'>;
 
 const schema = yup.object().shape({
   amount: yup
@@ -41,7 +36,7 @@ interface DepositCryptoProps {
   visible: boolean;
   onClose: () => void;
   selectedCoin: Coin;
-  selectedAddressNetwork: WalletAddress;
+  selectedAddressNetwork: Address;
 }
 export const DepositCrypto = ({
   onClose,

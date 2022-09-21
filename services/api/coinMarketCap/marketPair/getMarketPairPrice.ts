@@ -19,7 +19,7 @@ export const getPairPrice = async (marketPair: MarketPair) => {
   const exchange = data.market_pairs.find(
     (market_pair) => market_pair.exchange.id === marketPair.exchange.cmcId
   );
-  const price = exchange?.quote[Convert.USD].price;
+  const price = exchange?.quote.exchange_reported.price;
 
   return price;
 };
