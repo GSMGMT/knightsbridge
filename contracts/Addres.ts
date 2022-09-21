@@ -8,3 +8,11 @@ export interface IAddress {
   name: string;
   address: string;
 }
+
+export interface Address {
+  uid: string;
+  address: string;
+  network: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

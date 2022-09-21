@@ -1,20 +1,24 @@
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { withUser } from '@middlewares/client/withUser';
 
 import { navigation } from '@navigation';
-
-import {
-  fetchCoins as fetchCoinsReq,
-  Coin as PairedCoin,
-} from '@services/api/app/fetchCoins';
-
-import { useRequest } from '@hooks/Request';
 import { useTitle } from '@hooks/Title';
+
+import listCurrenciesWithAddresses from '@libs/firebase/functions/currency/address/listCurrenciesWithAddresses';
 
 import { Bidding } from '@components/Bidding';
 import { Feature } from '@components/Feature';
 import {
-  Address,
+  CoinAddress,
   Addresses,
   Coin,
   Coins,
@@ -27,66 +31,72 @@ const steps = [
   { title: 'Confirm deposit', slug: 'confirm' },
 ];
 
-const DepositCrypto = () => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
+  withUser<{
+    currencies: Coins;
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
+    const currencies: Coin[] = (
+      await listCurrenciesWithAddresses({
+        size: 100,
+      })
+    ).map(({ logo, name, symbol, uid, quote, walletAddresses: addresses }) => {
+      const walletAddresses =
+        addresses?.map(({ createdAt, updatedAt, ...address }) => address) ?? [];
+
+      return {
+        uid,
+        logo,
+        name,
+        symbol,
+        quote,
+        walletAddresses,
+      } as Coin;
+    });
+
+    return {
+      props: {
+        currencies,
+      },
+    };
+  });
+const DepositCrypto: FunctionComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ currencies: coins }) => {
   useTitle('Deposit Crypto');
 
   const { push: navigate } = useRouter();
 
-  const { handleRequest } = useRequest(fetchCoinsReq);
-  const [fetching, setFetching] = useState<boolean>(true);
+  const [fetching] = useState<boolean>(false);
 
-  const [pairedCoins, setPairedCoins] = useState<Array<PairedCoin>>([]);
-  const coins: Coins = useMemo(
-    () =>
-      pairedCoins.map(
-        ({ uid, logo, name, symbol, price }) =>
-          ({ uid, logo, name, symbol, price } as Coin)
-      ),
-    [pairedCoins]
-  );
   const addresses: Addresses = useMemo(
     () =>
-      pairedCoins.map(
+      coins.map(
         ({ uid, walletAddresses }) =>
           ({
             uid,
             walletAddresses,
-          } as Address)
+          } as CoinAddress)
       ),
-    [pairedCoins]
+    [coins]
   );
 
-  const [coinSelectedIndex, setCoinSelectedIndex] = useState<number>(-1);
+  const [coinSelectedIndex, setCoinSelectedIndex] = useState<number>(0);
   const coinSelected = useMemo(
     () => coins[coinSelectedIndex],
     [coins, coinSelectedIndex]
   );
 
-  const [networkSelectedIndex, setNetworkSelectedIndex] = useState<number>(-1);
+  const [networkSelectedIndex, setNetworkSelectedIndex] = useState<number>(0);
   const networkSelected = useMemo(
-    () => addresses[coinSelectedIndex]?.walletAddresses[networkSelectedIndex],
+    () => addresses[coinSelectedIndex].walletAddresses[networkSelectedIndex],
     [coinSelectedIndex, networkSelectedIndex, addresses]
   );
 
   useEffect(() => {
-    if (!fetching && pairedCoins.length === 0) {
+    if (!fetching && coins.length === 0) {
       navigate(navigation.app.wallet);
     }
-  }, [fetching, pairedCoins]);
-
-  const fetchCoins = useCallback(async () => {
-    const { coins: fetchedPairedCoins } = await handleRequest({
-      pageNumber: 1,
-      pageSize: 20,
-      onlyWithAddres: true,
-    });
-
-    setPairedCoins([...fetchedPairedCoins]);
-    setFetching(false);
-  }, []);
-  useEffect(() => {
-    fetchCoins();
-  }, []);
+  }, [fetching, coins]);
 
   const [amount, setAmount] = useState<number>(0);
 

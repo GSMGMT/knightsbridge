@@ -9,7 +9,6 @@ import Image from 'next/image';
 
 import { navigation } from '@navigation';
 
-import { WalletAddress } from '@services/api/app/fetchCoins';
 import { api } from '@services/api';
 
 import { TextInput } from '@components/TextInput';
@@ -17,7 +16,7 @@ import { Icon } from '@components/Icon';
 import { DepositInfo } from '@components/DepositInfo';
 import { Link } from '@components/Link';
 
-import { Coin } from '../types';
+import { Coin, Address } from '../types';
 import { DepositInfo as IDepositInfo, Successfully } from '../Successfully';
 
 import styles from './ConfirmDeposit.module.scss';
@@ -33,7 +32,7 @@ interface ConfirmDepositProps {
   goNext: () => void;
   goBack: () => void;
   coinSelected: Coin;
-  networkSelected: WalletAddress;
+  networkSelected: Address;
   amount: number;
 }
 export const ConfirmDeposit = ({
@@ -87,7 +86,7 @@ export const ConfirmDeposit = ({
         } = await api.post<{ data: { id: string } }>('/api/crypto/deposit', {
           amount,
           cryptoId: coinSelected.uid,
-          addressId: networkSelected.id,
+          addressId: networkSelected.uid,
           transactionHash: hash,
         });
 

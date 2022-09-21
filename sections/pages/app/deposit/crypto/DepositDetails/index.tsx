@@ -76,7 +76,9 @@ export const DepositDetails = ({
   const valueInUSD = useMemo(() => {
     if (!currentCurrency) return Number(value).toFixed(2);
 
-    const { price: currencyPrice } = currentCurrency;
+    let { quote: currencyPrice } = currentCurrency;
+
+    currencyPrice = currencyPrice || 1;
 
     const convertedValue = value * currencyPrice;
 
@@ -99,7 +101,9 @@ export const DepositDetails = ({
   const minAmount = useMemo(() => {
     if (!currentCurrency) return 0;
 
-    const { price: currencyPrice } = currentCurrency!;
+    let { quote: currencyPrice } = currentCurrency!;
+
+    currencyPrice = currencyPrice || 1;
 
     const min = 2 / Number(getValue(currencyPrice).replace(/,/g, ''));
 

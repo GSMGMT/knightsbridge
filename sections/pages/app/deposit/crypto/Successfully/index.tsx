@@ -5,9 +5,7 @@ import { navigation } from '@navigation';
 import { Link } from '@components/Link';
 import { Modal } from '@components/Modal';
 
-import { WalletAddress } from '@services/api/app/fetchCoins';
-
-import { Coin } from '../types';
+import { Coin, Address } from '../types';
 
 import styles from './Successfully.module.scss';
 
@@ -17,7 +15,7 @@ export interface DepositInfo {
 }
 interface SuccessfullyProps {
   coin: Coin;
-  walletAddress: WalletAddress;
+  walletAddress: Address;
   depositInfo: DepositInfo;
   amount: number;
   visible: boolean;

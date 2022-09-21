@@ -15,10 +15,11 @@ export const CurrencyConverter = {
       name: data.name,
       symbol: data.symbol,
       logo: `${process.env.API_URL}/${data.logo}`,
-      sign: data.sign,
       cmcId: data.cmcId,
-      quote: data.quote,
+      quote: data.quote ?? null,
       type: data.type,
+      sign: data.type === 'fiat' ? data.sign : null,
+      deposit: data.type === 'crypto' ? data.deposit : null,
       createdAt: data.createdAt?.toDate(),
       updatedAt: data.updatedAt?.toDate(),
     };

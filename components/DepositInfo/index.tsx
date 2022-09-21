@@ -2,8 +2,8 @@ import cn from 'classnames';
 
 import {
   Coin as PairedCoin,
-  WalletAddress,
-} from '@services/api/app/fetchCoins';
+  Address,
+} from '@sections/pages/app/deposit/crypto/types';
 
 import { Icon } from '@components/Icon';
 
@@ -11,11 +11,11 @@ import { useCopy } from '@hooks/Copy';
 
 import styles from './DepositInfo.module.scss';
 
-type Coin = Pick<PairedCoin, 'uid' | 'logo' | 'name' | 'symbol' | 'price'>;
+type Coin = Pick<PairedCoin, 'uid' | 'logo' | 'name' | 'symbol' | 'quote'>;
 
 interface DepositInfoProps {
   coin: Coin;
-  networkAddress: WalletAddress;
+  networkAddress: Address;
   amount: number;
 }
 export const DepositInfo = ({

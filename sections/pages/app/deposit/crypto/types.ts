@@ -1,10 +1,16 @@
-import { Coin as PairedCoin } from '@services/api/app/fetchCoins';
+import { Currency } from '@contracts/Currency';
+import { Address as DefaultAddress } from '@contracts/Addres';
 
 export type Coin = Pick<
-  PairedCoin,
-  'uid' | 'logo' | 'name' | 'symbol' | 'price'
+  Currency,
+  'uid' | 'logo' | 'name' | 'symbol' | 'quote' | 'walletAddresses'
 >;
 export type Coins = Array<Coin>;
 
-export type Address = Pick<PairedCoin, 'uid' | 'walletAddresses'>;
-export type Addresses = Array<Address>;
+export type Address = Omit<DefaultAddress, 'createdAt' | 'updatedAt'>;
+export type CoinAddress = Required<
+  Pick<Coin, 'uid'> & {
+    walletAddresses: Address[];
+  }
+>;
+export type Addresses = Array<CoinAddress>;
