@@ -11,4 +11,5 @@ export enum FirebaseCollections {
   ORDERS = 'orders',
   FEES = 'fees',
   ADDRESSES = 'addresses',
+  CRYPTO_DEPOSITS = 'crypto_deposits',
 }

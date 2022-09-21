@@ -75,7 +75,7 @@ export const Table = ({
     () =>
       items
         .filter(({ status }) => status === validStatusToAction)
-        .map(({ id }) => id),
+        .map(({ uid: id }) => id),
     [items, validStatusToAction]
   );
   const isAllSelected = useMemo(
@@ -95,7 +95,7 @@ export const Table = ({
   const [selectedItem, setSelectedItem] = useState<Item>({
     status: 'PROCESSING',
     user: { email: '', name: '' },
-    id: '',
+    uid: '',
     date: new Date(),
     amount: 0,
     currency: '',
@@ -107,7 +107,7 @@ export const Table = ({
   }, []);
   const handleAction: (id: string, action: Variant) => void = useCallback(
     (id, action) => {
-      const newSelectedItem = items.find(({ id: idItem }) => idItem === id);
+      const newSelectedItem = items.find(({ uid: idItem }) => idItem === id);
 
       if (newSelectedItem) {
         setVariant(action);
@@ -124,7 +124,7 @@ export const Table = ({
   }, []);
   const handleEdit: (id: string) => void = useCallback(
     (id) => {
-      const newSelectedItem = items.find(({ id: idItem }) => idItem === id);
+      const newSelectedItem = items.find(({ uid: idItem }) => idItem === id);
 
       if (newSelectedItem) {
         setIsSelectedEditItem(true);
@@ -223,13 +223,13 @@ export const Table = ({
               onClick={
                 item.status === validStatusToAction ? handleClick : undefined
               }
-              key={item.id}
+              key={item.uid}
               data-testid={`table-item-${index + 1}`}
             >
               <div className={styles.col}>
                 <Checkbox
-                  checked={isSelected(item.id)}
-                  onChange={() => handleToggleSelection(item.id)}
+                  checked={isSelected(item.uid)}
+                  onChange={() => handleToggleSelection(item.uid)}
                   disabled={item.status !== validStatusToAction}
                   data-testid={`select-item-${index + 1}`}
                 />
@@ -256,7 +256,7 @@ export const Table = ({
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>ID #</div>
-                {getMinimumId(item.id)}
+                {getMinimumId(item.uid)}
               </div>
               <div className={styles.col}>
                 <div className={styles.label}>Currency</div>
@@ -311,7 +311,7 @@ export const Table = ({
                 <button
                   type="button"
                   className={cn('button-stroke', 'button-small', styles.action)}
-                  onClick={() => handleAction(item.id, 'CONFIRM')}
+                  onClick={() => handleAction(item.uid, 'CONFIRM')}
                 >
                   <CheckI />
                   Confirm
@@ -319,7 +319,7 @@ export const Table = ({
                 <button
                   type="button"
                   className={cn('button-stroke', 'button-small', styles.action)}
-                  onClick={() => handleAction(item.id, 'REJECT')}
+                  onClick={() => handleAction(item.uid, 'REJECT')}
                 >
                   <Icon name="close" />
                   Reject
@@ -327,7 +327,7 @@ export const Table = ({
                 <button
                   type="button"
                   className={cn('button-stroke', 'button-small', styles.action)}
-                  onClick={() => handleEdit(item.id)}
+                  onClick={() => handleEdit(item.uid)}
                 >
                   <Icon name="edit" />
                   Edit

@@ -6,7 +6,7 @@ export interface User {
 }
 
 export interface Item {
-  id: string;
+  uid: string;
   user: User;
   currency: string;
   amount: number;

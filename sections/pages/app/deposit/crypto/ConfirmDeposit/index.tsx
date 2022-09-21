@@ -68,7 +68,7 @@ export const ConfirmDeposit = ({
   const hash = watch('hash');
   const [transactionId, setTransactionId] = useState<string>('');
   const depositInfo: IDepositInfo = useMemo(
-    () => ({ hash, id: transactionId } as IDepositInfo),
+    () => ({ hash, uid: transactionId } as IDepositInfo),
     [transactionId]
   );
 
@@ -81,16 +81,16 @@ export const ConfirmDeposit = ({
       try {
         const {
           data: {
-            data: { id },
+            data: { uid },
           },
-        } = await api.post<{ data: { id: string } }>('/api/crypto/deposit', {
+        } = await api.post<{ data: { uid: string } }>('/api/crypto/deposit', {
           amount,
           cryptoId: coinSelected.uid,
           addressId: networkSelected.uid,
           transactionHash: hash,
         });
 
-        setTransactionId(id);
+        setTransactionId(uid);
         setModalVisible(true);
       } catch (errorHandler: any) {
         if (axios.isAxiosError(errorHandler)) {

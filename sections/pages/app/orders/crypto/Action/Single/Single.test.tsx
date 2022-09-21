@@ -10,7 +10,7 @@ const user: User = {
 };
 const item: Item = {
   date: new Date(),
-  id: '8safdg9',
+  uid: '8safdg9',
   amount: 245,
   status: 'CONFIRMED',
   user,
@@ -47,7 +47,7 @@ describe('Single item action', () => {
     expect(variantElement).toHaveTextContent(variant);
 
     const referenceNumberTitleElement = getByTestId('reference-number-title');
-    expect(referenceNumberTitleElement).toHaveTextContent(item.id);
+    expect(referenceNumberTitleElement).toHaveTextContent(item.uid);
 
     const userNameElement = getByTestId('user-name');
     expect(userNameElement).toHaveTextContent(user.name);
@@ -56,10 +56,10 @@ describe('Single item action', () => {
     expect(userEmailElement).toHaveTextContent(user.email);
 
     const referenceNumberElement = getByTestId('reference-number');
-    expect(referenceNumberElement).toHaveTextContent(item.id);
+    expect(referenceNumberElement).toHaveTextContent(item.uid);
 
     const currencyCodeElement = getByTestId('currency-code');
-    expect(currencyCodeElement).toHaveTextContent(item.id);
+    expect(currencyCodeElement).toHaveTextContent(item.uid);
 
     const quantityElement = getByTestId('quantity');
     expect(quantityElement).toHaveTextContent(String(item.amount));

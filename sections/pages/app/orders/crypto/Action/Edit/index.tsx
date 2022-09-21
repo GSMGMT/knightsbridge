@@ -51,18 +51,18 @@ export const Edit = ({
         const amountRequest = stringToNumber(amount) || undefined;
         const transactionHashRequest = transactionHash || undefined;
 
-        await api.put(`/api/crypto/deposit/${item.id}`, {
+        await api.put(`/api/crypto/deposit/${item.uid}`, {
           amount: amountRequest,
           transactionHash: transactionHashRequest,
         });
 
         if (approve) {
           await api.put(`/api/crypto/deposit/approve`, {
-            id: item.id,
+            id: item.uid,
             approved: true,
           });
 
-          handleChangeItemStatus('CONFIRMED', item.id);
+          handleChangeItemStatus('CONFIRMED', item.uid);
         }
 
         handleClose();
@@ -110,7 +110,7 @@ export const Edit = ({
           <div className={styles.item}>
             <div className={styles.category}>Transaction ID</div>
             <div className={styles.content} data-testid="user-name">
-              {getMinimumId(item.id)}
+              {getMinimumId(item.uid)}
             </div>
           </div>
           <div className={styles.item}>

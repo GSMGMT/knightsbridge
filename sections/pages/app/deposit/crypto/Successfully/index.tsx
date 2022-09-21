@@ -10,7 +10,7 @@ import { Coin, Address } from '../types';
 import styles from './Successfully.module.scss';
 
 export interface DepositInfo {
-  id: string;
+  uid: string;
   hash: string;
 }
 interface SuccessfullyProps {
@@ -54,9 +54,9 @@ export const Successfully = ({
           <div
             className={styles.content}
             data-testid="id"
-            title={depositInfo.id}
+            title={depositInfo.uid}
           >
-            {depositInfo.id}
+            {depositInfo.uid}
           </div>
         </div>
         <div className={styles.item}>

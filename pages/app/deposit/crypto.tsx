@@ -13,7 +13,7 @@ import { withUser } from '@middlewares/client/withUser';
 import { navigation } from '@navigation';
 import { useTitle } from '@hooks/Title';
 
-import listCurrenciesWithAddresses from '@libs/firebase/functions/currency/address/listCurrenciesWithAddresses';
+import listCurrenciesWithAddresses from '@libs/firebase/functions/crypto/address/listCurrenciesWithAddresses';
 
 import { Bidding } from '@components/Bidding';
 import { Feature } from '@components/Feature';

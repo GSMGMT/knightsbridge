@@ -152,11 +152,13 @@ const Crypto = () => {
     } = await api.get<{
       totalCount: number;
       data: Array<{
-        id: string;
-        name: string;
-        surname: string;
-        email: string;
-        crypto: {
+        uid: string;
+        user: {
+          email: string;
+          name: string;
+          surname: string;
+        };
+        currency: {
           symbol: string;
         };
         address: {
@@ -167,7 +169,7 @@ const Crypto = () => {
         transactionHash: string;
         status: Status;
       }>;
-    }>('/api/crypto/deposit/list', {
+    }>('/api/crypto/deposit', {
       params: {
         pageSize,
         pageNumber,
@@ -181,19 +183,17 @@ const Crypto = () => {
 
     const newTableItems = data.map(
       ({
-        id,
+        uid,
         amount,
-        email: userEmail,
-        name,
-        surname,
+        user: { email: userEmail, name, surname },
         createdAt,
-        crypto: { symbol: currency },
+        currency: { symbol: currency },
         status,
         transactionHash,
         address: { network },
       }) =>
         ({
-          id,
+          uid,
           date: new Date(createdAt),
           amount,
           status,
@@ -221,7 +221,7 @@ const Crypto = () => {
     (status, ...ids) => {
       const newTableItems = [...tableItems].map(({ ...data }) => {
         const { status: newStatus, ...newData } = data;
-        const { id: itemId } = newData;
+        const { uid: itemId } = newData;
 
         const isThisToChange = itemId === ids.find((item) => item === itemId);
 

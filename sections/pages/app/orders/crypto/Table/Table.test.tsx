@@ -10,7 +10,7 @@ const user: User = {
 };
 const firstItem: Item = {
   date: new Date(),
-  id: '8safdg9',
+  uid: '8safdg9',
   amount: 245,
   status: 'CONFIRMED',
   user,
@@ -20,7 +20,7 @@ const firstItem: Item = {
 };
 const secondItem: Item = {
   date: new Date(),
-  id: '8safdg35239',
+  uid: '8safdg35239',
   amount: 245,
   status: 'CONFIRMED',
   user,

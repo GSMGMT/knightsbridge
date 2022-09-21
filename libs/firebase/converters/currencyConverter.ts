@@ -16,7 +16,7 @@ export const CurrencyConverter = {
       symbol: data.symbol,
       logo: `${process.env.API_URL}/${data.logo}`,
       cmcId: data.cmcId,
-      quote: data.quote ?? null,
+      quote: data.quote,
       type: data.type,
       sign: data.sign,
       deposit: data.deposit,

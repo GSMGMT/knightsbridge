@@ -5,7 +5,7 @@ import { ResponseModel } from '@contracts/Response';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { Pagination } from '@utils/types';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
-import listCurrenciesWithAddresses from '@libs/firebase/functions/currency/address/listCurrenciesWithAddresses';
+import listCurrenciesWithAddresses from '@libs/firebase/functions/crypto/address/listCurrenciesWithAddresses';
 
 export const config = {
   api: {

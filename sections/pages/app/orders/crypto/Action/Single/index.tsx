@@ -35,13 +35,13 @@ export const Single = ({
       setFetching(true);
 
       await api.put(`/api/crypto/deposit/approve`, {
-        id: item.id,
+        id: item.uid,
         approved: variant === 'CONFIRM',
       });
 
       handleChangeItemStatus(
         variant === 'CONFIRM' ? 'CONFIRMED' : 'REJECTED',
-        item.id
+        item.uid
       );
       handleClose();
     } finally {
@@ -61,7 +61,7 @@ export const Single = ({
         <div className={cn('h2', styles.title)}>{lowecaseVariant}</div>
         <div className={cn(styles.info, styles[lowecaseVariant])}>
           Are you sure you want to <span data-testid="variant">{variant}</span>{' '}
-          the deposit request <span>{getMinimumId(item.id)}</span>?
+          the deposit request <span>{getMinimumId(item.uid)}</span>?
         </div>
         <div className={styles.list}>
           <div className={styles.item}>
@@ -76,7 +76,7 @@ export const Single = ({
           <div className={styles.item}>
             <div className={styles.category}>Transaction ID</div>
             <div className={styles.content} data-testid="user-name">
-              {getMinimumId(item.id)}
+              {getMinimumId(item.uid)}
             </div>
           </div>
           <div className={styles.item}>
