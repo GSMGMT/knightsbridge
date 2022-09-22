@@ -34,8 +34,8 @@ export const Single = ({
     try {
       setFetching(true);
 
-      await api.put(`/api/crypto/deposit/approve`, {
-        id: item.uid,
+      await api.post(`/api/crypto/deposit/evaluate`, {
+        depositIds: item.uid,
         approved: variant === 'CONFIRM',
       });
 

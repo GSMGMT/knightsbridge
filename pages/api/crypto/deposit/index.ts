@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next';
-import { object, string, SchemaOf, number, array } from 'yup';
+import { object, string, SchemaOf, number, array, mixed } from 'yup';
 
 import { ResponseModel } from '@contracts/Response';
 import { Currency } from '@contracts/Currency';
@@ -11,12 +11,21 @@ import listCryptoDeposits from '@libs/firebase/functions/crypto/deposit/listDepo
 import { isPersisted, parseSortField } from '@utils/validator';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 import { Pagination } from '@utils/types';
+import { Roles } from '@contracts/User';
+import updateDeposit from '@libs/firebase/functions/crypto/deposit/updateDeposit';
+import { CryptoDepositUpdateQuery } from '@contracts/CryptoDeposit';
 
 export interface InsertDepositDTO {
   amount: number;
   addressId: string;
   cryptoId: string;
   transactionHash: string;
+}
+
+interface EditDepositDTO {
+  amount?: number;
+  transactionHash?: string;
+  depositUid: string;
 }
 
 type ListDepositsDTO = Pagination & {
@@ -34,6 +43,16 @@ const schema: SchemaOf<InsertDepositDTO> = object().shape({
     ),
   addressId: string().required('Address id is required.'),
   transactionHash: string().required('Transaction hash is required.'),
+});
+
+const editDepositSchema: SchemaOf<EditDepositDTO> = object().shape({
+  amount: mixed().when(['transactionHash'], {
+    is: undefined,
+    then: number().positive().required('Amount is required.'),
+    otherwise: number().positive(),
+  }),
+  transactionHash: string(),
+  depositUid: string().required('Deposit uid is required.'),
 });
 
 const listDepositsSchema: SchemaOf<ListDepositsDTO> = object().shape({
@@ -95,7 +114,40 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           })
         );
       }
+      case 'PUT': {
+        if (req.user.role === Roles.USER) {
+          return res.status(403).json(
+            ResponseModel.create(null, {
+              message: 'Unauthorized',
+            })
+          );
+        }
+
+        const { amount, transactionHash, depositUid } =
+          await editDepositSchema.validate(req.body);
+
+        const updateData: CryptoDepositUpdateQuery = {};
+
+        if (amount) updateData.amount = amount;
+        if (transactionHash) updateData.transactionHash = transactionHash;
+
+        await updateDeposit(depositUid, updateData);
+
+        return res.status(200).json(
+          ResponseModel.create(null, {
+            message: 'Deposit updated successfully',
+          })
+        );
+      }
       case 'GET': {
+        if (req.user.role === Roles.USER) {
+          return res.status(403).json(
+            ResponseModel.create(null, {
+              message: 'Unauthorized',
+            })
+          );
+        }
+
         const { size, search, sort } = await listDepositsSchema.validate(
           req.query
         );

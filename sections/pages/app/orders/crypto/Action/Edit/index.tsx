@@ -51,14 +51,15 @@ export const Edit = ({
         const amountRequest = stringToNumber(amount) || undefined;
         const transactionHashRequest = transactionHash || undefined;
 
-        await api.put(`/api/crypto/deposit/${item.uid}`, {
+        await api.put(`/api/crypto/deposit`, {
           amount: amountRequest,
           transactionHash: transactionHashRequest,
+          depositUid: item.uid,
         });
 
         if (approve) {
-          await api.put(`/api/crypto/deposit/approve`, {
-            id: item.uid,
+          await api.post(`/api/crypto/deposit/evaluate`, {
+            depositIds: item.uid,
             approved: true,
           });
 

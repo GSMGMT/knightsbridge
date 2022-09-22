@@ -176,7 +176,7 @@ const Crypto = () => {
         status: requestStatus,
         startDate: startDateRequest,
         endDate: endDateRequest,
-        email: emailRequest,
+        search: emailRequest,
         sort: sortByRequest,
       },
     });

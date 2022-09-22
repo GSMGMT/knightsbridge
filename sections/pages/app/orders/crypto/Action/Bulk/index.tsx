@@ -33,14 +33,15 @@ export const Bulk = ({
 
       const {
         data: { data },
-      } = await api.put('/api/crypto/deposit/approve/bulk', {
-        ids: selectedItems,
+      } = await api.post('/api/crypto/deposit/evaluate', {
+        depositIds: selectedItems,
+        multiple: true,
         approved: variant === 'CONFIRM',
       });
 
       const itemsAvailableToChange = data
         .filter((item: { success: boolean }) => item.success)
-        .map((item: { id: string }) => item.id);
+        .map((item: { uid: string }) => item.uid);
 
       handleChangeItemStatus(
         variant === 'CONFIRM' ? 'CONFIRMED' : 'REJECTED',

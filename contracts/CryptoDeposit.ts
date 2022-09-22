@@ -12,7 +12,7 @@ export enum CRYPTODepositStatus {
 export type CryptoCurrency = Omit<OmitTimestamp<Currency>, 'sign' | 'quote'>;
 
 export interface CryptoDeposit {
-  uid?: string;
+  uid: string;
   amount: number;
   transactionHash: string;
   status: CRYPTODepositStatus;
@@ -22,3 +22,7 @@ export interface CryptoDeposit {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type CryptoDepositUpdateQuery = Partial<
+  Pick<CryptoDeposit, 'transactionHash' | 'amount' | 'status'>
+>;

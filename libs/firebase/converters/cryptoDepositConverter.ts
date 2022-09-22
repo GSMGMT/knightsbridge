@@ -7,9 +7,7 @@ import { CryptoDeposit } from '@contracts/CryptoDeposit';
 
 export const CryptoDepositConverter = {
   toFirestore: (data: WithFieldValue<CryptoDeposit>): DocumentData => data,
-  fromFirestore: (
-    snapshot: QueryDocumentSnapshot<DocumentData>
-  ): CryptoDeposit => {
+  fromFirestore: (snapshot: QueryDocumentSnapshot): CryptoDeposit => {
     const data = snapshot.data();
 
     return {
