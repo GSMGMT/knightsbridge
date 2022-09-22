@@ -74,13 +74,17 @@ export const Item = ({ item, children }: ItemProps) => {
           <div className={styles.info}>
             {getValueWithCurrency(item.currencyAvailable)}
           </div>
-          <div className={styles.text}>{getValueInDollar(0)}</div>
+          <div className={styles.text}>
+            {getValueInDollar(item.currencyAvailable)}
+          </div>
         </div>
         <div className={styles.col}>
           <div className={styles.info}>
             {getValueWithCurrency(item.currencyOrder)}
           </div>
-          <div className={styles.text}>{getValueInDollar(0)}</div>
+          <div className={styles.text}>
+            {getValueInDollar(item.currencyOrder)}
+          </div>
         </div>
       </div>
       <div className={styles.btns}>{children}</div>

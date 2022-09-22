@@ -2,6 +2,7 @@ import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
 import getAssetsByWalletUid from '@libs/firebase/functions/wallet/asset/getAssetsByWalletUid';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
 import { Asset } from '@contracts/Wallet';
+import { fetchCryptoPrice } from '../coinMarketCap/crypto/getCryptoPrice';
 
 type CurrencyData = {
   uid: string;
@@ -40,7 +41,7 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
   const fiatCurrency: CurrencyData[] = [];
   const cryptoCurrency: CurrencyData[] = [];
 
-  currencies.forEach((currency) => {
+  for await (const currency of currencies) {
     const currencyAsset = assets.find(
       (asset) => currency.uid === asset.currency.uid
     );
@@ -67,7 +68,20 @@ export const usersPortfolio = async (userUid: string): Promise<Portfolio> => {
     } else {
       fiatCurrency.push(currencyData);
     }
-  });
+  }
+
+  await Promise.all([
+    ...cryptoCurrency.map(async (currency) => {
+      const defaultCurrency = currencies.find(
+        (crypto) => crypto.uid === currency.uid
+      )!;
+
+      const price = await fetchCryptoPrice(defaultCurrency.cmcId);
+
+      // eslint-disable-next-line no-param-reassign
+      currency.quote = price ?? 1;
+    }),
+  ]);
 
   return {
     fiat: fiatCurrency,

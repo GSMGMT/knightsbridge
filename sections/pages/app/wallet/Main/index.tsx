@@ -1,5 +1,7 @@
 import cn from 'classnames';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { api } from '@services/api';
 
 import { getValue } from '@helpers/GetValue';
 
@@ -10,7 +12,23 @@ interface MainProps {
   cryptoAmount: number;
 }
 export const Main = ({ fiatAmount, cryptoAmount }: MainProps) => {
-  const [bitcoinQuote] = useState<number>(20000);
+  const [bitcoinQuote, setBitcoinQuote] = useState<number>(20000);
+
+  useEffect(() => {
+    (async () => {
+      const {
+        data: { data: price },
+      } = await api.get<{
+        data: number;
+      }>('/api/currency/latest', {
+        params: {
+          id: 1,
+        },
+      });
+
+      if (price) setBitcoinQuote(price);
+    })();
+  }, []);
 
   const getValueWithDollar: (value: number) => string = useCallback((value) => {
     const valueWithDollar = getValue(value);

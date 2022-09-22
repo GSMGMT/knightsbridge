@@ -155,12 +155,9 @@ export const DepositDetails = ({
     try {
       const {
         data: { data: amount },
-      } = await api.get<{ data: number }>('/api/financial/balance', {
-        params: {
-          type: 'CRYPTOCURRENCY',
-          currencyId: coins[coinSelectedIndex].uid,
-        },
-      });
+      } = await api.get<{ data: number }>(
+        `/api/currency/${coins[coinSelectedIndex].uid}/balance`
+      );
 
       setWalletAmount(amount);
     } finally {
