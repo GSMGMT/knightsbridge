@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import cn from 'classnames';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 
@@ -33,15 +33,20 @@ interface FormFields {
 }
 
 const CoinList = () => {
-  const [search, setSearch] = useState<string>('');
-  const { handleSubmit: submit, register } = useForm<FormFields>({
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const { handleSubmit: submit, control } = useForm<FormFields>({
     defaultValues: {
       search: '',
     },
   });
+  const search = useMemo(() => {
+    const newSearch = searchTerm.length >= 3 ? searchTerm : undefined;
+
+    return newSearch;
+  }, [searchTerm]);
   const handleSubmit = useCallback(
     submit(({ search: searchField }) => {
-      setSearch(searchField);
+      setSearchTerm(searchField);
     }),
     []
   );
@@ -121,13 +126,23 @@ const CoinList = () => {
             </div>
 
             <form className={styles.form} onSubmit={handleSubmit}>
-              <input
-                className={styles.input}
-                type="text"
-                placeholder="Search coin"
-                autoComplete="off"
-                {...register('search')}
+              <Controller
+                name="search"
+                control={control}
+                render={({ field: { onChange, ...field } }) => (
+                  <input
+                    className={styles.input}
+                    type="text"
+                    placeholder="Search coin"
+                    autoComplete="off"
+                    {...field}
+                    onChange={({ target: { value } }) => {
+                      onChange(value.toUpperCase());
+                    }}
+                  />
+                )}
               />
+
               <button
                 className={styles.result}
                 type="submit"

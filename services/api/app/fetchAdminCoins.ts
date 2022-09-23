@@ -55,7 +55,7 @@ export const fetchAdminCoins: (args?: {
     params: {
       pageNumber,
       pageSize: 10,
-      search,
+      name: search,
     },
   });
   const cryptoCurrencies: AdminPair[] = cryptoCurrenciesFetched.map(

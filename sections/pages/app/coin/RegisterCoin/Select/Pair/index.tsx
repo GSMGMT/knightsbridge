@@ -56,9 +56,13 @@ export const SelectPair = ({
   );
 
   const [selectedPair, setSelectedPair] = useState<Pair | null>(null);
+  const [registeringPair, setRegisteringPair] = useState<boolean>(false);
+  const [pairRegistered, setPairRegistered] = useState<boolean>(false);
 
   const [fetching, setFetching] = useState<boolean>(false);
   const fetchCoinCmc: () => Promise<void> = useCallback(async () => {
+    if (fetching) return;
+
     try {
       setFetching(true);
 
@@ -139,30 +143,44 @@ export const SelectPair = ({
     }
   }, [searchInput]);
 
-  const canSubmit = useMemo(() => !!selectedPair, [selectedPair]);
+  const canSubmit = useMemo(
+    () => !!selectedPair && !pairRegistered && !registeringPair,
+    [selectedPair, pairRegistered, registeringPair]
+  );
   const handleRegisterPair = useCallback(async () => {
     if (!canSubmit) return;
 
-    const {
-      id: marketPairId,
-      name: marketPairName,
-      base: { id: baseId, type: baseType },
-      pair: { id: quoteId, type: quoteType },
-    } = selectedPair!;
+    try {
+      setRegisteringPair(true);
 
-    await api.post('/api/marketPair', {
-      name: marketPairName,
-      cmcId: marketPairId,
-      baseCmcId: baseId,
-      baseType: baseType.toUpperCase(),
-      quoteCmcId: quoteId,
-      quoteType: quoteType.toUpperCase(),
-      exchangeCmcId: exchangeId,
-    });
+      const {
+        id: marketPairId,
+        name: marketPairName,
+        base: { id: baseId, type: baseType },
+        pair: { id: quoteId, type: quoteType },
+      } = selectedPair!;
 
-    fetchPairs();
-    closeModal();
+      await api.post('/api/marketPair', {
+        name: marketPairName,
+        cmcId: marketPairId,
+        baseCmcId: baseId,
+        baseType: baseType.toUpperCase(),
+        quoteCmcId: quoteId,
+        quoteType: quoteType.toUpperCase(),
+        exchangeCmcId: exchangeId,
+      });
+      setPairRegistered(true);
+
+      fetchPairs();
+      closeModal();
+    } finally {
+      setRegisteringPair(false);
+    }
   }, [canSubmit, selectedPair, currentExchange, closeModal, exchangeId]);
+
+  useEffect(() => {
+    setSelectedPair(null);
+  }, [searchTerm]);
 
   return (
     <div className={styles.area}>
@@ -248,7 +266,13 @@ export const SelectPair = ({
         disabled={!canSubmit}
         onClick={handleRegisterPair}
       >
-        Done
+        {registeringPair
+          ? 'Registering pair...'
+          : pairRegistered
+          ? 'Pair registered'
+          : selectedPair
+          ? 'Register pair'
+          : 'Select pair'}
       </button>
     </div>
   );

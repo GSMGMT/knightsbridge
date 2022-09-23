@@ -37,6 +37,7 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
     const newSearch =
       searchTerm.length >= 3 ? searchTerm.toLowerCase() : undefined;
 
+    setSelectedExchangeId('');
     setExchanges([]);
 
     if (newSearch) {
