@@ -40,8 +40,17 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
       size: 100,
     });
 
-    const currencies: Coins = fetchedCurrencies.map(
-      ({ logo, name, symbol, uid, walletAddresses: addresses }) => {
+    if (!fetchedCurrencies.length) {
+      return {
+        redirect: {
+          destination: navigation.app.wallet,
+          permanent: false,
+        },
+      };
+    }
+
+    const currencies: Coins = fetchedCurrencies
+      .map(({ logo, name, symbol, uid, walletAddresses: addresses }) => {
         const walletAddresses =
           addresses?.map(({ createdAt, updatedAt, ...address }) => address) ??
           [];
@@ -54,8 +63,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
           quote: 1,
           walletAddresses,
         } as Coin;
-      }
-    );
+      })
+      .sort((a, b) => a.symbol.localeCompare(b.symbol));
 
     for await (const fetchedCurrency of fetchedCurrencies) {
       const price = await fetchCryptoPrice(fetchedCurrency.cmcId);
