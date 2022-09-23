@@ -36,7 +36,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
         filters: { type: 'fiat' },
         size: 100,
       })
-    ).map(({ createdAt, updatedAt, ...data }) => ({ ...data }));
+    ).map(({ createdAt, updatedAt, deposit, ...data }) => ({ ...data }));
     const banks: Bank[] = (
       await listBanks({
         size: 100,

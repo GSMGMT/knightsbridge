@@ -61,8 +61,8 @@ export const ConfirmDeposit = ({
 
   const [fetching, setFetching] = useState<boolean>(false);
   const canSubmit = useMemo(
-    () => !formState.errors.hash && !modalVisible,
-    [formState]
+    () => !formState.errors.hash && !modalVisible && !fetching,
+    [formState, modalVisible, fetching]
   );
 
   const hash = watch('hash');
