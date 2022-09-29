@@ -10,6 +10,7 @@ import insertMarketPair from '@libs/firebase/functions/marketPair/insertMarketPa
 import uploadFileToStorage, {
   File,
 } from '@libs/firebase/functions/storage/uploadFile';
+import { removeApiUrl } from '@utils/removeApiUrl';
 import { parseToUrlQuery } from '@utils/parseToUrlQuery';
 import { Exchange } from '@contracts/Exchange';
 import insertExchange from '@libs/firebase/functions/exchange/insertExchange';
@@ -22,14 +23,6 @@ interface RegisterMarketPair {
   quoteCmcId: number;
   exchangeCmcId: number;
 }
-
-const removeApiUrl = <T>(data: T & { logo: string }) => {
-  const [, logo] = data.logo.split(`${process.env.API_URL}/`);
-  return {
-    ...data,
-    logo,
-  };
-};
 
 const fetchLogoFromCoinMarket = async (url: string): Promise<File> => {
   const { data: logoBinary, headers } = await axios.get(url, {
