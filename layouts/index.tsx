@@ -18,7 +18,11 @@ export const Layouts = ({ children }: LayoutsProps) => {
   if (path.startsWith('/auth')) {
     return <Sign>{children}</Sign>;
   }
-  if (path.includes('/app/wallet') || path.includes('/app/buy-sell')) {
+  if (
+    path.includes('/app/wallet') ||
+    path.includes('/app/buy-sell') ||
+    path.includes('/app/presale')
+  ) {
     return <Wallet>{children}</Wallet>;
   }
   if (path.includes('/app/coin')) {

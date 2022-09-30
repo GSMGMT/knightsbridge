@@ -28,6 +28,11 @@ const navigation: Array<NavigationItem> = [
     title: 'Fiat and Spot',
     color: '#FFD166',
     url: navigationLinks.app.wallet,
+  },
+  {
+    title: 'Presale',
+    color: '#0063F5',
+    url: navigationLinks.app.presale,
     separator: true,
   },
   {

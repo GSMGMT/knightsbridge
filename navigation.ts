@@ -59,6 +59,7 @@ export const navigation = {
       crypto: '/app/deposit/crypto',
     },
     wallet: '/app/wallet',
+    presale: '/app/presale',
     orders: {
       fiat: '/app/orders/fiat',
       crypto: '/app/orders/crypto',
