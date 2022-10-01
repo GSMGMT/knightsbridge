@@ -1,22 +1,22 @@
 import {
   useState,
   useId,
-  // useContext,
   useEffect,
   useCallback,
   useMemo,
+  FunctionComponent,
 } from 'react';
 import cn from 'classnames';
 import { Range, getTrackBackground } from 'react-range';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
-// import { ExchangeContext } from '@store/contexts/Exchange';
+import { Coin as PresaleCoin } from '@pages/app/presale';
 
 import { api } from '@services/api';
 
 import { Icon } from '@components/Icon';
 
-import { stringToValue } from '@helpers/StringToValue';
+import { getValue } from '@helpers/GetValue';
 
 import { Dropdown } from './Dropdown';
 import { Coins } from './Dropdown/types';
@@ -24,54 +24,76 @@ import { Coins } from './Dropdown/types';
 import styles from './Action.module.scss';
 
 interface BuyProps {
-  classButton: string;
-  buttonText: string;
+  coins: PresaleCoin[];
+  handleFetchPorfolio: () => Promise<void>;
+  handleFetchCoins: () => Promise<void>;
 }
-export const Action = ({ classButton, buttonText }: BuyProps) => {
-  const presaleCoins: Coins = [
-    {
-      name: 'Bitcoin',
-      logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
-      symbol: 'BTC',
-      uid: '1',
-    },
-  ];
+export const Action: FunctionComponent<BuyProps> = ({
+  coins,
+  handleFetchPorfolio,
+  handleFetchCoins,
+}) => {
+  const presaleCoins: Coins = useMemo(() => {
+    const coinsFormatted: Coins = coins.map((coin) => ({
+      logo: coin.icon,
+      name: coin.name,
+      symbol: coin.symbol,
+      uid: coin.uid,
+    }));
+
+    return coinsFormatted;
+  }, [coins]);
   const presaleCoinsNames = useMemo(() => {
-    const newOptions = presaleCoins.map(({ name }) => name);
+    const newOptions = presaleCoins.map(({ uid }) => uid);
 
     return [...newOptions];
   }, [presaleCoins]);
-  const [currency, setCurrency] = useState<string>(presaleCoinsNames[0]);
+  const [currentCoinName, setCurrency] = useState<string>(presaleCoinsNames[0]);
 
+  const currentCoin = useMemo(() => {
+    const selectedCoin = coins.find(({ uid }) => uid === currentCoinName)!;
+
+    return selectedCoin;
+  }, [coins, currentCoinName]);
   const {
-    // walletPortfolio: {
-    //   pair: { amount: pairWalletAmount },
-    // },
-    // handleFetchPairCurrencyWallet,
-    // pair,
     quote: price,
     uid: id,
     symbol: baseSlug,
-    baseCurrency: { symbol: pairSlug, amount: pairWalletAmount },
-  } = {
-    baseCurrency: {
-      // logo: 'logo/258abd98ea7a3842dd29f4da',
-      // name: 'Tether',
-      symbol: 'USDT',
-      amount: 41023,
-    },
-    // icon: 'logo/1d34b8d2903a85503f3e2fc04',
-    // name: 'Coin',
-    quote: 0.53,
-    symbol: 'CON',
-    uid: 'b96a9a5b-3b7c-4289-9f05-b59adb259d35',
-  };
-  // const {
-  //   base: { slug: baseSlug },
-  //   pair: { slug: pairSlug },
-  //   price,
-  //   id,
-  // } = useMemo(() => pair!, [pair]);
+    amount: availableAmount,
+    baseCurrency,
+  } = useMemo(() => currentCoin, [currentCoin]);
+  const [pairSlug, setPairSlug] = useState<string>('');
+  const [fetchingBaseCurrencyAmount, setFetchingBaseCurrencyAmount] =
+    useState<boolean>(false);
+  const { symbol: coinPairSlug } = useMemo(() => baseCurrency, [baseCurrency]);
+  const [pairWalletAmount, setPairWalletAmount] = useState<number>(0);
+  const maxTransactionAmount = useMemo(() => {
+    const maxValueTransaction = availableAmount * price;
+
+    if (maxValueTransaction > pairWalletAmount) {
+      return pairWalletAmount;
+    }
+
+    return maxValueTransaction;
+  }, [price, availableAmount, pairWalletAmount]);
+
+  const handleFetchBaseCurrencyBalance = useCallback(async () => {
+    setFetchingBaseCurrencyAmount(true);
+
+    const { uid } = baseCurrency;
+
+    const {
+      data: { data: amount },
+    } = await api.get<{ data: number }>(`/api/currency/${uid}/balance`);
+
+    setPairWalletAmount(amount);
+    setPairSlug(coinPairSlug);
+
+    setFetchingBaseCurrencyAmount(false);
+  }, [baseCurrency]);
+  useEffect(() => {
+    (async () => handleFetchBaseCurrencyBalance())();
+  }, [handleFetchBaseCurrencyBalance]);
 
   const [transactionFail, setTransactionFail] = useState<boolean>(false);
   const removeTransactionFailFeedback = useCallback(() => {
@@ -113,7 +135,7 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
   useEffect(() => {
     setFiatAmount('0');
     setCryptoAmount('0');
-  }, [/* pair, */ pairWalletAmount]);
+  }, [currentCoin, maxTransactionAmount]);
 
   const [fetching, setFetching] = useState<boolean>(false);
 
@@ -127,8 +149,8 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
   const [lastChange, setLastChange] = useState<'CRYPTO' | 'FIAT'>('CRYPTO');
 
   const valueIsMajor = useMemo(
-    () => pairWalletAmount < fiatAmountValue,
-    [pairWalletAmount, fiatAmountValue]
+    () => maxTransactionAmount < fiatAmountValue,
+    [maxTransactionAmount, fiatAmountValue]
   );
 
   useEffect(() => {
@@ -160,47 +182,39 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
   useEffect(() => {
     let newPercentage = 0;
 
-    newPercentage = (fiatAmountValue / pairWalletAmount) * 100;
+    newPercentage = (fiatAmountValue / maxTransactionAmount) * 100;
 
     if (newPercentage > 100 || !newPercentage) {
       newPercentage = 0;
     }
 
     setPercentage(newPercentage);
-  }, [fiatAmountValue, pairWalletAmount]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     await handleFetchPairCurrencyWallet();
-  //   })();
-  // }, [pair]);
+  }, [fiatAmountValue, maxTransactionAmount]);
 
   const handleBuy: () => Promise<void> = useCallback(async () => {
     try {
       setFetching(true);
 
-      await api.post('/api/order', {
-        type: 'buy',
-        marketPairId: id,
+      await api.post('/api/presale/order', {
         amount: cryptoAmountValue,
+        presaleCoinId: id,
       });
 
       setPercentage(0);
 
-      // await handleFetchPairCurrencyWallet();
+      await Promise.all([
+        handleFetchPorfolio(),
+        handleFetchCoins(),
+        handleFetchBaseCurrencyBalance(),
+      ]);
     } catch (errorHandler: any) {
       if (axios.isAxiosError(errorHandler)) {
-        const error = errorHandler as AxiosError<{ message: string }>;
-
-        const { message } = error.response!.data;
-        console.error({ message });
-
         setTransactionFail(true);
       }
     } finally {
       setFetching(false);
     }
-  }, [cryptoAmountValue /* , pair, handleFetchPairCurrencyWallet */]);
+  }, [cryptoAmountValue, handleFetchBaseCurrencyBalance]);
   const canSubmit = useMemo(
     () => !valueIsMajor && percentage > 0 && !fetching,
     [percentage, fetching, valueIsMajor]
@@ -214,7 +228,7 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
         <Dropdown
           options={presaleCoins}
           setValue={setCurrency}
-          value={currency}
+          value={currentCoinName}
           label="select token"
         />
       </div>
@@ -261,12 +275,15 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
           }}
         />
         <div className={styles.currency}>
-          <span>{pairSlug}</span>
+          <span>{coinPairSlug}</span>
         </div>
       </label>
-      <span className={styles.wallet}>
-        <Icon name="wallet" /> {stringToValue(pairWalletAmount.toString(), 12)}{' '}
-        {pairSlug}
+      <span
+        className={cn(styles.wallet, {
+          [styles.loading]: fetchingBaseCurrencyAmount,
+        })}
+      >
+        <Icon name="wallet" /> {getValue(pairWalletAmount)} {pairSlug}
       </span>
       <Range
         values={[percentage]}
@@ -276,12 +293,12 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
         onChange={([newValue]) => {
           setPercentage(newValue);
 
-          const newFiatAmount = (pairWalletAmount / 100) * newValue;
+          const newFiatAmount = (maxTransactionAmount / 100) * newValue;
           setFiatAmount(newFiatAmount.toString());
 
           setLastChange('FIAT');
         }}
-        disabled={pairWalletAmount === 0}
+        disabled={maxTransactionAmount === 0}
         renderMark={({ props: { style, ...props }, index }) => (
           <div
             {...props}
@@ -374,12 +391,12 @@ export const Action = ({ classButton, buttonText }: BuyProps) => {
         <Icon name="lightning" /> Fee 1.5%
       </span>
       <button
-        className={cn(classButton, styles.button)}
+        className={cn('button', styles.button)}
         type="button"
         onClick={handleSubmitOrder}
         disabled={!canSubmit}
       >
-        {buttonText}
+        Buy {baseSlug}
       </button>
     </div>
   );

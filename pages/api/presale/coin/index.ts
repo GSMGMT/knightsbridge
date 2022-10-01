@@ -29,6 +29,9 @@ export interface InsertCoinDTO {
   amount: number;
   icon: any;
 }
+export interface ListCoinsDTO {
+  onlyAvailable?: number;
+}
 
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 const FOUR_MB = 4096 * 1024;
@@ -63,6 +66,10 @@ const schema: SchemaOf<InsertCoinDTO> = object().shape({
       (value) =>
         value === null || (value && SUPPORTED_FORMATS.includes(value.mimetype))
     ),
+});
+
+const listSchema: SchemaOf<ListCoinsDTO> = object().shape({
+  onlyAvailable: number(),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
@@ -125,7 +132,9 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
       }
       case 'GET': {
-        const coins = await listCoins();
+        const { onlyAvailable = 1 } = await listSchema.validate(req.query);
+
+        const coins = await listCoins({ onlyAvailable: !!onlyAvailable });
 
         return res.status(200).json(
           ResponseModel.create(coins, {

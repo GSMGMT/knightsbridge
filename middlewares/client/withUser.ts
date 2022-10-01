@@ -27,7 +27,8 @@ export async function withUser<T extends {}>(
     const { uid } = await adminAuth.verifyIdToken(token);
 
     if (freeToAccessBy !== 'BOTH') {
-      const { role } = (await getUserByUid(uid))!;
+      const user = (await getUserByUid(uid))!;
+      const { role } = user;
 
       if (freeToAccessBy === Roles.SUPERADMIN) {
         freeToAccessBy = Roles.ADMIN;

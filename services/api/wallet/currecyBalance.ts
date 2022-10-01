@@ -1,7 +1,5 @@
-import DineroFactory from 'dinero.js';
 import getAssetByCurrencyUid from '@libs/firebase/functions/wallet/asset/getAssetByCurrencyUid';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
-import { dineroFromFloat, getNumberDecimalQuantity } from '@utils/dinero';
 
 export const currencyBalance = async (userUid: string, currencyUid: string) => {
   const wallet = await getWalletByUserUid(userUid);
@@ -16,15 +14,9 @@ export const currencyBalance = async (userUid: string, currencyUid: string) => {
     return 0.0;
   }
 
-  const amountDigits = getNumberDecimalQuantity(asset.amount);
-  const amount = DineroFactory(dineroFromFloat(asset.amount, amountDigits));
+  const { amount, reserved } = asset;
 
-  const reservedDigits = getNumberDecimalQuantity(asset.reserved);
-  const reserved = DineroFactory(
-    dineroFromFloat(asset.reserved, reservedDigits)
-  );
+  const balance = amount - reserved;
 
-  const balance = amount.subtract(reserved);
-
-  return balance.toUnit();
+  return balance;
 };

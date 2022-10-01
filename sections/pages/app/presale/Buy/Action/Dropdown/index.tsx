@@ -41,7 +41,7 @@ export const Dropdown = ({
   };
 
   const coinSelected = useMemo(() => {
-    const selectedCoin = options.find(({ name }) => name === value);
+    const selectedCoin = options.find(({ uid }) => uid === value);
 
     return selectedCoin;
   }, [value, options]);
@@ -79,9 +79,9 @@ export const Dropdown = ({
           {options.map((option) => (
             <div
               className={cn(classDropdownOption, styles.option, {
-                [styles.selectioned]: option.name === value,
+                [styles.selectioned]: option.uid === value,
               })}
-              onClick={() => handleClick(option.name)}
+              onClick={() => handleClick(option.uid)}
               key={option.uid}
               role="button"
               tabIndex={0}

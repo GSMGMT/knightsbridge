@@ -1,11 +1,28 @@
+import { FunctionComponent } from 'react';
+
+import { Coin } from '@pages/app/presale';
+
 import { Action } from './Action';
 import { Animation } from './Animation';
 
 import styles from './Buy.module.scss';
 
-export const Buy = () => (
+interface BuyProps {
+  coins: Coin[];
+  handleFetchPorfolio: () => Promise<void>;
+  handleFetchCoins: () => Promise<void>;
+}
+export const Buy: FunctionComponent<BuyProps> = ({
+  coins,
+  handleFetchPorfolio,
+  handleFetchCoins,
+}) => (
   <div className={styles.container}>
     <Animation />
-    <Action classButton="button-green" buttonText="Buy" />
+    <Action
+      coins={coins}
+      handleFetchPorfolio={handleFetchPorfolio}
+      handleFetchCoins={handleFetchCoins}
+    />
   </div>
 );

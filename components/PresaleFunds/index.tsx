@@ -1,9 +1,11 @@
+import { PresaleData } from '@services/api/presale/portfolio';
+
 import styles from './Funds.module.scss';
 
-import { Item, ItemI } from './Item';
+import { Item } from './Item';
 
 interface FundsProps {
-  items: Array<ItemI>;
+  items: Array<PresaleData>;
 }
 export const Funds = ({ items }: FundsProps) => (
   <div className={styles.wrap}>

@@ -12,6 +12,9 @@
   padding: 40px;
   border-radius: 4px;
 
+  display: flex;
+  flex-direction: column;
+
   background: $n8;
 
   @include dark {
@@ -66,7 +69,7 @@
     --field-border-color: #{$p3};
   }
   &:not(:last-child) {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
   }
   &.dropdown {
     --field-border-color: transparent;
@@ -133,7 +136,7 @@
   }
 }
 .button {
-  width: 100%;
+  margin-left: auto;
 }
 .wallet,
 .fee {
@@ -151,10 +154,19 @@
 
   margin-bottom: 12px;
 
+  &.loading {
+    opacity: 0.5;
+  }
+
   @include dark {
     color: $n8;
   }
 }
+.wallet {
+  margin-top: -12px;
+  margin-bottom: 24px;
+}
 .fee {
   margin-top: 12px;
+  margin-bottom: 48px;
 }
