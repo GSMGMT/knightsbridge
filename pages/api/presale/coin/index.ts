@@ -12,6 +12,7 @@ import uploadFileToStorage from '@libs/firebase/functions/storage/uploadFile';
 import insertCoin from '@libs/firebase/functions/presale/coin/insertCoin';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { removeApiUrl } from '@utils/removeApiUrl';
+import listCoins from '@libs/firebase/functions/presale/coin/listCoins';
 
 export const config = {
   api: {
@@ -25,6 +26,7 @@ export interface InsertCoinDTO {
   quote: number;
   baseCurrencyId: string;
   availableAt: string;
+  amount: number;
   icon: any;
 }
 
@@ -47,6 +49,7 @@ const schema: SchemaOf<InsertCoinDTO> = object().shape({
       value ? !!new Date(value).getTime() : false
     )
     .required('Available at is required.'),
+  amount: number().required('Amount is required.'),
   icon: mixed()
     .required('Receipt is required.')
     .test(
@@ -66,10 +69,17 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'POST': {
-        const { baseCurrencyId, availableAt, icon, name, quote, symbol } =
-          await parseMultipartForm<InsertCoinDTO>(req).then((parsedBody) =>
-            schema.validate(parsedBody)
-          );
+        const {
+          baseCurrencyId,
+          availableAt,
+          icon,
+          name,
+          quote,
+          symbol,
+          amount,
+        } = await parseMultipartForm<InsertCoinDTO>(req).then((parsedBody) =>
+          schema.validate(parsedBody)
+        );
 
         const buffer = await readFile(icon.filepath);
         const filePath = `logo/${icon.newFilename}`;
@@ -100,6 +110,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
             uid: currency.uid,
             type: currency.type,
           },
+          amount,
           availableAt: new Date(availableAt),
           icon: filePath,
           name,
@@ -110,6 +121,15 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         return res.status(201).json(
           ResponseModel.create(coin, {
             message: 'Presale coin created successfully',
+          })
+        );
+      }
+      case 'GET': {
+        const coins = await listCoins();
+
+        return res.status(200).json(
+          ResponseModel.create(coins, {
+            message: 'Presale coins fetched successfully',
           })
         );
       }

@@ -26,7 +26,7 @@ export const { firestore } = admin;
 export const { database } = admin;
 export const { storage } = admin;
 
-export const { increment } = admin.firestore.FieldValue;
+export const { increment, serverTimestamp } = admin.firestore.FieldValue;
 
 export type Timestamp = admin.firestore.Timestamp;
 export type WithFieldValue<T> = admin.firestore.WithFieldValue<T>;

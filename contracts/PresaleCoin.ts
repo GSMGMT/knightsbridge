@@ -12,6 +12,7 @@ export interface PresaleCoin {
   symbol: string;
   quote: number;
   icon: string;
+  amount: number;
   baseCurrency: CryptoCurrency;
   availableAt: Date;
   createdAt: Date;

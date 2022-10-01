@@ -2,7 +2,7 @@ import {
   DocumentData,
   QueryDocumentSnapshot,
   WithFieldValue,
-} from 'firebase/firestore';
+} from '@libs/firebase/admin-config';
 import { PresaleCoin } from '@contracts/PresaleCoin';
 
 export const PresaleCoinConverter = {
@@ -15,6 +15,7 @@ export const PresaleCoinConverter = {
       name: data.name,
       symbol: data.symbol,
       quote: data.quote,
+      amount: data.amount,
       icon: `${process.env.API_URL}/${data.icon}`,
       baseCurrency: {
         ...data.baseCurrency,
