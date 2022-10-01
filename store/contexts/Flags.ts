@@ -17,6 +17,7 @@ export const defaultFlags: Flags = {
   deposit_crypto: true,
   coin_register: true,
   wallet: true,
+  presale: true,
 };
 
 export const FlagsContext = createContext<{

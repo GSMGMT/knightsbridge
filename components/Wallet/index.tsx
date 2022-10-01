@@ -1,8 +1,12 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 
+import { useFeature } from '@hooks/Feature';
+
 import { navigation as navigationLinks } from '@navigation';
+
+import { Features } from '@contracts/Features';
 
 import { Link } from '@components/Link';
 import { NavLink } from '@components/NavLink';
@@ -11,34 +15,46 @@ import styles from './Wallet.module.sass';
 
 import { Icon, Icons } from '../Icon';
 
-interface NavigationItem {
+type NavigationAction =
+  | {
+      color: string;
+      icon?: never;
+    }
+  | {
+      color?: never;
+      icon: Icons;
+    };
+type NavigationItem = NavigationAction & {
   title: string;
-  color?: string;
-  icon?: Icons;
   url?: string;
   separator?: boolean;
-}
-const navigation: Array<NavigationItem> = [
+  feature: Features;
+};
+const navigationItemsDefault: Array<NavigationItem> = [
   {
     title: 'Overview',
     color: '#23262F',
     url: navigationLinks.app.wallet,
+    feature: 'wallet',
   },
   {
     title: 'Fiat and Spot',
     color: '#FFD166',
     url: navigationLinks.app.wallet,
+    feature: 'wallet',
   },
   {
+    separator: true,
     title: 'Presale',
     color: '#0063F5',
     url: navigationLinks.app.presale,
-    separator: true,
+    feature: 'presale',
   },
   {
     title: 'Buy and Sell',
     icon: 'wallet',
     url: navigationLinks.app.buySell,
+    feature: 'buy_sell',
   },
 ];
 
@@ -48,10 +64,34 @@ interface WalletProps {
 }
 export const Wallet = ({ className, children }: WalletProps) => {
   const { pathname } = useRouter();
+  const { isEnabled } = useFeature();
 
   const [visibleMenu, setVisibleMenu] = useState(false);
 
-  const activeItem = navigation.find((x) => pathname.includes(x.url!))!;
+  const activeItem = navigationItemsDefault.find((x) =>
+    pathname.includes(x.url!)
+  )!;
+
+  const navigationItems: Array<NavigationItem> = useMemo(() => {
+    const items: Array<NavigationItem> = [];
+
+    let addSeparatorToNextItem: boolean = false;
+
+    navigationItemsDefault.forEach(({ separator, ...item }) => {
+      if (isEnabled(item.feature)) {
+        if (addSeparatorToNextItem) {
+          items.push({ separator: true, ...item });
+          addSeparatorToNextItem = false;
+        } else {
+          items.push({ ...item, separator });
+        }
+      } else if (separator) {
+        addSeparatorToNextItem = true;
+      }
+    });
+
+    return items;
+  }, [isEnabled, navigationItemsDefault]);
 
   return (
     <div className={cn(className, styles.wallet)}>
@@ -70,7 +110,7 @@ export const Wallet = ({ className, children }: WalletProps) => {
             {activeItem.title}
           </div>
           <div className={styles.menu}>
-            {navigation.map(
+            {navigationItems.map(
               (item, index) =>
                 item.url && (
                   <NavLink

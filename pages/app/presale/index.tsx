@@ -21,6 +21,7 @@ import {
 } from '@services/api/presale/portfolio';
 import { api } from '@services/api';
 import { adminAuth } from '@libs/firebase/admin-config';
+import { Feature } from '@components/Feature';
 
 export type Coin = Omit<PresaleCoin, 'availableAt' | 'createdAt' | 'updatedAt'>;
 
@@ -112,22 +113,24 @@ const Presale: FunctionComponent<
   );
 
   return (
-    <div className={styles.container}>
-      <Main balanceDollar={totalBalance} />
-      <Buy
-        coins={presaleCoins}
-        handleFetchPorfolio={handleFetchPorfolio}
-        handleFetchCoins={handleFetchCoins}
-      />
-      <div className={styles.list}>
-        <div className={styles.item}>
-          <div className={styles.head}>Funds</div>
-          <div className={styles.body}>
-            <Funds items={presaleAssets} />
+    <Feature feature="presale">
+      <div className={styles.container}>
+        <Main balanceDollar={totalBalance} />
+        <Buy
+          coins={presaleCoins}
+          handleFetchPorfolio={handleFetchPorfolio}
+          handleFetchCoins={handleFetchCoins}
+        />
+        <div className={styles.list}>
+          <div className={styles.item}>
+            <div className={styles.head}>Funds</div>
+            <div className={styles.body}>
+              <Funds items={presaleAssets} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Feature>
   );
 };
 export default Presale;

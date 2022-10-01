@@ -127,15 +127,15 @@
                 background: $n2
             svg
                 fill: $n8
-    &:not(:last-child).separator
+    &:not(:first-child).separator
         position: relative
-        margin-bottom: 41px
+        margin-top: 41px
         +d
-            margin-bottom: 0
+            margin-top: 0
         &:after
             content: ""
             position: absolute
-            top: calc(100% + 20px)
+            bottom: calc(100% + 20px)
             left: 0
             right: 0
             height: 1px

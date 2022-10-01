@@ -8,4 +8,5 @@ export type Features =
   | 'dashboard'
   | 'coin_list'
   | 'coin_register'
-  | 'wallet';
+  | 'wallet'
+  | 'presale';
