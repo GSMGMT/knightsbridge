@@ -35,6 +35,11 @@ const navigationItemsDefault: INavigation[] = [
       },
     ],
   },
+  {
+    title: 'Presale',
+    url: navigation.app.presale,
+    feature: 'presale',
+  },
 ];
 
 interface UserNavigationProps {
