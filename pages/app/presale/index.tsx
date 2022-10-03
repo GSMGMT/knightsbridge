@@ -15,6 +15,8 @@ import styles from '@styles/pages/app/presale/Presale.module.sass';
 
 import { PresaleCoin } from '@contracts/PresaleCoin';
 
+import { navigation } from '@navigation';
+
 import {
   PresaleData,
   usersPresalePortfolio,
@@ -26,7 +28,10 @@ import { Feature } from '@components/Feature';
 export type Coin = Omit<PresaleCoin, 'availableAt' | 'createdAt' | 'updatedAt'>;
 
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx, { freeToAccessBy: 'USER' }, async () => {
+  withUser<{
+    coins: Coin[];
+    assets: PresaleData[];
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
     const { token } = parseCookies(ctx);
     const { uid: userId } = await adminAuth.verifyIdToken(token);
 
@@ -50,6 +55,15 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
           uid,
         } as Coin)
     );
+
+    if (coins.length === 0) {
+      return {
+        redirect: {
+          destination: navigation.app.wallet,
+          permanent: false,
+        },
+      };
+    }
 
     return {
       props: {

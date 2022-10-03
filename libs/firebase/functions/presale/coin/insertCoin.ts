@@ -12,11 +12,11 @@ interface InsertCoin {
   quote: number;
   icon: string;
   amount: number;
-  availableAt: Date;
+  availableAt?: string;
   baseCurrency: CryptoCurrency;
 }
 
-const insertCoin = async (newCoin: InsertCoin) => {
+const insertCoin = async ({ availableAt, ...newCoin }: InsertCoin) => {
   const uid = uuidv4();
   const serverTime = firestore.FieldValue.serverTimestamp();
 
@@ -27,6 +27,7 @@ const insertCoin = async (newCoin: InsertCoin) => {
 
   await CoinDoc.create({
     uid,
+    availableAt: availableAt ? new Date(availableAt) : serverTime,
     ...newCoin,
     createdAt: serverTime,
     updatedAt: serverTime,

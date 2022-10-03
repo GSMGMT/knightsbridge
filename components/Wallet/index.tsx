@@ -44,13 +44,13 @@ const navigationItemsDefault: Array<NavigationItem> = [
     feature: 'wallet',
   },
   {
-    separator: true,
     title: 'Presale',
     color: '#0063F5',
     url: navigationLinks.app.presale,
     feature: 'presale',
   },
   {
+    separator: true,
     title: 'Buy and Sell',
     icon: 'wallet',
     url: navigationLinks.app.buySell,

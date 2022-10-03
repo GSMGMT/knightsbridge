@@ -25,7 +25,7 @@ export interface InsertCoinDTO {
   symbol: string;
   quote: number;
   baseCurrencyId: string;
-  availableAt: string;
+  availableAt?: string;
   amount: number;
   icon: any;
 }
@@ -47,11 +47,9 @@ const schema: SchemaOf<InsertCoinDTO> = object().shape({
       'Could not find any CRYPTO currency with given ID',
       (currencyId) => isPersisted(currencyId as string, getCurrencyByUid)
     ),
-  availableAt: string()
-    .test('dateFormat', 'Date format invalid', (value) =>
-      value ? !!new Date(value).getTime() : false
-    )
-    .required('Available at is required.'),
+  availableAt: string().test('dateFormat', 'Date format invalid', (value) =>
+    value ? !!new Date(value).getTime() : true
+  ),
   amount: number().required('Amount is required.'),
   icon: mixed()
     .required('Receipt is required.')
@@ -118,7 +116,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
             type: currency.type,
           },
           amount,
-          availableAt: new Date(availableAt),
+          availableAt,
           icon: filePath,
           name,
           quote,
