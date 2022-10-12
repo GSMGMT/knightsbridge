@@ -73,5 +73,8 @@ export const navigation = {
     },
     buySell: '/app/buy-sell',
   },
+  resources: {
+    chart: '/resources/chart',
+  },
   soon: '/soon',
 };

@@ -148,6 +148,7 @@ type DollarQuote = {
 type Quote = {
   2781: DollarQuote;
   USD: DollarQuote;
+  [id: number]: DollarQuote;
   exchange_reported: {
     price: number;
   };
