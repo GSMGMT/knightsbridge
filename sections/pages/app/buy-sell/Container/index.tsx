@@ -13,9 +13,9 @@ import { Charts } from '../Charts';
 import { Select } from '../Select';
 
 export const Container = () => {
-  const { query } = useRouter();
-
   const { pair } = useContext(ExchangeContext);
+
+  const { query } = useRouter();
 
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
 

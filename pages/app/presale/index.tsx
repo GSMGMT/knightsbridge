@@ -5,8 +5,10 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { withUser } from '@middlewares/client/withUser';
 
 import listCoins from '@libs/firebase/functions/presale/coin/listCoins';
+import { adminAuth } from '@libs/firebase/admin-config';
 
 import { Funds } from '@components/PresaleFunds';
+import { Feature } from '@components/Feature';
 
 import { Main } from '@sections/pages/app/presale/Main';
 import { Buy } from '@sections/pages/app/presale/Buy';
@@ -22,8 +24,6 @@ import {
   usersPresalePortfolio,
 } from '@services/api/presale/portfolio';
 import { api } from '@services/api';
-import { adminAuth } from '@libs/firebase/admin-config';
-import { Feature } from '@components/Feature';
 
 export type Coin = Omit<PresaleCoin, 'availableAt' | 'createdAt' | 'updatedAt'>;
 
