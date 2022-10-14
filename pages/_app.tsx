@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 
+import 'nprogress/nprogress.css';
+import '@styles/app.scss';
+
 import { Layouts } from '@layouts/index';
 
 import { AuthProvider } from '@store/providers/Auth';
-
-import 'nprogress/nprogress.css';
-import '@styles/app.scss';
 import { FlagsProvider } from '@store/providers/Flags';
+import { TitleProvider } from '@store/providers/Title';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -31,17 +31,16 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <FlagsProvider>
-      <AuthProvider>
-        <Head>
-          <title>KnightsBridge</title>
-        </Head>
-        <Layouts>
-          <Component {...pageProps} />
-        </Layouts>
-        <Toaster />
-      </AuthProvider>
-    </FlagsProvider>
+    <TitleProvider>
+      <FlagsProvider>
+        <AuthProvider>
+          <Layouts>
+            <Component {...pageProps} />
+          </Layouts>
+          <Toaster />
+        </AuthProvider>
+      </FlagsProvider>
+    </TitleProvider>
   );
 };
 export default App;

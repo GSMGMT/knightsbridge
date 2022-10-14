@@ -10,6 +10,7 @@ interface ListCurrencies {
   sort?: Sort;
   filters?: {
     type?: CurrencyType;
+    symbol?: string;
   };
 }
 
@@ -26,6 +27,13 @@ const listCurrencies = async ({
 
   if (filters?.type) {
     CurrencyCollection = CurrencyCollection.where('type', '==', filters.type);
+  }
+  if (filters?.symbol) {
+    CurrencyCollection = CurrencyCollection.where(
+      'symbol',
+      '==',
+      filters.symbol
+    );
   }
 
   const querySnapshot = await CurrencyCollection.get();

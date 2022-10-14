@@ -31,6 +31,7 @@ interface InsertCurrencyDTO {
 
 interface ListCurrenciesDTO extends Pagination {
   type?: CurrencyType;
+  symbol?: string;
 }
 
 const schema: SchemaOf<InsertCurrencyDTO> = object().shape({
@@ -52,6 +53,7 @@ const listCurrenciesSchema: SchemaOf<ListCurrenciesDTO> = object().shape({
   size: number().max(5000).default(100),
   sort: mixed().transform((_, originalValue) => parseSortField(originalValue)),
   type: mixed<CurrencyType>().oneOf(['crypto', 'fiat']),
+  symbol: string(),
 });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
@@ -96,14 +98,13 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
         );
       }
       case 'GET': {
-        const { size, sort, type } = await listCurrenciesSchema.validate(
-          req.query
-        );
+        const { size, sort, type, symbol } =
+          await listCurrenciesSchema.validate(req.query);
 
         const currencies = await listCurrencies({
           size,
           sort,
-          filters: { type },
+          filters: { type, symbol },
         });
 
         return res.status(200).json(
