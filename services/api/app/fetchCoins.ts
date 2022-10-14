@@ -18,6 +18,7 @@ export interface Coin {
 }
 interface RequestArgs extends Omit<Request, 'startDate' | 'endDate'> {
   onlyWithAddres?: boolean;
+  symbol?: string;
 }
 interface Response {
   coins: Coin[];

@@ -29,6 +29,24 @@
 }
 
 .items {
+  max-height: 400px;
+  overflow-y: overlay;
+
+  &::-webkit-scrollbar-track {
+    background-color: #e4e4e400;
+    border-radius: 100px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    border: 8px solid transparent;
+
+    background-clip: content-box;
+    background-color: $n5;
+  }
+  &::-webkit-scrollbar {
+    width: 20px;
+  }
+
   .item {
     padding: 16px;
     border-radius: 8px;

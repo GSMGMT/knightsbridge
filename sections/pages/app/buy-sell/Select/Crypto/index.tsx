@@ -47,7 +47,7 @@ export const Crypto = ({
       await handleRequest({
         pageSize: 10,
         pageNumber,
-        search: searchTerm,
+        symbol: searchTerm,
       });
 
     let newCoins = [];
@@ -65,15 +65,19 @@ export const Crypto = ({
     requestCoins();
   }, [pageNumber, searchTerm]);
 
+  const updateSearchTerm = useCallback((newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
+    setPageNumber(1);
+    setSelectedCoin(null);
+  }, []);
+
   const handleSubmit = useCallback(
     submit(({ search }) => {
-      if (search !== searchTerm) {
-        setSearchTerm(search);
-        setPageNumber(1);
-        setSelectedCoin(null);
+      if (search !== searchTerm && search.length >= 3) {
+        updateSearchTerm(search);
       }
     }),
-    [submit, searchTerm]
+    [submit, searchTerm, updateSearchTerm]
   );
 
   const canLoadMore = useMemo(
@@ -115,7 +119,11 @@ export const Crypto = ({
                 onChange={({ target: { value } }) => {
                   if (fetching) return;
 
-                  change(value);
+                  const newValue = value.toUpperCase();
+
+                  change(newValue);
+
+                  if (newValue.length < 3) updateSearchTerm('');
                 }}
                 {...field}
                 readOnly={fetching}
