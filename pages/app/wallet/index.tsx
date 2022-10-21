@@ -10,13 +10,9 @@ import { Funds } from '@components/Funds';
 import { ItemI } from '@components/Funds/Item';
 import { Feature } from '@components/Feature';
 
-import { useTitle } from '@hooks/Title';
-
 import { api } from '@services/api';
 
 const FiatSpot = () => {
-  useTitle('Fiat and Spot');
-
   const [fiatItems, setFiatItems] = useState<Array<ItemI>>([]);
   const [spotItems, setSpotItems] = useState<Array<ItemI>>([]);
 

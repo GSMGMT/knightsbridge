@@ -11,7 +11,6 @@ import {
 import { withUser } from '@middlewares/client/withUser';
 
 import { navigation } from '@navigation';
-import { useTitle } from '@hooks/Title';
 
 import listCurrenciesWithAddresses from '@libs/firebase/functions/crypto/address/listCurrenciesWithAddresses';
 
@@ -83,8 +82,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
 const DepositCrypto: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ currencies: coins }) => {
-  useTitle('Deposit Crypto');
-
   const { push: navigate } = useRouter();
 
   const [fetching] = useState<boolean>(false);

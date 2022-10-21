@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { AppProps } from 'next/app';
-import { Toaster } from 'react-hot-toast';
 import Router from 'next/router';
+import { Toaster } from 'react-hot-toast';
 import NProgress from 'nprogress';
 
 import 'nprogress/nprogress.css';
@@ -31,16 +31,14 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <TitleProvider>
-      <FlagsProvider>
-        <AuthProvider>
-          <Layouts>
-            <Component {...pageProps} />
-          </Layouts>
-          <Toaster />
-        </AuthProvider>
-      </FlagsProvider>
-    </TitleProvider>
+    <FlagsProvider>
+      <AuthProvider>
+        <Layouts>
+          <Component {...pageProps} />
+        </Layouts>
+        <Toaster />
+      </AuthProvider>
+    </FlagsProvider>
   );
 };
 export default App;

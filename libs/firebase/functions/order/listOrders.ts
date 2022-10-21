@@ -2,7 +2,7 @@ import { firestore } from '@libs/firebase/admin-config';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { Sort } from '@utils/types';
-import { Order } from '@contracts/Order';
+import { Order, OrderType, OrderStatus } from '@contracts/Order';
 import { OrderConverter } from '@libs/firebase/converters/orderConverter';
 
 interface ListOrders {
@@ -11,6 +11,8 @@ interface ListOrders {
   filters?: {
     email?: string;
     userId?: string;
+    status?: keyof typeof OrderStatus;
+    type?: OrderType;
   };
 }
 
@@ -24,6 +26,14 @@ const listOrders = async ({
     .orderBy(sort?.field ?? 'createdAt', sort?.orientation ?? 'asc')
     .limit(size)
     .withConverter(OrderConverter);
+
+  if (filters?.type) {
+    OrderCollection = OrderCollection.where('type', '==', filters.type);
+  }
+
+  if (filters?.status) {
+    OrderCollection = OrderCollection.where('status', '==', filters.status);
+  }
 
   if (filters?.email) {
     OrderCollection = OrderCollection.where('user.email', '==', filters.email);

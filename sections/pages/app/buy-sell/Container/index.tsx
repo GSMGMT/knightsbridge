@@ -9,13 +9,13 @@ import styles from './Container.module.scss';
 import { Main } from '../Main';
 import { Table } from '../Table';
 import { Actions } from '../Actions';
-import { Charts } from '../Charts';
+import { Panel } from '../Panel';
 import { Select } from '../Select';
 
 export const Container = () => {
-  const { query } = useRouter();
-
   const { pair } = useContext(ExchangeContext);
+
+  const { query } = useRouter();
 
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
 
@@ -32,13 +32,13 @@ export const Container = () => {
             <>
               <Actions />
               <div className={styles.box}>
-                <Charts />
+                <Panel />
                 <Table />
               </div>
             </>
           ) : (
             <>
-              <Charts />
+              <Panel />
               <Actions />
               <Table />
             </>

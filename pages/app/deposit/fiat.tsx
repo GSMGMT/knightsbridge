@@ -7,6 +7,7 @@ import { Feature } from '@components/Feature';
 import { SelectCurrency } from '@sections/pages/app/deposit/fiat/SelectCurrency';
 import { ImportantNotes } from '@sections/pages/app/deposit/fiat/ImportantNotes';
 import { PaymentDetails } from '@sections/pages/app/deposit/fiat/PaymentDetails';
+import { Request } from '@sections/pages/app/deposit/fiat/types';
 
 import { withUser } from '@middlewares/client/withUser';
 
@@ -15,7 +16,6 @@ import { Bank as DefaultBank } from '@contracts/Bank';
 
 import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
 import listBanks from '@libs/firebase/functions/fiat/bank/listBanks';
-import { Request } from '@sections/pages/app/deposit/fiat/types';
 
 export type FiatCurrency = Omit<Currency, 'createdAt' | 'updatedAt'>;
 export type Bank = Omit<DefaultBank, 'createdAt' | 'updatedAt'>;

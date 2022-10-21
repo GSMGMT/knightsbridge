@@ -79,6 +79,10 @@
   font-size: 12px;
   line-height: calc(20 / 12);
 }
+@mixin caption-2-medium {
+  @include caption-2;
+  font-weight: 500;
+}
 @mixin caption-bold-2 {
   font-size: 12px;
   line-height: calc(20 / 12);
