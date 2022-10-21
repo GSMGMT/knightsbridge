@@ -11,7 +11,6 @@ import { Layouts } from '@layouts/index';
 
 import { AuthProvider } from '@store/providers/Auth';
 import { FlagsProvider } from '@store/providers/Flags';
-import { TitleProvider } from '@store/providers/Title';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
