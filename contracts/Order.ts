@@ -10,9 +10,11 @@ export enum OrderStatus {
   REJECTED = 'REJECTED',
 }
 
+export type OrderType = 'buy' | 'sell';
+
 export type Order = {
   uid: string;
-  type: 'buy' | 'sell';
+  type: OrderType;
   user: OmitTimestamp<User>;
   marketPair: OmitTimestamp<MarketPair>;
   price: number;
@@ -22,6 +24,13 @@ export type Order = {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type BidAndAsk = {
+  uid: string;
+  price: number;
+  amount: number;
+  total: number;
 };
 
 export type OrderUpdateQuery = Partial<Pick<Order, 'status'>>;

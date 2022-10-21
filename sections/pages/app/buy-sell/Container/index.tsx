@@ -9,7 +9,7 @@ import styles from './Container.module.scss';
 import { Main } from '../Main';
 import { Table } from '../Table';
 import { Actions } from '../Actions';
-import { Charts } from '../Charts';
+import { Panel } from '../Panel';
 import { Select } from '../Select';
 
 export const Container = () => {
@@ -32,13 +32,13 @@ export const Container = () => {
             <>
               <Actions />
               <div className={styles.box}>
-                <Charts />
+                <Panel />
                 <Table />
               </div>
             </>
           ) : (
             <>
-              <Charts />
+              <Panel />
               <Actions />
               <Table />
             </>

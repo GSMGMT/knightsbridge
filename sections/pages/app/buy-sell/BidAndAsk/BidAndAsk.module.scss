@@ -1,0 +1,55 @@
+@import '@styles/helpers';
+
+@mixin d-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.table {
+  @include d-flex-column;
+
+  .sections {
+    @include d-flex-column;
+    row-gap: 16px;
+
+    .section {
+      @include d-flex-column;
+    }
+  }
+
+  .item {
+    padding: 4px 16px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    column-gap: 12px;
+
+    &.title {
+      span {
+        @include caption-bold-2;
+        color: $n4;
+      }
+    }
+
+    &.buy {
+      span:first-child {
+        color: $p4;
+      }
+    }
+    &.sell {
+      span:first-child {
+        color: $p3;
+      }
+    }
+
+    span {
+      @include caption-2-medium;
+      text-align: right;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+  }
+}
