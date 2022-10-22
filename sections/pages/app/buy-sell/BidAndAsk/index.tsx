@@ -1,15 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
 import cn from 'classnames';
+
+import { getValue } from '@helpers/GetValue';
+
+import { ExchangeContext } from '@store/contexts/Exchange';
 
 import { BidAndAskListOrders } from '@libs/firebase/functions/order/bidAndAsk/listOrders';
 
 import { api } from '@services/api';
 
-import { getValue } from '@helpers/GetValue';
 import styles from './BidAndAsk.module.scss';
 
 export const BidAndAsk = () => {
+  const {
+    walletPortfolio: {
+      base: { amount: baseWalletAmount },
+      pair: { amount: pairWalletAmount },
+    },
+  } = useContext(ExchangeContext);
+
   const [bidAndAsk, setBidAndAsk] = useState<BidAndAskListOrders>({
     buy: [],
     sell: [],
@@ -31,7 +41,7 @@ export const BidAndAsk = () => {
 
   useEffect(() => {
     fetchBidAndAsk();
-  }, [fetchBidAndAsk]);
+  }, [baseWalletAmount, pairWalletAmount]);
 
   return (
     <div className={styles.table}>
