@@ -7,7 +7,7 @@ export const defaultValues: User = {
   email: '',
   name: '',
   surname: '',
-  role: '',
+  role: 'USER',
 };
 
 export interface ISignUp {
