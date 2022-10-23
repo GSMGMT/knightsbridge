@@ -9,7 +9,7 @@ export interface User {
   email: string;
   name: string;
   surname: string;
-  role: string;
+  role: keyof typeof Roles;
 }
 
 export type UserData = Omit<User, 'accessToken' | 'refreshToken' | 'role'>;

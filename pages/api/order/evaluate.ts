@@ -27,6 +27,9 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'PUT': {
+        const { user } = req;
+        if (user.role === 'USER') throw new Error('Unauthorized');
+
         const { orderIds, approved } = await evaluateOrderSchema.validate(
           req.body
         );
@@ -46,7 +49,9 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         return res.status(200).json(
           ResponseModel.create(orders, {
-            message: 'Order canceled successfully',
+            message: approved
+              ? 'Order rejected successfully'
+              : 'Order approved successfully',
           })
         );
       }
