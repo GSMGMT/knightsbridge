@@ -13,6 +13,7 @@ interface ListOrders {
     userId?: string;
     status?: keyof typeof OrderStatus;
     type?: OrderType;
+    martketPair?: string;
   };
 }
 
@@ -41,6 +42,14 @@ const listOrders = async ({
 
   if (filters?.userId) {
     OrderCollection = OrderCollection.where('user.uid', '==', filters.userId);
+  }
+
+  if (filters?.martketPair) {
+    OrderCollection = OrderCollection.where(
+      'marketPair.name',
+      '==',
+      filters.martketPair
+    );
   }
 
   const querySnapshot = await OrderCollection.get();

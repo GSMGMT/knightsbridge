@@ -14,11 +14,20 @@ import styles from './BidAndAsk.module.scss';
 
 export const BidAndAsk = () => {
   const {
+    pair,
     walletPortfolio: {
       base: { amount: baseWalletAmount },
       pair: { amount: pairWalletAmount },
     },
   } = useContext(ExchangeContext);
+  const martketPair = useMemo(() => {
+    const {
+      base: { slug: baseSlug },
+      pair: { slug: pairSlug },
+    } = pair!;
+
+    return `${baseSlug}/${pairSlug}`;
+  }, [pair]);
 
   const [bidAndAsk, setBidAndAsk] = useState<BidAndAskListOrders>({
     buy: [],
@@ -32,10 +41,14 @@ export const BidAndAsk = () => {
       data: { data },
     } = await api.get<{
       data: BidAndAskListOrders;
-    }>('/api/order/bidask');
+    }>('/api/order/bidask', {
+      params: {
+        martketPair: martketPair === 'FBX/USDT' ? 'FBX/USDT' : undefined,
+      },
+    });
 
     setBidAndAsk(data);
-  }, []);
+  }, [martketPair]);
 
   useInterval(fetchBidAndAsk, 1000 * 60 * 5);
 
