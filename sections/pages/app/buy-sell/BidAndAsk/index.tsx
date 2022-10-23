@@ -43,7 +43,7 @@ export const BidAndAsk = () => {
       data: BidAndAskListOrders;
     }>('/api/order/bidask', {
       params: {
-        martketPair: martketPair === 'FBX/USDT' ? 'FBX/USDT' : undefined,
+        martketPair,
       },
     });
 
