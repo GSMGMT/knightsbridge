@@ -54,7 +54,7 @@ export const BidAndAsk = () => {
 
   useEffect(() => {
     fetchBidAndAsk();
-  }, [baseWalletAmount, pairWalletAmount]);
+  }, [baseWalletAmount, pairWalletAmount, martketPair]);
 
   return (
     <div className={styles.table}>
