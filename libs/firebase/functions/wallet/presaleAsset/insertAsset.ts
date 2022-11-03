@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { firestore } from '@libs/firebase/admin-config';
 import { OmitTimestamp } from '@utils/types';
-import { PresaleAsset as Asset } from '@contracts/PresaleAsset';
-import { PresaleAssetConverter } from '@libs/firebase/converters/presaleAssetConverter';
-import { PresaleCoin } from '@contracts/PresaleCoin';
+import { PresaleAsset as Asset } from '@contracts/presale/currency/PresaleAsset';
+import { PresaleAssetConverter } from '@libs/firebase/converters/presale/currency/presaleAssetConverter';
+import { PresaleCoin } from '@contracts/presale/currency/PresaleCoin';
 
 interface InsertAsset {
   amount: number;

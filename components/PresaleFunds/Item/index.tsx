@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import Image from 'next/image';
 
-import { PresaleData } from '@services/api/presale/portfolio';
+import { PresaleData } from '@services/api/presale/currency/portfolio';
 
 import { getValue } from '@helpers/GetValue';
 

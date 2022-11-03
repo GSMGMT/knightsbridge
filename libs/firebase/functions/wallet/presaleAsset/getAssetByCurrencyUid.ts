@@ -1,7 +1,7 @@
 import { firestore } from '@libs/firebase/admin-config';
-import { PresaleAsset } from '@contracts/PresaleAsset';
+import { PresaleAsset } from '@contracts/presale/currency/PresaleAsset';
 import { FirebaseCollections } from '@libs/firebase/collections';
-import { PresaleAssetConverter } from '@libs/firebase/converters/presaleAssetConverter';
+import { PresaleAssetConverter } from '@libs/firebase/converters/presale/currency/presaleAssetConverter';
 
 const getAssetByCoinUid = async (
   walletUid: string,

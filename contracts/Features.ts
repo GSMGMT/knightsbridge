@@ -9,4 +9,5 @@ export type Features =
   | 'coin_list'
   | 'coin_register'
   | 'wallet'
-  | 'presale';
+  | 'presale_coins'
+  | 'presale_nfts';

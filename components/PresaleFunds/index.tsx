@@ -1,4 +1,4 @@
-import { PresaleData } from '@services/api/presale/portfolio';
+import { PresaleData } from '@services/api/presale/currency/portfolio';
 
 import styles from './Funds.module.scss';
 

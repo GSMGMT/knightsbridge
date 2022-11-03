@@ -1,0 +1,29 @@
+@import '@styles/helpers';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+
+  padding-left: 32px;
+  padding-right: 32px;
+  height: 100%;
+}
+
+.title {
+  @include body-bold-1;
+}
+.description {
+  @include caption-1;
+}
+
+.ilustration {
+  margin-top: auto;
+
+  display: flex;
+
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}

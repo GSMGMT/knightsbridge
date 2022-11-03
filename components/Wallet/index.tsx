@@ -44,10 +44,16 @@ const navigationItemsDefault: Array<NavigationItem> = [
     feature: 'wallet',
   },
   {
-    title: 'Presale',
+    title: 'Token Presale',
     color: '#0063F5',
-    url: navigationLinks.app.presale,
-    feature: 'presale',
+    url: navigationLinks.app.presale.token,
+    feature: 'presale_coins',
+  },
+  {
+    title: 'NFT Presale',
+    color: '#4BC9F0',
+    url: navigationLinks.app.presale.nft,
+    feature: 'presale_nfts',
   },
   {
     separator: true,

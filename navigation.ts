@@ -59,7 +59,10 @@ export const navigation = {
       crypto: '/app/deposit/crypto',
     },
     wallet: '/app/wallet',
-    presale: '/app/presale',
+    presale: {
+      token: '/app/presale/coin',
+      nft: '/app/presale/nft',
+    },
     orders: {
       fiat: '/app/orders/fiat',
       crypto: '/app/orders/crypto',

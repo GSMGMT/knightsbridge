@@ -37,8 +37,20 @@ const navigationItemsDefault: INavigation[] = [
   },
   {
     title: 'Presale',
-    url: navigation.app.presale,
-    feature: 'presale',
+    dropdown: [
+      {
+        url: navigation.app.presale.token,
+        feature: 'presale_coins',
+        icon: 'coin',
+        title: 'Coin',
+      },
+      {
+        url: navigation.app.presale.nft,
+        feature: 'presale_nfts',
+        icon: 'image',
+        title: 'NFT',
+      },
+    ],
   },
 ];
 

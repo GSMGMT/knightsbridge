@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin';
 
 import { FirebaseCollections } from '@libs/firebase/collections';
-import { PresaleAssetConverter } from '@libs/firebase/converters/presaleAssetConverter';
+import { PresaleAssetConverter } from '@libs/firebase/converters/presale/currency/presaleAssetConverter';
 
 type UpdateFields = {
   amount?: firestore.FieldValue;

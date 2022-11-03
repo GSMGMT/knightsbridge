@@ -1,0 +1,14 @@
+@import '@styles/helpers';
+
+.container {
+  display: grid;
+  grid-template-columns: 424px 1fr;
+
+  @include t {
+    grid-template-columns: 1fr;
+
+    > *:first-child {
+      display: none;
+    }
+  }
+}

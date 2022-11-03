@@ -1,6 +1,11 @@
 @import './variables';
 
 // media queries
+@mixin g {
+  @media only screen and (max-width: '1600px') {
+    @content;
+  }
+}
 @mixin w {
   @media only screen and (max-width: '1419px') {
     @content;
@@ -40,6 +45,9 @@
 // fonts
 @mixin dm-sans {
   font-family: 'DM Sans', sans-serif;
+}
+@mixin work-sans {
+  font-family: 'Work Sans', sans-serif;
 }
 @mixin poppins {
   font-family: 'Poppins', sans-serif;
@@ -91,6 +99,10 @@
 @mixin caption-3 {
   font-size: 10px;
   line-height: calc(16 / 10);
+}
+@mixin caption-3-medium {
+  @include caption-3;
+  font-weight: 500;
 }
 @mixin caption-bold-3 {
   @include caption-3;

@@ -1,0 +1,108 @@
+@import '@styles/helpers';
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.banner {
+  position: relative;
+
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  .picture {
+    position: absolute;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    user-select: none;
+  }
+
+  .price {
+    position: absolute;
+    left: 8px;
+    bottom: 12px;
+
+    padding: 10px;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    @include work-sans;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+    color: $n1;
+  }
+}
+
+.item {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+
+  border: 1px solid $n6;
+
+  .info {
+    padding: 16px 8px 8px;
+    border-bottom: 1px solid $n6;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+
+    .author {
+      @include caption-bold-2;
+      color: $p1;
+
+      @include text-overflow;
+    }
+
+    .name {
+      @include body-bold-2;
+      color: $n2;
+
+      @include text-overflow;
+    }
+  }
+
+  .action {
+    padding: 8px 8px 16px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 12px;
+
+    .sale {
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      color: $n2;
+      text-align: right;
+
+      .items {
+        @include caption-bold-2;
+      }
+      .description {
+        @include caption-3-medium;
+
+        @include text-overflow;
+      }
+    }
+  }
+}
