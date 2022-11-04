@@ -1,4 +1,4 @@
-import { PresaleCoin } from '@contracts/presale/nft/PresaleCoin';
+import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
 import { firestore } from '@libs/firebase/admin-config';
 import { FirebaseCollections } from '@libs/firebase/collections';
 import { PresaleConverter } from '@libs/firebase/converters/presale/nft/presaleConverter';
@@ -6,7 +6,7 @@ import { PresaleConverter } from '@libs/firebase/converters/presale/nft/presaleC
 interface ListCoins {
   onlyAvailable: boolean;
 }
-const listCoins: (data?: ListCoins) => Promise<PresaleCoin[]> = async (
+const listCoins: (data?: ListCoins) => Promise<PresaleNFT[]> = async (
   { onlyAvailable } = {
     onlyAvailable: true,
   }
@@ -17,7 +17,7 @@ const listCoins: (data?: ListCoins) => Promise<PresaleCoin[]> = async (
 
   const querySnapshot = await CoinDoc.get();
 
-  const coins: Array<PresaleCoin> = [];
+  const coins: Array<PresaleNFT> = [];
 
   querySnapshot.forEach((doc) => {
     const coin = doc.data();

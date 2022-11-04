@@ -5,14 +5,13 @@ import { object, string, SchemaOf, number, mixed } from 'yup';
 import { ResponseModel } from '@contracts/Response';
 import { Currency } from '@contracts/Currency';
 import { NextApiRequestWithUser, withUser } from '@middlewares/api/withUser';
-import getCurrencyByUid from '@libs/firebase/functions/currency/getCurrencyByUid';
-import { isPersisted } from '@utils/validator';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 import uploadFileToStorage from '@libs/firebase/functions/storage/uploadFile';
 import insertCoin from '@libs/firebase/functions/presale/nft/token/insertCoin';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { removeApiUrl } from '@utils/removeApiUrl';
 import listCoins from '@libs/firebase/functions/presale/nft/token/listCoins';
+import getCurrencyBySymbol from '@libs/firebase/functions/currency/getCurrencyBySymbol';
 
 export const config = {
   api: {
@@ -24,7 +23,6 @@ export interface InsertNFTDTO {
   name: string;
   author: string;
   icon: any;
-  baseCurrencyId: string;
   quote: number;
   amount: number;
   amountAvailable?: number;
@@ -52,13 +50,6 @@ const schema: SchemaOf<InsertNFTDTO> = object().shape({
       (value) =>
         value === null || (value && SUPPORTED_FORMATS.includes(value.mimetype))
     ),
-  baseCurrencyId: string()
-    .required('Crypto id is required.')
-    .test(
-      'crypto-exists',
-      'Could not find any CRYPTO currency with given ID',
-      (currencyId) => isPersisted(currencyId as string, getCurrencyByUid)
-    ),
   quote: number().required('Quote is required.'),
   amount: number().required('Amount is required.'),
   amountAvailable: number(),
@@ -73,7 +64,6 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
     switch (req.method) {
       case 'POST': {
         const {
-          baseCurrencyId,
           icon,
           name,
           quote,
@@ -100,7 +90,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           console.log('Tmp file successfully deleted')
         );
 
-        const currency = await getCurrencyByUid(baseCurrencyId).then((result) =>
+        const currency = await getCurrencyBySymbol('USDT').then((result) =>
           removeApiUrl<Currency>(result as Currency)
         );
 

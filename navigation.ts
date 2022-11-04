@@ -62,6 +62,8 @@ export const navigation = {
     presale: {
       token: '/app/presale/coin',
       nft: '/app/presale/nft',
+      create: '/app/presale/nft/create',
+      list: '/app/presale/nft/list',
     },
     orders: {
       fiat: '/app/orders/fiat',

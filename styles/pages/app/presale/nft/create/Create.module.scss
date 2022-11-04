@@ -1,0 +1,24 @@
+@import '@styles/helpers';
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @include m {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.details {
+  margin-right: auto;
+}
+.user {
+  @include body-bold-1;
+}
+
+.title {
+  @include body-bold-1;
+
+  margin-top: 40px;
+}

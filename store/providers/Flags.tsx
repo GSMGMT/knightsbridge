@@ -34,8 +34,8 @@ export const FlagsProvider = ({ children }: FlagsProviderProps) => {
       const remoteConfig = getRemoteConfig(getApp());
 
       remoteConfig.settings = {
-        minimumFetchIntervalMillis: 1000,
-        fetchTimeoutMillis: 1000,
+        minimumFetchIntervalMillis: 60000,
+        fetchTimeoutMillis: 60000,
       };
       remoteConfig.defaultConfig = defaultFlags;
 

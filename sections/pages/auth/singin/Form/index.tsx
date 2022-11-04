@@ -1,4 +1,4 @@
-import { /* useCallback, useEffect, */ useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,7 +10,6 @@ import { AuthContext } from '@store/contexts/Auth';
 import { TextInput } from '@components/TextInput';
 import { Feature } from '@components/Feature';
 import { Checkbox } from '@components/Checkbox';
-// import { Recaptcha } from '@components/Recaptcha';
 
 import { navigation } from '@navigation';
 
@@ -19,7 +18,6 @@ import styles from './Form.module.scss';
 interface FormInputs {
   email: string;
   password: string;
-  // recaptcha: boolean;
   remember: boolean;
 }
 const schema = yup.object().shape({
@@ -31,10 +29,6 @@ const schema = yup.object().shape({
     .string()
     .required('Please enter a password')
     .min(8, 'Please enter a password with at least 8 characters.'),
-  // recaptcha: yup
-  //   .boolean()
-  //   .required()
-  //   .oneOf([true], 'Please verify that you are not a robot.'),
   remember: yup.boolean(),
 });
 
@@ -46,12 +40,10 @@ export const Form = () => {
     handleSubmit: submit,
     formState,
     setError,
-    // setValue,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      // recaptcha: false,
       remember: false,
     },
   });
@@ -71,10 +63,6 @@ export const Form = () => {
     return errorsLength === 0;
   }, [formState]);
 
-  // useEffect(() => {
-  //   register('recaptcha');
-  // }, [register]);
-
   const handleSubmit = submit(async ({ email, password, remember }) => {
     try {
       await signIn({
@@ -86,17 +74,6 @@ export const Form = () => {
       setError('email', { message: 'Error, please try again' });
     }
   });
-
-  // const handleChangeCaptcha = useCallback(
-  //   (value: string | null) => {
-  //     const isValid = value !== null;
-
-  //     setValue('recaptcha', isValid, {
-  //       shouldValidate: true,
-  //     });
-  //   },
-  //   [setValue]
-  // );
 
   return (
     <form
@@ -137,16 +114,6 @@ export const Form = () => {
       <Checkbox className={styles.check} {...register('remember')}>
         <span>Remember me</span>
       </Checkbox>
-      {/* <Recaptcha
-        onChange={handleChangeCaptcha}
-        note={errors.recaptcha?.message}
-      />
-      <input
-        type="checkbox"
-        data-testid="recaptcha-input"
-        className={styles['recaptcha-check']}
-        {...register('recaptcha')}
-      /> */}
 
       <button
         className={cn('button', styles.button)}

@@ -45,6 +45,11 @@ const navigationItemsDefault: INavigation[] = [
     url: navigation.app.coin.list,
     feature: 'coin_list',
   },
+  {
+    title: 'NFT Presale',
+    url: navigation.app.presale.create,
+    feature: 'presale_nfts',
+  },
 ];
 
 interface AdminNavigationProps {

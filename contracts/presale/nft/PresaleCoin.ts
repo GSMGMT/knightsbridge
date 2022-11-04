@@ -1,6 +1,6 @@
 import { CryptoCurrency } from '../currency/PresaleCoin';
 
-export interface PresaleCoin {
+export interface PresaleNFT {
   uid: string;
   name: string;
   author: string;

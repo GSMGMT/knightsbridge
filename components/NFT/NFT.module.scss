@@ -97,6 +97,8 @@
 
       .items {
         @include caption-bold-2;
+
+        @include text-overflow;
       }
       .description {
         @include caption-3-medium;

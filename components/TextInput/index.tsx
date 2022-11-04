@@ -3,6 +3,7 @@ import {
   InputHTMLAttributes,
   MouseEventHandler,
   useCallback,
+  useMemo,
   useState,
 } from 'react';
 import cn from 'classnames';
@@ -25,6 +26,8 @@ interface TextInputProps
   iconColor?: string;
   note?: string;
   variant?: Variant;
+  inputTextAlignment?: 'left' | 'center' | 'right';
+  postLabel?: string;
 }
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
@@ -39,6 +42,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       iconColor,
       note,
       variant,
+      inputTextAlignment,
+      postLabel,
       type: inputType = 'text',
       ...props
     },
@@ -50,6 +55,14 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       useCallback(() => {
         setType(type === 'text' ? inputType : 'text');
       }, [type]);
+
+    const inputTextAlign = useMemo(() => {
+      if (postLabel) {
+        return 'right';
+      }
+
+      return inputTextAlignment;
+    }, [inputTextAlignment, postLabel]);
 
     return (
       <div
@@ -63,13 +76,24 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       >
         {label && <div className={cn(classLabel, styles.label)}>{label}</div>}
         <div className={styles.wrap}>
-          <input
-            className={cn(classInput, styles.input, variant && styles[variant])}
-            type={type}
-            autoComplete="off"
-            {...props}
-            ref={ref}
-          />
+          <div className={styles['input-area']}>
+            <input
+              className={cn(
+                classInput,
+                styles.input,
+                variant && styles[variant],
+                styles[inputTextAlign!],
+                { [styles['post-input']]: postLabel }
+              )}
+              type={type}
+              autoComplete="off"
+              {...props}
+              ref={ref}
+            />
+            {postLabel && (
+              <span className={styles['post-input-area']}>{postLabel}</span>
+            )}
+          </div>
           {view && inputType === 'password' && (
             <button
               className={styles.toggle}
@@ -114,4 +138,6 @@ TextInput.defaultProps = {
   iconColor: undefined,
   note: undefined,
   variant: undefined,
+  postLabel: undefined,
+  inputTextAlignment: 'left',
 };

@@ -3,11 +3,11 @@ import {
   QueryDocumentSnapshot,
   WithFieldValue,
 } from '@libs/firebase/admin-config';
-import { PresaleCoin } from '@contracts/presale/nft/PresaleCoin';
+import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
 
 export const PresaleConverter = {
-  toFirestore: (data: WithFieldValue<PresaleCoin>): DocumentData => data,
-  fromFirestore: (snapshot: QueryDocumentSnapshot): PresaleCoin => {
+  toFirestore: (data: WithFieldValue<PresaleNFT>): DocumentData => data,
+  fromFirestore: (snapshot: QueryDocumentSnapshot): PresaleNFT => {
     const data = snapshot.data();
 
     return {

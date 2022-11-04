@@ -127,7 +127,7 @@ const Presale: FunctionComponent<
   );
 
   return (
-    <Feature feature="presale">
+    <Feature feature="presale_coins">
       <div className={styles.container}>
         <Main balanceDollar={totalBalance} />
         <Buy
