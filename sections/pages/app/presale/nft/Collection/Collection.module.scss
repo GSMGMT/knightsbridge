@@ -1,0 +1,45 @@
+@import '@styles/helpers';
+
+.box {
+  padding: 40px;
+  border-radius: 4px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+  background: $n8;
+
+  @include dark {
+    background: #17181b;
+  }
+}
+
+.title {
+  @include body-bold-1;
+}
+
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+
+  @include g {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @include x {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @include t {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @include m {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include a {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include s {
+    grid-template-columns: 1fr;
+  }
+}

@@ -6,7 +6,7 @@ import { PresaleConverter } from '@libs/firebase/converters/presale/nft/presaleC
 interface ListCoins {
   onlyAvailable: boolean;
 }
-const listCoins: (data?: ListCoins) => Promise<PresaleNFT[]> = async (
+const listNFTs: (data?: ListCoins) => Promise<PresaleNFT[]> = async (
   { onlyAvailable } = {
     onlyAvailable: true,
   }
@@ -33,4 +33,4 @@ const listCoins: (data?: ListCoins) => Promise<PresaleNFT[]> = async (
   return coins;
 };
 
-export default listCoins;
+export default listNFTs;

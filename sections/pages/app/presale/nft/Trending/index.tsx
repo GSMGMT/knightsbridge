@@ -13,8 +13,14 @@ export const Trending: FunctionComponent<{ items: Array<IPresale> }> = ({
   <div className={cn(styles.box)}>
     <h2 className={styles.title}>TRENDING 🔥</h2>
     <div className={styles.tokens}>
-      {items.map((item) => (
-        <NFT data={item} key={item.uid} />
+      {items.map(({ baseCurrency: { symbol: currencySymbol }, ...item }) => (
+        <NFT
+          data={{
+            ...item,
+            currencySymbol,
+          }}
+          key={item.uid}
+        />
       ))}
     </div>
   </div>

@@ -1,72 +1,108 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import { FunctionComponent, useMemo } from 'react';
+import { parseCookies } from 'nookies';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
+import { adminAuth } from '@libs/firebase/admin-config';
+import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
+import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
+
 import { withUser } from '@middlewares/client/withUser';
 
-import { Feature } from '@components/Feature';
+import { NFTProvider } from '@store/providers/NFT';
 
-import styles from '@styles/pages/app/presale/Presale.module.sass';
+import PresaleNFTContainer from '@sections/pages/app/presale/nft/Container';
 
-import { Main } from '@sections/pages/app/presale/nft/Main';
-import { Buy } from '@sections/pages/app/presale/nft/Buy';
-import { Trending } from '@sections/pages/app/presale/nft/Trending';
+import { navigation } from '@navigation';
+import {
+  Portfolio,
+  PresaleData,
+  usersPresalePortfolio,
+} from '@services/api/presale/nft/portfolio';
 
-import { api } from '@services/api';
-import { useInterval } from 'usehooks-ts';
+interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
+  createdAt: number;
+  updatedAt: number;
+}
 
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx, { freeToAccessBy: 'USER' });
+  withUser<{
+    nfts: PresaleServerSide[];
+    assets: PresaleData[];
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
+    const { token } = parseCookies(ctx);
+    const { uid: userUid } = await adminAuth.verifyIdToken(token);
 
-const PresaleNFT = () => {
-  const [NFTs, setNFTs] = useState<Array<IPresale>>([]);
-  const definedNFTs = useMemo(
-    () => NFTs.sort(({ updatedAt: a }, { updatedAt: b }) => +b - +a),
-    [NFTs]
-  );
-  const newestNFTs = useMemo(() => NFTs.slice(0, 3), [definedNFTs]);
-  const trendingNFTs = useMemo(() => NFTs.slice(3, -1), [definedNFTs]);
+    let assets: PresaleData[] = [];
 
-  const [fetching, setFetching] = useState<boolean>(false);
+    const wallet = await getWalletByUserUid(userUid);
 
-  const handleFetchNFTs = useCallback(async () => {
-    if (fetching) return;
+    let assetsPromises: Promise<Portfolio> = Promise.resolve({ assets: [] });
 
-    setFetching(true);
+    if (wallet) assetsPromises = usersPresalePortfolio(userUid);
 
-    const {
-      data: { data },
-    } = await api.get<{
-      data: Array<IPresale>;
-    }>('/api/presale/nft/token');
+    const allCoinsPromise = listNFTs();
 
-    const newNFTs = data.map(
-      ({ createdAt, updatedAt, ...itemData }) =>
+    const [allNFTs, allAssets] = await Promise.all([
+      allCoinsPromise,
+      assetsPromises,
+    ]);
+
+    const nfts: PresaleServerSide[] = allNFTs.map(
+      ({ createdAt, updatedAt, ...data }) =>
         ({
-          ...itemData,
-          updatedAt: new Date(updatedAt),
-          createdAt: new Date(createdAt),
-        } as IPresale)
+          ...data,
+          createdAt: +createdAt,
+          updatedAt: +updatedAt,
+        } as PresaleServerSide)
     );
+    if (nfts.length === 0)
+      return {
+        redirect: {
+          destination: navigation.app.wallet,
+          permanent: false,
+        },
+      };
 
-    setNFTs(newNFTs);
-  }, [fetching]);
+    if (wallet)
+      assets = allAssets.assets.map(
+        ({ ...data }) =>
+          ({
+            ...data,
+          } as PresaleData)
+      );
 
-  useInterval(handleFetchNFTs, 1000 * 60);
+    return {
+      props: {
+        nfts,
+        assets,
+      },
+    };
+  });
 
-  useEffect(() => {
-    handleFetchNFTs();
-  }, []);
+const PresaleNFT: FunctionComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ nfts, assets }) => {
+  const fetchedNFTs = useMemo(
+    () =>
+      nfts.map(
+        ({ createdAt, updatedAt, ...data }) =>
+          ({
+            ...data,
+            createdAt: new Date(createdAt),
+            updatedAt: new Date(updatedAt),
+          } as IPresale)
+      ),
+    [nfts]
+  );
+
+  const fetchedAssets = useMemo(() => [...assets], [assets]);
 
   return (
-    <Feature feature="presale_coins">
-      <div className={styles.container}>
-        <Main />
-        <Buy items={newestNFTs} />
-        <Trending items={trendingNFTs} />
-      </div>
-    </Feature>
+    <NFTProvider fetchedNFTs={fetchedNFTs} fetchedAssets={fetchedAssets}>
+      <PresaleNFTContainer />
+    </NFTProvider>
   );
 };
 

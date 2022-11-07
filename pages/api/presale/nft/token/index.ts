@@ -10,7 +10,7 @@ import uploadFileToStorage from '@libs/firebase/functions/storage/uploadFile';
 import insertCoin from '@libs/firebase/functions/presale/nft/token/insertCoin';
 import parseMultipartForm from '@utils/parseMultipartForm';
 import { removeApiUrl } from '@utils/removeApiUrl';
-import listCoins from '@libs/firebase/functions/presale/nft/token/listCoins';
+import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
 import getCurrencyBySymbol from '@libs/firebase/functions/currency/getCurrencyBySymbol';
 
 export const config = {
@@ -120,7 +120,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
       case 'GET': {
         const { onlyAvailable = 1 } = await listSchema.validate(req.query);
 
-        const coins = await listCoins({ onlyAvailable: !!onlyAvailable });
+        const coins = await listNFTs({ onlyAvailable: !!onlyAvailable });
 
         return res.status(200).json(
           ResponseModel.create(coins, {

@@ -5,7 +5,7 @@ import { ValidationError } from 'yup';
 export const apiErrorHandler = (
   req: NextApiRequest,
   res: NextApiResponse,
-  err: unknown
+  err: any
 ) => {
   console.error({ err });
 
@@ -19,5 +19,5 @@ export const apiErrorHandler = (
 
   return res
     .status(500)
-    .json(ResponseModel.create(null, { message: 'Something went wrong xxx' }));
+    .json(ResponseModel.create(null, { message: err.toString() }));
 };

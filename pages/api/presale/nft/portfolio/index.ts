@@ -3,7 +3,7 @@ import { NextApiResponse } from 'next';
 import { ResponseModel } from '@contracts/Response';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
-import { usersPresalePortfolio } from '@services/api/presale/currency/portfolio';
+import { usersPresalePortfolio } from '@services/api/presale/nft/portfolio';
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
