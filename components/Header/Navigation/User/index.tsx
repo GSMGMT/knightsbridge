@@ -48,7 +48,7 @@ const navigationItemsDefault: INavigation[] = [
         url: navigation.app.presale.nft,
         feature: 'presale_nfts',
         icon: 'image',
-        title: 'NFT',
+        title: 'Digital Asset',
       },
     ],
   },
