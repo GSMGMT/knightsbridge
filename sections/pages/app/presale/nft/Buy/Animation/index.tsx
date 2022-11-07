@@ -9,8 +9,8 @@ export const Animation = () => (
     </h2>
     <div className={styles.description}>
       <p>
-        It's time to buy your NFT before launch, get it in advance. At the
-        moment we only accept USDT.
+        It's time to buy your Digital Asset before launch, get it in advance. At
+        the moment we only accept USDT.
       </p>
     </div>
     <div className={styles.ilustration}>

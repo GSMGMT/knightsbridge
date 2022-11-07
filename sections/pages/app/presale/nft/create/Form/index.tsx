@@ -95,7 +95,7 @@ export const Form = () => {
           amount: quantity,
         });
 
-        toast.success('NFT created successfully');
+        toast.success('Digital Asset created successfully');
         router.replace(navigation.app.presale.list);
       } catch (error) {
         toast.error('Error, please try again');
@@ -217,7 +217,7 @@ export const Form = () => {
             disabled={!canSubmit}
             data-loading={isSubmitting || undefined}
           >
-            Register a NFT
+            Register a Digital Asset
           </button>
         </div>
       </form>
