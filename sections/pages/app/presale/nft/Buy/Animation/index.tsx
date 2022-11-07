@@ -4,7 +4,9 @@ import styles from './Animation.module.scss';
 
 export const Animation = () => (
   <div className={styles.container}>
-    <h2 className={styles.title}>Get ready to buy extraordinary NFTs</h2>
+    <h2 className={styles.title}>
+      Get ready to buy extraordinary Digital Assets
+    </h2>
     <div className={styles.description}>
       <p>
         It's time to buy your NFT before launch, get it in advance. At the

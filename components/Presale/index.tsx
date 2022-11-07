@@ -17,12 +17,12 @@ interface Navigation {
 }
 const navigation: Array<Navigation> = [
   {
-    title: "NFT's List",
+    title: "Digital Asset's List",
     icon: 'list',
     url: navigationLinks.app.presale.list,
   },
   {
-    title: 'Create a NFT Presale',
+    title: 'Create a Digital Asset Presale',
     icon: 'plus',
     url: navigationLinks.app.presale.create,
     separator: true,

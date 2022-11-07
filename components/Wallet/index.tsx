@@ -50,7 +50,7 @@ const navigationItemsDefault: Array<NavigationItem> = [
     feature: 'presale_coins',
   },
   {
-    title: 'NFT Presale',
+    title: 'Digital Asset Presale',
     color: '#4BC9F0',
     url: navigationLinks.app.presale.nft,
     feature: 'presale_nfts',

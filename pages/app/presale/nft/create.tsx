@@ -15,7 +15,7 @@ const Create = () => (
     <div>
       <div className={styles.head}>
         <div className={styles.details}>
-          <div className={styles.user}>Create a NFT Presale</div>
+          <div className={styles.user}>Create a Digital Asset Presale</div>
         </div>
       </div>
       <Form />
