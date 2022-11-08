@@ -1,7 +1,8 @@
-import { navigation } from '@navigation';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import useDarkMode from 'use-dark-mode';
+
+import { navigation } from '@navigation';
 
 import { Coin } from './Coin';
 import { Page } from './Page';
@@ -23,14 +24,15 @@ export const Layouts = ({ children }: LayoutsProps) => {
   if (
     path.includes('/app/wallet') ||
     path.includes('/app/buy-sell') ||
-    path === navigation.app.presale.nft ||
+    path === navigation.app.presale.nft.store ||
+    path === navigation.app.presale.nft.collection ||
     path === navigation.app.presale.token
   ) {
     return <Wallet>{children}</Wallet>;
   }
   if (
-    path === navigation.app.presale.create ||
-    path === navigation.app.presale.list
+    path === navigation.app.presale.nft.create ||
+    path === navigation.app.presale.nft.list
   ) {
     return <Presale>{children}</Presale>;
   }

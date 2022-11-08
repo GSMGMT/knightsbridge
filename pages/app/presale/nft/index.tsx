@@ -1,25 +1,17 @@
 import { FunctionComponent, useMemo } from 'react';
-import { parseCookies } from 'nookies';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
-import { adminAuth } from '@libs/firebase/admin-config';
 import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
-import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
 
 import { withUser } from '@middlewares/client/withUser';
 
 import { NFTProvider } from '@store/providers/NFT';
 
-import PresaleNFTContainer from '@sections/pages/app/presale/nft/Container';
+import PresaleNFTContainer from '@sections/pages/app/presale/nft/store/Container';
 
 import { navigation } from '@navigation';
-import {
-  Portfolio,
-  PresaleData,
-  usersPresalePortfolio,
-} from '@services/api/presale/nft/portfolio';
 
 interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
   createdAt: number;
@@ -29,25 +21,10 @@ interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     nfts: PresaleServerSide[];
-    assets: PresaleData[];
   }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const { token } = parseCookies(ctx);
-    const { uid: userUid } = await adminAuth.verifyIdToken(token);
-
-    let assets: PresaleData[] = [];
-
-    const wallet = await getWalletByUserUid(userUid);
-
-    let assetsPromises: Promise<Portfolio> = Promise.resolve({ assets: [] });
-
-    if (wallet) assetsPromises = usersPresalePortfolio(userUid);
-
     const allCoinsPromise = listNFTs();
 
-    const [allNFTs, allAssets] = await Promise.all([
-      allCoinsPromise,
-      assetsPromises,
-    ]);
+    const [allNFTs] = await Promise.all([allCoinsPromise]);
 
     const nfts: PresaleServerSide[] = allNFTs.map(
       ({ createdAt, updatedAt, ...data }) =>
@@ -65,25 +42,16 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
         },
       };
 
-    if (wallet)
-      assets = allAssets.assets.map(
-        ({ ...data }) =>
-          ({
-            ...data,
-          } as PresaleData)
-      );
-
     return {
       props: {
         nfts,
-        assets,
       },
     };
   });
 
 const PresaleNFT: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ nfts, assets }) => {
+> = ({ nfts }) => {
   const fetchedNFTs = useMemo(
     () =>
       nfts.map(
@@ -97,10 +65,8 @@ const PresaleNFT: FunctionComponent<
     [nfts]
   );
 
-  const fetchedAssets = useMemo(() => [...assets], [assets]);
-
   return (
-    <NFTProvider fetchedNFTs={fetchedNFTs} fetchedAssets={fetchedAssets}>
+    <NFTProvider fetchedNFTs={fetchedNFTs}>
       <PresaleNFTContainer />
     </NFTProvider>
   );

@@ -1,15 +1,16 @@
-import { FunctionComponent, useContext, useMemo } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 import cn from 'classnames';
-
-import { NFTContext } from '@store/contexts/NFT';
 
 import { NFT } from '@components/NFT';
 
+import { PresaleData } from '@services/api/presale/nft/portfolio';
+
 import styles from './Collection.module.scss';
 
-export const Collection: FunctionComponent = () => {
-  const { assets } = useContext(NFTContext);
-
+interface CollectionProps {
+  assets: Array<PresaleData>;
+}
+export const Collection: FunctionComponent<CollectionProps> = ({ assets }) => {
   const assetsQuantity = useMemo(() => assets.length, [assets]);
 
   return (

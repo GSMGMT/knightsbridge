@@ -16,7 +16,6 @@ import styles from '@styles/pages/app/presale/Presale.module.sass';
 import { Main } from '../Main';
 import { Buy } from '../Buy';
 import { Trending } from '../Trending';
-import { Collection } from '../Collection';
 
 const PresaleNFTContainer: FunctionComponent = () => {
   const mobile = useMediaQuery('(min-width: 475px) and (max-width: 639px)');
@@ -57,7 +56,6 @@ const PresaleNFTContainer: FunctionComponent = () => {
         <Main />
         <Buy items={newestNFTs} />
         <Trending items={trendingNFTs} />
-        <Collection />
       </div>
     </Feature>
   );

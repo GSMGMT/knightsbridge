@@ -61,9 +61,12 @@ export const navigation = {
     wallet: '/app/wallet',
     presale: {
       token: '/app/presale/coin',
-      nft: '/app/presale/nft',
-      create: '/app/presale/nft/create',
-      list: '/app/presale/nft/list',
+      nft: {
+        store: '/app/presale/nft',
+        collection: '/app/presale/nft/my-collection',
+        create: '/app/presale/nft/create',
+        list: '/app/presale/nft/list',
+      },
     },
     orders: {
       fiat: '/app/orders/fiat',

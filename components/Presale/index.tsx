@@ -19,12 +19,12 @@ const navigation: Array<Navigation> = [
   {
     title: "Digital Asset's List",
     icon: 'list',
-    url: navigationLinks.app.presale.list,
+    url: navigationLinks.app.presale.nft.list,
   },
   {
     title: 'Create a Digital Asset Presale',
     icon: 'plus',
-    url: navigationLinks.app.presale.create,
+    url: navigationLinks.app.presale.nft.create,
     separator: true,
   },
 ];

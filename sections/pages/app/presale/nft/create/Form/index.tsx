@@ -96,7 +96,7 @@ export const Form = () => {
         });
 
         toast.success('Digital Asset created successfully');
-        router.replace(navigation.app.presale.list);
+        router.replace(navigation.app.presale.nft.list);
       } catch (error) {
         toast.error('Error, please try again');
       }

@@ -47,7 +47,7 @@ const navigationItemsDefault: INavigation[] = [
   },
   {
     title: 'Digital Asset Presale',
-    url: navigation.app.presale.create,
+    url: navigation.app.presale.nft.create,
     feature: 'presale_nfts',
   },
 ];

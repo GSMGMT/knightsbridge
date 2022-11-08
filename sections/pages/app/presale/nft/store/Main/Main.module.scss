@@ -1,0 +1,22 @@
+@import '@styles/helpers';
+
+.main {
+  padding: 32px;
+  border-radius: 4px;
+
+  background: $n8;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @include dark {
+    background: #17181b;
+  }
+
+  .button {
+    margin-left: auto;
+  }
+}
