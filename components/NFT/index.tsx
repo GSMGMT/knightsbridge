@@ -1,19 +1,24 @@
 import Image from 'next/image';
-import { useCallback, useContext, useState } from 'react';
-import toast from 'react-hot-toast';
-
-import { NFTContext } from '@store/contexts/NFT';
-
-import { api } from '@services/api';
+import { ReactElement } from 'react';
+import cn from 'classnames';
 
 import styles from './NFT.module.scss';
+
+interface Label {
+  positionX?: 'left' | 'right';
+  positionY?: 'top' | 'bottom';
+  text?: string;
+}
+const defaultLabelPosition: Label = {
+  positionX: 'right',
+  positionY: 'bottom',
+  text: '',
+};
 
 type IPresale = {
   uid: string;
   author: string;
   name: string;
-  quote: number;
-  currencySymbol: string;
   icon: string;
 };
 
@@ -26,48 +31,33 @@ type Presale<T> = T extends true
       amount?: never;
       amountAvailable?: never;
     };
-interface NFTProps<T extends boolean> {
-  data: Presale<T>;
-  action?: T;
-}
-export const NFT = <T extends boolean>({ data, action }: NFTProps<T>) => {
-  const {
-    author,
-    name,
-    currencySymbol,
-    quote,
-    uid,
-    amount,
-    amountAvailable,
-    icon,
-  } = data;
-
-  const { processing, handleSetProcessing, handleFetchNFTs } =
-    useContext(NFTContext);
-
-  const [buying, setBuying] = useState<boolean>(false);
-
-  const handleBuyNFT = useCallback(async () => {
-    if (processing) return;
-
-    try {
-      setBuying(true);
-      handleSetProcessing(true);
-
-      await api.post('/api/presale/nft/order', {
-        presaleNFTId: uid,
-      });
-
-      toast.success('NFT bought successfully');
-    } catch (error) {
-      toast.error('Something went wrong, please try again');
-    } finally {
-      setBuying(false);
-      handleSetProcessing(false);
-
-      await handleFetchNFTs();
+type Action<T> = T extends true
+  ? {
+      action: ReactElement;
     }
-  }, [processing, handleSetProcessing, uid]);
+  : {
+      action?: never;
+    };
+type NFTProps<T extends boolean> = Action<T> & {
+  data: Presale<T>;
+  hasAction?: T;
+  label?: Label;
+};
+export const NFT = <T extends boolean = true>({
+  data,
+  hasAction,
+  label: {
+    positionX = defaultLabelPosition.positionX,
+    positionY = defaultLabelPosition.positionY,
+    text: labelText = defaultLabelPosition.text,
+  } = {
+    positionX: defaultLabelPosition.positionX,
+    positionY: defaultLabelPosition.positionY,
+    text: defaultLabelPosition.text,
+  },
+  action,
+}: NFTProps<T>) => {
+  const { author, name, amount, amountAvailable, icon } = data;
 
   return (
     <div className={styles.container}>
@@ -75,25 +65,22 @@ export const NFT = <T extends boolean>({ data, action }: NFTProps<T>) => {
         <div className={styles.picture}>
           <Image src={icon} alt="Teste" layout="fill" draggable={false} />
         </div>
-        <div className={styles.price}>
-          {quote} {currencySymbol}
-        </div>
+        {labelText && (
+          <div
+            className={cn(styles.price, styles[positionX!], styles[positionY!])}
+          >
+            {labelText}
+          </div>
+        )}
       </div>
       <div className={styles.item}>
         <div className={styles.info}>
           <div className={styles.author}>{author}</div>
           <div className={styles.name}>{name}</div>
         </div>
-        {action && (
+        {hasAction && (
           <div className={styles.action}>
-            <button
-              type="button"
-              className="button-small"
-              onClick={handleBuyNFT}
-              disabled={processing}
-            >
-              {buying ? 'Buying...' : 'Buy Now'}
-            </button>
+            {action}
             <div className={styles.sale}>
               <span className={styles.items}>
                 {amountAvailable}/{amount}
@@ -107,5 +94,6 @@ export const NFT = <T extends boolean>({ data, action }: NFTProps<T>) => {
   );
 };
 NFT.defaultProps = {
-  action: true,
+  hasAction: true,
+  label: defaultLabelPosition,
 };

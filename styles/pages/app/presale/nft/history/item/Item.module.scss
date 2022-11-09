@@ -1,0 +1,21 @@
+@import '@styles/helpers';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 48px;
+}
+
+.pagination-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  row-gap: 32px;
+
+  .pagination-label {
+    color: $n4;
+
+    @include caption-bold-2;
+  }
+}

@@ -1,0 +1,23 @@
+@import '@styles/helpers';
+
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px 10px;
+
+  margin-top: 48px;
+
+  @include m {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include a {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include s {
+    grid-template-columns: 1fr;
+  }
+
+  .button-action {
+    order: 1;
+  }
+}

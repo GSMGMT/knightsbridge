@@ -66,6 +66,7 @@ export const navigation = {
         collection: '/app/presale/nft/my-collection',
         create: '/app/presale/nft/create',
         list: '/app/presale/nft/list',
+        history: '/app/presale/nft/history/',
       },
     },
     orders: {

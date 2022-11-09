@@ -1,0 +1,18 @@
+@import '@styles/helpers';
+
+.header {
+  display: flex;
+  flex-direction: row;
+  column-gap: 16px;
+
+  .back {
+    display: flex;
+
+    color: inherit;
+  }
+
+  .title {
+    @include body-bold-1;
+    @include text-overflow;
+  }
+}

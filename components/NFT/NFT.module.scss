@@ -33,8 +33,6 @@
 
   .price {
     position: absolute;
-    left: 8px;
-    bottom: 12px;
 
     padding: 10px;
     border-radius: 6px;
@@ -46,6 +44,19 @@
     font-size: 12px;
     line-height: 1;
     color: $n1;
+
+    &.left {
+      left: 8px;
+    }
+    &.right {
+      right: 8px;
+    }
+    &.top {
+      top: 12px;
+    }
+    &.bottom {
+      bottom: 12px;
+    }
   }
 }
 

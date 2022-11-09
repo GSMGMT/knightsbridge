@@ -12,6 +12,7 @@ import styles from './Presale.module.scss';
 interface Navigation {
   title: string;
   url: string;
+  alias?: string;
   icon: Icons;
   separator?: boolean;
 }
@@ -20,6 +21,7 @@ const navigation: Array<Navigation> = [
     title: "Digital Asset's List",
     icon: 'list',
     url: navigationLinks.app.presale.nft.list,
+    alias: navigationLinks.app.presale.nft.history,
   },
   {
     title: 'Create a Digital Asset Presale',
@@ -37,8 +39,8 @@ export const Presale = ({ children }: PresaleProps) => {
 
   const [visible, setVisible] = useState<boolean>(false);
 
-  const activeLink: Navigation = navigation.find((x) =>
-    pathname.includes(x.url)
+  const activeLink: Navigation = navigation.find(
+    (x) => pathname.includes(x.url) || (x?.alias && pathname.includes(x.alias))
   )!;
 
   return (
@@ -62,7 +64,9 @@ export const Presale = ({ children }: PresaleProps) => {
                     <NavLink
                       className={({ isActive }) =>
                         cn(styles.link, {
-                          [styles.active]: isActive,
+                          [styles.active]:
+                            isActive ||
+                            (item?.alias && pathname.includes(item.alias)),
                           [styles.separator]: item.separator,
                         })
                       }

@@ -1,0 +1,44 @@
+@import '@styles/helpers';
+
+.container {
+  display: grid;
+  grid-template-columns: 256px 1fr;
+  gap: 20px;
+
+  transition: 0.3s grid-template-columns;
+
+  @include a {
+    grid-template-columns: 128px 1fr;
+  }
+  @include s {
+    grid-template-columns: 1fr;
+  }
+
+  .picture {
+    position: relative;
+
+    border-radius: 4px;
+
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
+    }
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+
+    .author {
+      @include body-bold-2;
+      color: $p1;
+    }
+    .name {
+      @include body-bold-1;
+    }
+  }
+}

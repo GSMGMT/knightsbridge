@@ -112,6 +112,13 @@
         }
         .detail {
           color: $n4;
+
+          &.limit {
+            @include text-overflow;
+
+            min-width: 0;
+            width: 100%;
+          }
         }
         .info {
           display: flex;
@@ -139,32 +146,34 @@
             color: $n4;
           }
         }
-        .status {
-          text-transform: capitalize;
+        @if $status != false {
+          .status {
+            text-transform: capitalize;
 
-          position: relative;
+            position: relative;
 
-          text-indent: 20px;
-          display: inline-block;
+            text-indent: 20px;
+            display: inline-block;
 
-          &::before {
-            content: '';
+            &::before {
+              content: '';
 
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
 
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
 
-            background-color: var(--status-color);
-          }
+              background-color: var(--status-color);
+            }
 
-          @each $key, $color in $status {
-            &.#{$key} {
-              --status-color: #{$color};
+            @each $key, $color in $status {
+              &.#{$key} {
+                --status-color: #{$color};
+              }
             }
           }
         }

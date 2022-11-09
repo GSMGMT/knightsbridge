@@ -15,7 +15,7 @@ export const Main: FunctionComponent = () => (
       href={navigation.app.presale.nft.collection}
       className={cn('button-stroke button-small', styles.button)}
     >
-      <span>My Colletion</span> <Icon name="arrow-right" />
+      <span>My Collection</span> <Icon name="arrow-right" />
     </Link>
   </div>
 );

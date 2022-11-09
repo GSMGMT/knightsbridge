@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import { useInterval } from 'usehooks-ts';
+import toast from 'react-hot-toast';
 
 import { api } from '@services/api';
 
@@ -60,14 +61,38 @@ export const NFTProvider: FunctionComponent<FlagsProviderProps> = ({
   }, [fetching, processing]);
   useInterval(handleFetchNFTs, 1000 * 60);
 
+  const handleBuyNFT = useCallback(
+    async (uid: string) => {
+      if (processing) return;
+
+      try {
+        handleSetProcessing(true);
+
+        await api.post('/api/presale/nft/order', {
+          presaleNFTId: uid,
+        });
+
+        toast.success('NFT bought successfully');
+      } catch (error) {
+        toast.error('Something went wrong, please try again');
+      } finally {
+        await handleFetchNFTs();
+
+        handleSetProcessing(false);
+      }
+    },
+    [processing, handleSetProcessing]
+  );
+
   const value = useMemo(
     () => ({
       processing,
       handleSetProcessing,
       NFTs,
       handleFetchNFTs,
+      handleBuyNFT,
     }),
-    [processing, handleSetProcessing, NFTs, handleFetchNFTs]
+    [processing, handleSetProcessing, NFTs, handleFetchNFTs, handleBuyNFT]
   );
 
   return <NFTContext.Provider value={value}>{children}</NFTContext.Provider>;

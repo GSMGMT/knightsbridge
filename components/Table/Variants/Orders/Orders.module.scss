@@ -1,0 +1,3 @@
+@import '../../Table.module.scss';
+
+@include table(4, 180px 180px 60px 80px, false);

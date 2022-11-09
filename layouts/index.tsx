@@ -32,7 +32,8 @@ export const Layouts = ({ children }: LayoutsProps) => {
   }
   if (
     path === navigation.app.presale.nft.create ||
-    path === navigation.app.presale.nft.list
+    path === navigation.app.presale.nft.list ||
+    path.includes(navigation.app.presale.nft.history)
   ) {
     return <Presale>{children}</Presale>;
   }
