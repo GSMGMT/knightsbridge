@@ -7,7 +7,7 @@ import { ResponseModel } from '@contracts/Response';
 
 import { apiErrorHandler } from '@utils/apiErrorHandler';
 import { isPersisted } from '@utils/validator';
-import { getPresaleNFTByUid } from '@libs/firebase/functions/presale/nft/token/getTokenByUid';
+import { getPresaleNFTByUid } from '@libs/firebase/functions/presale/nft/token/getPresaleNFTByUid';
 import { createTransaction } from '@services/api/presale/nft/transaction/createTransaction';
 
 export interface CreatePresaleOrderDTO {

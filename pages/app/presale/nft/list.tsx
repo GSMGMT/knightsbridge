@@ -100,17 +100,16 @@ const List: FunctionComponent<
 
   const [pageNumber, setPageNumber] = useState<number>(1);
   const pageSize = useMemo(() => 12, []);
-  const totalItems = useMemo(() => nfts.length, [nfts]);
-
-  const handleChangePage: (newPage: number) => void = useCallback((newPage) => {
-    setPageNumber(newPage);
-  }, []);
-
   const pagedItems = useMemo(
     () =>
       filteredItems.slice(pageSize * (pageNumber - 1), pageSize * pageNumber),
     [pageSize, pageNumber, search, filteredItems]
   );
+  const totalItems = useMemo(() => filteredItems.length, [filteredItems]);
+
+  const handleChangePage: (newPage: number) => void = useCallback((newPage) => {
+    setPageNumber(newPage);
+  }, []);
 
   return (
     <Feature feature="presale_nfts">
@@ -147,7 +146,7 @@ const List: FunctionComponent<
 
         <div className={styles['pagination-area']}>
           <div className={styles['pagination-label']}>
-            Showing ({filteredItems.length}) of {totalItems}
+            Showing ({pagedItems.length}) of {totalItems}
           </div>
 
           <Pagination
