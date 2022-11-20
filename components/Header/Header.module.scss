@@ -63,22 +63,25 @@
 
     margin-right: auto;
   }
-  svg {
+  .image {
     max-width: 136px;
 
     @include t {
       max-width: 42px;
     }
 
+    &.light {
+      display: flex !important;
+    }
     &.dark {
-      display: none;
+      display: none !important;
     }
     @include dark {
       &.light {
-        display: none;
+        display: none !important;
       }
       &.dark {
-        display: block;
+        display: flex !important;
       }
     }
   }

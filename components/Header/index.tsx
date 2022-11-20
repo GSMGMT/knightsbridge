@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 
 import { Features } from '@contracts/Features';
 
-import LogoTextLight from '@public/images/logos/logo-text-light.svg';
-import LogoLight from '@public/images/logos/logo-light.svg';
-import LogoTextDark from '@public/images/logos/logo-text-dark.svg';
-import LogoDark from '@public/images/logos/logo-dark.svg';
+import LogoLight from '@public/images/logos/logo-light.png';
+import LogoTextLight from '@public/images/logos/logo-text-light.png';
+import LogoDark from '@public/images/logos/logo-dark.png';
+import LogoTextDark from '@public/images/logos/logo-text-dark.png';
 import LogoAdmin from '@public/images/logos/logo-admin.svg';
 
 import { AuthContext } from '@store/contexts/Auth';
@@ -73,12 +74,20 @@ export const Header = ({ headerWide }: HeaderProps) => {
           ) : (
             <>
               <div className={styles.picDesktop}>
-                <LogoTextLight className={styles.light} alt="Knights Bridge" />
-                <LogoTextDark className={styles.dark} alt="Knights Bridge" />
+                <div className={cn(styles.image, styles.light)}>
+                  <Image src={LogoTextLight} alt="Knights Bridge" />
+                </div>
+                <div className={cn(styles.image, styles.dark)}>
+                  <Image src={LogoTextDark} alt="Knights Bridge" />
+                </div>
               </div>
               <div className={styles.picMobile}>
-                <LogoLight className={styles.light} alt="Knights Bridge" />
-                <LogoDark className={styles.dark} alt="Knights Bridge" />
+                <div className={cn(styles.image, styles.light)}>
+                  <Image src={LogoLight} alt="Knights Bridge" />
+                </div>
+                <div className={cn(styles.image, styles.dark)}>
+                  <Image src={LogoDark} alt="Knights Bridge" />
+                </div>
               </div>
             </>
           )}

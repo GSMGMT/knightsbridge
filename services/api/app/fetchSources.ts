@@ -1,6 +1,7 @@
 import { api } from '@services/api';
 
 import { Request } from '@contracts/Request';
+import { Price } from '@services/api/coinMarketCap/marketPair/getMarketPairPrice';
 
 interface Source {
   name: string;
@@ -16,6 +17,7 @@ interface Coin {
 export interface PairSource {
   id: string;
   price: number;
+  usdQuote: number;
   marketPair: string;
   marketPairId: number;
   base: Coin;
@@ -71,7 +73,7 @@ export const fetchPairsSources: (
 
     const prices = await Promise.all(
       data.map(async (pair) => {
-        const price = await api.get<{ data: number }>(
+        const price = await api.get<{ data: Price }>(
           `/api/marketPair/${pair.uid}/price`
         );
 
@@ -99,7 +101,8 @@ export const fetchPairsSources: (
           marketPair: name,
           source,
           marketPairId,
-          price: prices[index],
+          price: prices[index].price,
+          usdQuote: prices[index].usdQuote,
           base: {
             id: baseId,
             slug: baseSlug,
