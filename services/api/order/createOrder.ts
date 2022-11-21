@@ -66,7 +66,7 @@ export const createOrder = async ({
 
   const { amount: fund, reserved } = desiredAsset;
 
-  const price = await getPairPrice(marketPair);
+  const { price } = await getPairPrice(marketPair);
 
   if (!price) {
     throw Error('Was not able to get most recent pair price');
