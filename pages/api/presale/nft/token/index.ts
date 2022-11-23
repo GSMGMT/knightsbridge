@@ -25,6 +25,7 @@ export interface InsertNFTDTO {
   icon: any;
   quote: number;
   amount: number;
+  description: string;
   amountAvailable?: number;
 }
 export interface ListNFTDTO {
@@ -53,6 +54,7 @@ const schema: SchemaOf<InsertNFTDTO> = object().shape({
   quote: number().required('Quote is required.'),
   amount: number().required('Amount is required.'),
   amountAvailable: number(),
+  description: string().required('Description is required.'),
 });
 
 const listSchema: SchemaOf<ListNFTDTO> = object().shape({
@@ -70,6 +72,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
           author,
           amount,
           amountAvailable = amount,
+          description,
         } = await parseMultipartForm<InsertNFTDTO>(req).then((parsedBody) =>
           schema.validate(parsedBody)
         );
@@ -103,6 +106,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
             uid: currency.uid,
             type: currency.type,
           },
+          description,
           amountAvailable,
           author,
           amount,

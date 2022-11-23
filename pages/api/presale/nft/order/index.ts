@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next';
-import { object, string, SchemaOf } from 'yup';
+import { object, string, SchemaOf, number } from 'yup';
 
 import { NextApiRequestWithUser, withUser } from '@middlewares/api/withUser';
 
@@ -12,6 +12,7 @@ import { createTransaction } from '@services/api/presale/nft/transaction/createT
 
 export interface CreatePresaleOrderDTO {
   presaleNFTId: string;
+  amount?: number;
 }
 
 const createPresaleOrderSchema: SchemaOf<CreatePresaleOrderDTO> =
@@ -24,20 +25,21 @@ const createPresaleOrderSchema: SchemaOf<CreatePresaleOrderDTO> =
         (presaleCoinId) =>
           isPersisted(presaleCoinId as string, getPresaleNFTByUid)
       ),
+    amount: number(),
   });
 
 async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'POST': {
-        const { presaleNFTId } = await createPresaleOrderSchema.validate(
-          req.body
-        );
+        const { presaleNFTId, amount = 1 } =
+          await createPresaleOrderSchema.validate(req.body);
 
         const presaleNFT = (await getPresaleNFTByUid(presaleNFTId))!;
 
         const order = await createTransaction({
           presaleNFT,
+          amount,
           user: req.user,
         });
 

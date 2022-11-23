@@ -23,6 +23,7 @@ export const PresaleOrderConverter = {
         icon: `${process.env.API_URL}/${data.nft.icon}`,
       },
       user: data.user,
+      amount: data?.amount || 1,
       updatedAt: data.updatedAt?.toDate(),
       createdAt: data.createdAt?.toDate(),
     };

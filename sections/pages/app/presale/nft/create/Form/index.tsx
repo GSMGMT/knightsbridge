@@ -11,6 +11,7 @@ import { api } from '@services/api';
 
 import { navigation } from '@navigation';
 
+import { TextArea } from '@components/TextArea';
 import { TextInput } from '@components/TextInput';
 import { Icon } from '@components/Icon';
 
@@ -26,12 +27,14 @@ interface FormInputs {
   creator: string;
   quantity: string;
   price: string;
+  description: string;
 }
 const schema: SchemaOf<FormInputs> = object().shape({
   title: string().required('Please enter a title'),
   creator: string().required('Please enter a creator'),
   quantity: string().required('Please enter a quantity'),
   price: string().required('Please enter a price'),
+  description: string().required('Please enter a description'),
 });
 
 export const Form = () => {
@@ -85,7 +88,7 @@ export const Form = () => {
   const hasFile = useMemo(() => !!file, [file]);
 
   const handleSubmit = useCallback(
-    submit(async ({ creator, price, quantity, title }) => {
+    submit(async ({ creator, price, quantity, title, description }) => {
       try {
         await api.postForm('/api/presale/nft/token', {
           icon: file,
@@ -93,6 +96,7 @@ export const Form = () => {
           author: creator,
           quote: stringToNumber(price),
           amount: quantity,
+          description,
         });
 
         toast.success('Digital Asset created successfully');
@@ -178,6 +182,14 @@ export const Form = () => {
               {...field}
             />
           )}
+        />
+
+        <TextArea
+          label="Description"
+          variant={errors?.description ? 'error' : undefined}
+          note={errors?.description?.message}
+          className={styles['full-field']}
+          {...register('description')}
         />
 
         <div

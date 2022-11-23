@@ -1,7 +1,11 @@
-import { FunctionComponent, useCallback, useContext, useState } from 'react';
+import {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import cn from 'classnames';
-
-import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
 
 import { NFTContext } from '@store/contexts/NFT';
 
@@ -9,10 +13,16 @@ import { NFT } from '@components/NFT';
 
 import styles from './Tokens.module.scss';
 
-export const Tokens: FunctionComponent<{
-  items: Array<PresaleNFT>;
-}> = ({ items }) => {
-  const { processing, handleBuyNFT } = useContext(NFTContext);
+interface NFTsProps {
+  nftUid: string;
+}
+export const Store: FunctionComponent<NFTsProps> = ({ nftUid }) => {
+  const { processing, handleBuyNFT, NFTs } = useContext(NFTContext);
+
+  const items = useMemo(
+    () => NFTs.filter(({ uid }) => uid !== nftUid),
+    [nftUid, NFTs]
+  );
 
   const [buying, setBuying] = useState('');
 
@@ -33,7 +43,7 @@ export const Tokens: FunctionComponent<{
 
   return (
     <div className={cn(styles.box)}>
-      <h2 className={styles.title}>NEWESTS</h2>
+      <h2 className={styles.title}>People viewing this NFT also bought</h2>
       <div className={styles.tokens}>
         {items.map(({ baseCurrency: { symbol: currencySymbol }, ...item }) => (
           <NFT

@@ -36,8 +36,8 @@ export const usersPresalePortfolio = async (
           icon,
           name,
           quote,
+          uid,
         },
-        uid,
       }) =>
         ({
           author,

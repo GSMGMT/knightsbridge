@@ -1,0 +1,38 @@
+@import '@styles/helpers';
+
+.action-area {
+  display: flex;
+  flex-direction: row;
+  column-gap: 16px;
+
+  width: fit-content;
+
+  .action-button {
+    width: 20px;
+    height: 20px;
+
+    color: inherit;
+
+    transition: color 0.3s;
+
+    &:disabled {
+      color: $n6;
+
+      @include dark {
+        color: $n2;
+      }
+    }
+  }
+  .action-amount {
+    width: 20px;
+    height: 20px;
+
+    color: inherit;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include button-1;
+  }
+}

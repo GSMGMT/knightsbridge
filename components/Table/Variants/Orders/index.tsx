@@ -25,6 +25,7 @@ export const Orders = ({ items }: OrdersProps) => (
           quote,
           baseCurrency: { symbol },
         },
+        amount,
       }) => {
         const user = `${name} ${surname}`;
 
@@ -50,12 +51,15 @@ export const Orders = ({ items }: OrdersProps) => (
               </div>
               <div>
                 <div className={styles.label}>Quantity</div>
-                <div className={cn(styles.info)}>1</div>
+                <div className={cn(styles.info)}>{amount}</div>
               </div>
               <div>
                 <div className={styles.label}>Total</div>
                 <div className={cn(styles.info)}>
-                  {quote} {symbol}
+                  <span className={styles['text-overflow']}>
+                    {amount * quote}
+                  </span>
+                  <span>{symbol}</span>
                 </div>
               </div>
             </div>

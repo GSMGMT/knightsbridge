@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
+import { PresaleAsset } from '@contracts/presale/nft/PresaleOrder';
 
 import { User } from '@contracts/User';
 import { firestore } from '@libs/firebase/admin-config';
@@ -9,8 +9,9 @@ import { PresaleOrderConverter } from '@libs/firebase/converters/presale/nft/pre
 import { OmitTimestamp } from '@utils/types';
 
 interface InsertOrder {
-  nft: OmitTimestamp<PresaleNFT>;
+  nft: PresaleAsset;
   user: OmitTimestamp<User>;
+  amount: number;
   fee: number;
 }
 const insertNFTPresaleOrder = async (newOrder: InsertOrder) => {

@@ -9,6 +9,7 @@ export interface PresaleNFT {
   quote: number;
   amount: number;
   amountAvailable: number;
+  description: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -10,6 +10,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 48px 16px;
+
+  .full-field {
+    grid-column: span 2;
+  }
 }
 
 .submit {

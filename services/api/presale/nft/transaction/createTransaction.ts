@@ -20,12 +20,14 @@ import updateToken from '@libs/firebase/functions/presale/nft/token/updateToken'
 interface CreateTransaction {
   presaleNFT: PresaleNFT;
   user: User;
+  amount: number;
 }
 export const createTransaction = async ({
   presaleNFT,
   user,
+  amount,
 }: CreateTransaction) => {
-  const assetAmount = presaleNFT.quote;
+  const assetAmount = presaleNFT.quote * amount;
 
   const fee = await getFeeByType('GLOBAL');
   if (!fee) {
@@ -33,7 +35,10 @@ export const createTransaction = async ({
   }
   const { percentage: feePercentage } = fee;
 
-  if (presaleNFT.amountAvailable === 0) {
+  const valueToAdmin = assetAmount * feePercentage;
+  const valueToUser = assetAmount + valueToAdmin;
+
+  if (presaleNFT.amountAvailable === 0 || presaleNFT.amountAvailable < amount) {
     throw new Error('Not enough coins');
   }
 
@@ -94,14 +99,17 @@ export const createTransaction = async ({
   if (!adminAsset) {
     throw new Error('Admin asset not found');
   }
-  if (!userAsset || userAsset.amount < assetAmount) {
+  if (
+    !userAsset ||
+    userAsset.amount < assetAmount ||
+    userAsset.amount < valueToUser
+  ) {
     throw new Error('Not enough coins');
   }
 
   await insertPresaleOrder({
+    amount,
     nft: {
-      amount: presaleNFT.amount,
-      amountAvailable: presaleNFT.amountAvailable,
       author: presaleNFT.author,
       baseCurrency: {
         cmcId: presaleNFT.baseCurrency.cmcId,
@@ -111,6 +119,7 @@ export const createTransaction = async ({
         type: presaleNFT.baseCurrency.type,
         uid: presaleNFT.baseCurrency.uid,
       },
+      description: presaleNFT.description,
       quote: presaleNFT.quote,
       icon: removeApiUrl({
         logo: presaleNFT.icon,
@@ -128,9 +137,6 @@ export const createTransaction = async ({
     },
   });
 
-  const valueToAdmin = assetAmount * feePercentage;
-  const valueToUser = assetAmount + valueToAdmin;
-
   await Promise.all([
     updateAsset(adminWallet.uid, adminAsset.uid, {
       amount: increment(valueToAdmin),
@@ -139,9 +145,14 @@ export const createTransaction = async ({
       amount: increment(-valueToUser),
     }),
     updateToken(presaleNFT.uid, {
-      amountAvailable: increment(-1),
+      amountAvailable: increment(-amount),
     }),
-    insertPresaleAsset(userWallet.uid, {
+  ]);
+
+  for await (let item of Array(amount)) {
+    item = userWallet.uid;
+
+    await insertPresaleAsset(item, {
       nft: {
         author: presaleNFT.author,
         baseCurrency: {
@@ -152,6 +163,7 @@ export const createTransaction = async ({
           type: presaleNFT.baseCurrency.type,
           uid: presaleNFT.baseCurrency.uid,
         },
+        description: presaleNFT.description,
         icon: removeApiUrl({
           logo: presaleNFT.icon,
         }).logo,
@@ -159,6 +171,6 @@ export const createTransaction = async ({
         quote: presaleNFT.quote,
         uid: presaleNFT.uid,
       },
-    }),
-  ]);
+    });
+  }
 };

@@ -26,7 +26,8 @@ export const Layouts = ({ children }: LayoutsProps) => {
     path.includes('/app/buy-sell') ||
     path === navigation.app.presale.nft.store ||
     path === navigation.app.presale.nft.collection ||
-    path === navigation.app.presale.token
+    path === navigation.app.presale.token ||
+    path.includes(navigation.app.presale.nft.item)
   ) {
     return <Wallet>{children}</Wallet>;
   }

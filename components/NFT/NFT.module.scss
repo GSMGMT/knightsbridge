@@ -118,8 +118,6 @@
       display: flex;
       flex-direction: column;
 
-      text-align: right;
-
       .items {
         @include caption-bold-2;
 
@@ -132,4 +130,10 @@
       }
     }
   }
+}
+
+.link {
+  color: inherit;
+
+  display: contents;
 }

@@ -16,7 +16,7 @@ import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
 interface FlagsProviderProps {
   children: ReactElement;
-  fetchedNFTs: Array<IPresale>;
+  fetchedNFTs?: Array<IPresale>;
 }
 export const NFTProvider: FunctionComponent<FlagsProviderProps> = ({
   children,
@@ -61,8 +61,12 @@ export const NFTProvider: FunctionComponent<FlagsProviderProps> = ({
   }, [fetching, processing]);
   useInterval(handleFetchNFTs, 1000 * 60);
 
-  const handleBuyNFT = useCallback(
-    async (uid: string) => {
+  const handleBuyNFT: (
+    uid: string,
+    amount?: number,
+    fetchNFTs?: boolean
+  ) => Promise<void> = useCallback(
+    async (uid, amount = 1, fetchNFTs = true) => {
       if (processing) return;
 
       try {
@@ -70,13 +74,14 @@ export const NFTProvider: FunctionComponent<FlagsProviderProps> = ({
 
         await api.post('/api/presale/nft/order', {
           presaleNFTId: uid,
+          amount,
         });
 
         toast.success('NFT bought successfully');
       } catch (error) {
         toast.error('Something went wrong, please try again');
       } finally {
-        await handleFetchNFTs();
+        if (fetchNFTs) await handleFetchNFTs();
 
         handleSetProcessing(false);
       }
@@ -96,4 +101,7 @@ export const NFTProvider: FunctionComponent<FlagsProviderProps> = ({
   );
 
   return <NFTContext.Provider value={value}>{children}</NFTContext.Provider>;
+};
+NFTProvider.defaultProps = {
+  fetchedNFTs: [],
 };

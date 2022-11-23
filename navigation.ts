@@ -63,6 +63,7 @@ export const navigation = {
       token: '/app/presale/coin',
       nft: {
         store: '/app/presale/nft',
+        item: '/app/presale/nft/i/',
         collection: '/app/presale/nft/my-collection',
         create: '/app/presale/nft/create',
         list: '/app/presale/nft/list',

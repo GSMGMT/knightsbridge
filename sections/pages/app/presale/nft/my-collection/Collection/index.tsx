@@ -19,13 +19,13 @@ interface CollectionProps {
   assets: Array<PresaleData>;
 }
 export const Collection: FunctionComponent<CollectionProps> = ({ assets }) => {
+  console.log({ assets });
+
   const assetsList = useMemo(() => {
     const uniqueAssets: Array<UniqueAssets> = [];
 
     assets.forEach((asset) => {
-      const currentAsset = uniqueAssets.find(
-        (item) => item.icon === asset.icon
-      );
+      const currentAsset = uniqueAssets.find((item) => item.uid === asset.uid);
 
       if (currentAsset) {
         currentAsset.quantity += 1;

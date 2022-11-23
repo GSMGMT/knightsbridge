@@ -48,7 +48,11 @@ export const Trending: FunctionComponent<{ items: Array<IPresale> }> = ({
               <button
                 type="button"
                 className="button-small order-1"
-                onClick={() => handleBuy(item.uid)}
+                onClick={(event) => {
+                  event.preventDefault();
+
+                  return handleBuy(item.uid);
+                }}
                 disabled={processing}
               >
                 {buying === item.uid ? 'Buying...' : 'Buy Now'}

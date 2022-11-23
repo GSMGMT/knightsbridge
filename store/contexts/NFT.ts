@@ -6,7 +6,11 @@ export const NFTContext = createContext<{
   processing: boolean;
   handleSetProcessing: (isProcessing: boolean) => void;
   NFTs: IPresale[];
-  handleBuyNFT: (uid: string) => Promise<void>;
+  handleBuyNFT: (
+    uid: string,
+    amount?: number,
+    fetchNFTs?: boolean
+  ) => Promise<void>;
   handleFetchNFTs: () => Promise<void>;
 }>({
   processing: true,

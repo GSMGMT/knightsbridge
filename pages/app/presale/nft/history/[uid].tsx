@@ -65,16 +65,19 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
       name: nftFetched.name,
       quote: nftFetched.quote,
       uid: nftFetched.uid,
+      description: nftFetched.description,
     };
 
-    const orders = ordersFetched.map(
-      ({ createdAt, updatedAt, ...data }) =>
-        ({
-          ...data,
-          createdAt: +createdAt,
-          updatedAt: +updatedAt,
-        } as PresaleOrderServerSide)
-    );
+    const orders = ordersFetched
+      .map(
+        ({ createdAt, updatedAt, ...data }) =>
+          ({
+            ...data,
+            createdAt: +createdAt,
+            updatedAt: +updatedAt,
+          } as PresaleOrderServerSide)
+      )
+      .sort(({ createdAt: a }, { createdAt: b }) => (a > b ? -1 : 1));
 
     return {
       props: { nft, orders },
@@ -113,7 +116,12 @@ const Page: FunctionComponent<
   return (
     <div className={styles.container}>
       <Header title={nft.name} />
-      <Detail author={nft.author} icon={nft.icon} name={nft.name} />
+      <Detail
+        author={nft.author}
+        icon={nft.icon}
+        name={nft.name}
+        description={nft.description}
+      />
       <Orders items={filteredItems} />
       <div className={styles['pagination-area']}>
         <div className={styles['pagination-label']}>

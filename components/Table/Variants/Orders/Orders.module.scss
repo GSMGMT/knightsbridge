@@ -1,3 +1,7 @@
 @import '../../Table.module.scss';
 
-@include table(4, 180px 180px 60px 80px, false);
+@include table(4, minmax(180px, 1fr) minmax(180px, 1fr) 60px 100px, false);
+
+.text-overflow {
+  @include text-overflow;
+}

@@ -18,6 +18,7 @@ export const PresaleConverter = {
       quote: data.quote,
       amount: data.amount,
       icon: `${process.env.API_URL}/${data.icon}`,
+      description: data?.description || '',
       baseCurrency: {
         ...data.baseCurrency,
         logo: `${process.env.API_URL}/${data.baseCurrency.logo}`,

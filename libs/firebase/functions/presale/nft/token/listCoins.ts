@@ -4,16 +4,18 @@ import { FirebaseCollections } from '@libs/firebase/collections';
 import { PresaleConverter } from '@libs/firebase/converters/presale/nft/presaleConverter';
 
 interface ListCoins {
-  onlyAvailable: boolean;
+  onlyAvailable?: boolean;
+  size?: number;
 }
 const listNFTs: (data?: ListCoins) => Promise<PresaleNFT[]> = async (
-  { onlyAvailable } = {
+  { onlyAvailable, size } = {
     onlyAvailable: true,
   }
 ) => {
   const CoinDoc = firestore()
     .collection(FirebaseCollections.NFT_PRESALE_TOKENS)
-    .withConverter(PresaleConverter);
+    .withConverter(PresaleConverter)
+    .limit(size || 1000);
 
   const querySnapshot = await CoinDoc.get();
 

@@ -13,6 +13,7 @@ interface InsertCoin {
   baseCurrency: CryptoCurrency;
   quote: number;
   amount: number;
+  description: string;
   amountAvailable: number;
 }
 

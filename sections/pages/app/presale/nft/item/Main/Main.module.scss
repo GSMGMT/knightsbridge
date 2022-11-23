@@ -1,0 +1,113 @@
+@import '@styles/helpers';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  column-gap: 4px;
+}
+
+.icon {
+  position: relative;
+
+  align-self: flex-start;
+
+  max-width: 480px;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+
+  @include g {
+    max-width: 400px;
+  }
+  @include x {
+    max-width: 320px;
+  }
+  @include m {
+    max-width: 260px;
+  }
+  @include a {
+    max-width: 180px;
+  }
+  @include s {
+    max-width: 100px;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  .quote {
+    position: absolute;
+    right: 8px;
+    bottom: 12px;
+
+    padding: 10px;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    @include work-sans;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+    color: $n1;
+  }
+}
+.content {
+  width: 100%;
+  border-radius: 4px;
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+  background: $n8;
+  transition: padding 0.3s;
+
+  @include dark {
+    background: #17181b;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+
+    .author {
+      @include body-bold-2;
+
+      color: $p1;
+    }
+    .name {
+      @include body-bold-1;
+
+      color: $n2;
+
+      @include dark {
+        color: $n7;
+      }
+    }
+  }
+
+  @include t {
+    padding: 20px;
+  }
+  @include a {
+    padding: 12px;
+  }
+}
+
+.description {
+  @include caption-1;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+
+  align-items: center;
+}
