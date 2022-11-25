@@ -17,6 +17,11 @@ interface ExchangeProviderProps {
   children: ReactNode;
 }
 export const ExchangeProvider = ({ children }: ExchangeProviderProps) => {
+  const [action, setAction] = useState<string>('');
+  const handleSetAction = useCallback((value: string) => {
+    setAction(value);
+  }, []);
+
   const { push, pathname } = useRouter();
 
   const [pair, setPair] = useState<PairSource | undefined>(undefined);
@@ -78,6 +83,8 @@ export const ExchangeProvider = ({ children }: ExchangeProviderProps) => {
         walletPortfolio,
         handleFetchBaseCurrencyWallet,
         handleFetchPairCurrencyWallet,
+        action,
+        handleSetAction,
       } as IExchangeContext),
     [
       pair,
@@ -85,6 +92,8 @@ export const ExchangeProvider = ({ children }: ExchangeProviderProps) => {
       walletPortfolio,
       handleFetchBaseCurrencyWallet,
       handleFetchPairCurrencyWallet,
+      action,
+      handleSetAction,
     ]
   );
 

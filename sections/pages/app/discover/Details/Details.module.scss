@@ -1,0 +1,9 @@
+@import '@styles/helpers';
+
+.details {
+  position: relative;
+
+  &:not(.loading) {
+    margin-top: 64px;
+  }
+}

@@ -31,6 +31,7 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
     },
     handleFetchBaseCurrencyWallet,
     pair,
+    action,
   } = useContext(ExchangeContext);
   const {
     base: { slug: baseSlug },
@@ -38,6 +39,24 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
     price,
     id,
   } = useMemo(() => pair!, [pair]);
+
+  const isLimit = useMemo(() => action === 'limit', [action]);
+
+  const [expectedPrice, setExpectedPrice] = useState<string>('');
+  const expectPriceInputValue = useMemo(
+    () => expectedPrice.replace(/^0+/, ''),
+    [expectedPrice]
+  );
+  const expectedPriceValue = useMemo(
+    () => Number(expectedPrice) || 0,
+    [expectedPrice]
+  );
+
+  const currentPrice = useMemo(() => {
+    if (isLimit && expectedPrice) return expectedPriceValue;
+
+    return price;
+  }, [price, expectedPriceValue, action, isLimit, expectedPrice]);
 
   const [transactionFail, setTransactionFail] = useState<boolean>(false);
   const removeTransactionFailFeedback = useCallback(() => {
@@ -94,6 +113,7 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
 
   const priceId = useId();
   const amountId = useId();
+  const expectedId = useId();
 
   const [lastChange, setLastChange] = useState<'CRYPTO' | 'FIAT'>('CRYPTO');
 
@@ -115,18 +135,18 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
 
   useEffect(() => {
     if (lastChange === 'CRYPTO') {
-      const newFiatAmount = cryptoAmountValue * price;
+      const newFiatAmount = cryptoAmountValue * currentPrice;
 
       setFiatAmount(newFiatAmount.toString());
     }
-  }, [cryptoAmountValue, price, lastChange]);
+  }, [cryptoAmountValue, currentPrice, lastChange]);
   useEffect(() => {
     if (lastChange === 'FIAT') {
-      const newCryptoAmount = fiatAmountValue / price;
+      const newCryptoAmount = fiatAmountValue / currentPrice;
 
       setCryptoAmount(newCryptoAmount.toString());
     }
-  }, [fiatAmountValue, price, lastChange]);
+  }, [fiatAmountValue, currentPrice, lastChange]);
 
   useEffect(() => {
     let newPercentage = 0;
@@ -154,6 +174,8 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
         type: 'sell',
         marketPairId: id,
         amount: cryptoAmountValue,
+        action,
+        quoteExpected: currentPrice,
       });
 
       setPercentage(0);
@@ -171,7 +193,13 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
     } finally {
       setFetching(false);
     }
-  }, [cryptoAmountValue, pair, handleFetchBaseCurrencyWallet]);
+  }, [
+    cryptoAmountValue,
+    pair,
+    handleFetchBaseCurrencyWallet,
+    action,
+    currentPrice,
+  ]);
 
   const handleSubmitOrder = useCallback(() => handleSell(), [handleSell]);
 
@@ -330,6 +358,27 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
       <span className={styles.fee}>
         <Icon name="lightning" /> Fee 1.5%
       </span>
+      {isLimit && (
+        <label
+          className={cn(styles.field, { [styles.exceeded]: valueIsMajor })}
+          htmlFor={expectedId}
+        >
+          <div className={styles.label}>Quote</div>
+          <input
+            type="number"
+            className={styles.input}
+            value={expectPriceInputValue}
+            min={0}
+            onChange={({ target: { value } }) => setExpectedPrice(value)}
+            placeholder="0"
+            id={expectedId}
+            autoComplete="off"
+          />
+          <div className={styles.currency}>
+            <span>{pairSlug}</span>
+          </div>
+        </label>
+      )}
       <button
         className={cn(classButton, styles.button)}
         type="button"

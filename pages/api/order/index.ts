@@ -14,6 +14,8 @@ interface CreateOrderDTO {
   type: 'buy' | 'sell';
   marketPairId: string;
   amount: number;
+  action: string;
+  quoteExpected?: number;
 }
 
 type ListOrdersDTO = Pagination & {
@@ -22,8 +24,13 @@ type ListOrdersDTO = Pagination & {
 
 const createOrderSchema: SchemaOf<CreateOrderDTO> = object().shape({
   type: mixed().oneOf(['buy', 'sell']).required('type is required.'),
-  marketPairId: string().required('marketPairId is required.'),
   amount: number().required('amount is required'),
+  marketPairId: string().required('marketPairId is required.'),
+  action: string().required('action is required.'),
+  quoteExpected: number().when('action', {
+    is: 'limit',
+    then: number().required('quoteExpected is required.'),
+  }),
 });
 
 const listOrdersSchema: SchemaOf<ListOrdersDTO> = object().shape({

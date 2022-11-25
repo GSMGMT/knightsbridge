@@ -36,7 +36,7 @@ export const Main = () => {
     },
   } = useContext(ExchangeContext);
   const {
-    usdQuote,
+    price,
     base: { slug: baseSlug, cmcId: baseCmcId },
     pair: { slug: pairSlug, cmcId: pairCmcId },
   } = pair!;
@@ -116,7 +116,7 @@ export const Main = () => {
               [styles.negative]: percentageChange < 0,
             })}
           >
-            {getValue(usdQuote)}
+            {getValue(price)}
           </div>
           <div className={styles.content}>
             <Icon name="coin" size={16} /> {getValue(amount)}

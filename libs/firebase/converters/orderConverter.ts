@@ -13,6 +13,7 @@ export const OrderConverter = {
     return {
       uid: data.uid,
       type: data.type,
+      action: data?.action || 'market',
       user: data.user,
       marketPair: data.marketPair,
       price: data.price,

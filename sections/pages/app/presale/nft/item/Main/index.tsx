@@ -39,7 +39,7 @@ export const Main: FunctionComponent<MainProps> = ({
 }) => {
   const { processing, handleBuyNFT } = useContext(NFTContext);
 
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(amountAvailable);
   const [buying, setBuying] = useState(false);
 
   const handleBuy = useCallback(async () => {
@@ -55,8 +55,8 @@ export const Main: FunctionComponent<MainProps> = ({
   }, [uid, buying, amount, processing]);
 
   const actionDisabled = useMemo(
-    () => buying || processing,
-    [buying, processing]
+    () => buying || processing || amount === 0,
+    [buying, processing, amount]
   );
 
   return (

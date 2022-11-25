@@ -1,4 +1,5 @@
 import { User } from '@contracts/User';
+
 import getFeeByType from '@libs/firebase/functions/fee/getFeeByType';
 import getMarketPairByUid from '@libs/firebase/functions/marketPair/getMarketPairByUid';
 import getAssetsByWalletUid from '@libs/firebase/functions/wallet/asset/getAssetsByWalletUid';
@@ -6,6 +7,7 @@ import updateAsset from '@libs/firebase/functions/wallet/asset/updateAsset';
 import getWalletByUserUid from '@libs/firebase/functions/wallet/getWalletByUserUid';
 import { increment } from '@libs/firebase/admin-config';
 import insertOrder from '@libs/firebase/functions/order/insertOrder';
+
 import { getPairPrice } from '../coinMarketCap/marketPair/getMarketPairPrice';
 import { createWallet } from '../wallet/createWallet';
 
@@ -14,6 +16,8 @@ interface CreateOrder {
   type: 'buy' | 'sell';
   marketPairId: string;
   amount: number;
+  action: string;
+  quoteExpected?: number;
 }
 
 export const createOrder = async ({
@@ -21,8 +25,10 @@ export const createOrder = async ({
   type,
   marketPairId,
   amount,
+  action,
+  quoteExpected,
 }: CreateOrder) => {
-  const marketPair = await getMarketPairByUid(marketPairId);
+  const marketPair = await getMarketPairByUid(marketPairId!);
 
   if (!marketPair) {
     throw Error('Could not find any market pair with given ID');
@@ -66,7 +72,15 @@ export const createOrder = async ({
 
   const { amount: fund, reserved } = desiredAsset;
 
-  const { price } = await getPairPrice(marketPair);
+  let price: number;
+
+  if (action === 'limit') {
+    price = quoteExpected!;
+  } else {
+    const { price: pairPrice } = await getPairPrice(marketPair);
+
+    price = pairPrice;
+  }
 
   if (!price) {
     throw Error('Was not able to get most recent pair price');
@@ -91,6 +105,7 @@ export const createOrder = async ({
 
   return insertOrder({
     amount,
+    action,
     fee: fee.percentage,
     marketPair,
     price,

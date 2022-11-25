@@ -15,6 +15,7 @@ export type OrderType = 'buy' | 'sell';
 export type Order = {
   uid: string;
   type: OrderType;
+  action: string;
   user: OmitTimestamp<User>;
   marketPair: OmitTimestamp<MarketPair>;
   price: number;

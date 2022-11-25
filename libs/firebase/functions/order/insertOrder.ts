@@ -16,6 +16,7 @@ interface InsertOrder {
   amount: number;
   total: number;
   fee: number;
+  action: string;
 }
 
 const insertOrder = async (newOrder: InsertOrder) => {

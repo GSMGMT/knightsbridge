@@ -1,13 +1,33 @@
-import { MouseEventHandler, useState, useCallback } from 'react';
+import {
+  MouseEventHandler,
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+  useEffect,
+} from 'react';
 import cn from 'classnames';
+
+import { ExchangeContext } from '@store/contexts/Exchange';
 
 import styles from './Actions.module.scss';
 
 import { Form } from './Form';
 
+const navigation: Array<string> = ['Limit', 'Market'];
+
 export const Actions = () => {
+  const { handleSetAction } = useContext(ExchangeContext);
+
+  const [activeIndex, setActiveIndex] = useState(0);
   const [visibleAction, setVisibleAction] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  const currentAction = useMemo(() => navigation[activeIndex], [activeIndex]);
+  useEffect(() => {
+    const newAction = currentAction.toLowerCase();
+    handleSetAction(newAction);
+  }, [currentAction, handleSetAction]);
 
   const handleClickBuy: MouseEventHandler<HTMLButtonElement> =
     useCallback(() => {
@@ -23,6 +43,22 @@ export const Actions = () => {
 
   return (
     <div className={styles.actions}>
+      <div className={styles.head}>
+        <div className={styles.nav}>
+          {navigation.map((x, index) => (
+            <button
+              className={cn(styles.link, {
+                [styles.active]: index === activeIndex,
+              })}
+              onClick={() => setActiveIndex(index)}
+              key={index}
+              type="button"
+            >
+              {x}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className={cn(styles.wrapper, { [styles.show]: visible })}>
         <Form visible={visibleAction} setValue={setVisible} />
       </div>

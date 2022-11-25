@@ -29,6 +29,8 @@ export type FetchCoins = (args?: {
 
 export interface IExchangeContext {
   pair?: PairSource;
+  action: string;
+  handleSetAction: (action: string) => void;
   handleSelectPair: HandleSelectPair;
   walletPortfolio: Portfolio;
   handleFetchBaseCurrencyWallet: HandleFetchWallet;
@@ -36,6 +38,8 @@ export interface IExchangeContext {
 }
 export const ExchangeContext = createContext<IExchangeContext>({
   pair: undefined,
+  action: '',
+  handleSetAction: () => {},
   handleSelectPair: () => {},
   walletPortfolio: defaultPortfolio,
   handleFetchBaseCurrencyWallet: async () => {},
