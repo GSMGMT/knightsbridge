@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 
+import { navigation } from '@navigation';
+
 import { CurrencyQuote } from '@contracts/Currency';
 
 import { getValue } from '@helpers/GetValue';
@@ -160,7 +162,7 @@ export const Trade: FunctionComponent<TradeProps> = ({ coins }) => {
                 </div>
                 <Link
                   className={cn('button-small', styles.button)}
-                  href={`/exchange/${coin.symbol}`}
+                  href={navigation.app.buySell}
                 >
                   Buy
                 </Link>
