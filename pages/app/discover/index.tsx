@@ -26,7 +26,14 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
       const currencyList = await listCurrencies({
         filters: { type: 'crypto' },
       });
-      const currencyIds = currencyList.map(({ cmcId }) => cmcId);
+      const currencyIds: number[] = [];
+      currencyList.forEach(({ cmcId }) => {
+        const currencyAlreadyExists = currencyIds.includes(cmcId);
+
+        if (!currencyAlreadyExists) {
+          currencyIds.push(cmcId);
+        }
+      });
       const fetchCrypto = fetchCryptoById(currencyIds);
 
       const fetchQuote = [];
