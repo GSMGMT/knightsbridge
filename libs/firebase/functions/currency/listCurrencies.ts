@@ -6,7 +6,7 @@ import { Currency, CurrencyType } from '@contracts/Currency';
 import { Sort } from '@utils/types';
 
 interface ListCurrencies {
-  size: number;
+  size?: number;
   sort?: Sort;
   filters?: {
     type?: CurrencyType;
@@ -14,11 +14,11 @@ interface ListCurrencies {
   };
 }
 
-const listCurrencies = async ({
-  size,
-  sort,
+const listCurrencies: (data?: ListCurrencies) => Promise<Currency[]> = async ({
+  size = 1000,
   filters,
-}: ListCurrencies): Promise<Currency[]> => {
+  sort,
+} = {}) => {
   let CurrencyCollection = firestore()
     .collection(FirebaseCollections.CURRENCIES)
     .orderBy(sort?.field ?? 'createdAt', sort?.orientation ?? 'asc')

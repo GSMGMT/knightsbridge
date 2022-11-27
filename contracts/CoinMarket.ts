@@ -105,7 +105,6 @@ type Data = {
   name: string;
   symbol: string;
   slug: string;
-  nim_market_pairs: number;
   num_market_pairs: number;
   max_supply: number;
   circulating_supply: number;
@@ -124,6 +123,7 @@ type Data = {
   quotes?: [
     {
       quote: Quote;
+      time_close: string;
     }
   ];
   cmc_rank: number;
@@ -140,9 +140,11 @@ type DollarQuote = {
   low: number;
   close: number;
   volume: number;
+  volume_24h: number;
   percent_change_24h: number;
   percent_change_7d: number;
   total_market_cap: number;
+  market_cap: number;
 };
 
 type Quote = {

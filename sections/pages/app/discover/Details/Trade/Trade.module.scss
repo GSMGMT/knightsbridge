@@ -166,11 +166,10 @@
   flex-shrink: 0;
 
   width: 32px;
+  height: 32px;
   margin-right: 12px;
 
-  img {
-    max-width: 100%;
-  }
+  position: relative;
 }
 .subtitle {
   margin-right: 4px;
@@ -238,5 +237,20 @@
 
     @include caption-bold-2;
     color: $n4;
+  }
+}
+.pagination-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 32px;
+
+  row-gap: 32px;
+
+  .pagination-label {
+    color: $n4;
+
+    @include caption-bold-2;
   }
 }
