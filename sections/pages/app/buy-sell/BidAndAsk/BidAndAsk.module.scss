@@ -8,6 +8,15 @@
 .table {
   @include d-flex-column;
 
+  border-radius: 4px;
+  padding: 4px 0;
+
+  background: $n8;
+
+  @include dark {
+    background: #17181b;
+  }
+
   .sections {
     @include d-flex-column;
     row-gap: 16px;

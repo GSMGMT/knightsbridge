@@ -14,10 +14,10 @@ import { Coin as PresaleCoin } from '@pages/app/presale/coin';
 
 import { api } from '@services/api';
 
-import { Icon } from '@components/Icon';
-
 import { getValue } from '@helpers/GetValue';
 
+import { Icon } from '@components/Icon';
+import { Fee } from '@components/Fee';
 import { Dropdown } from './Dropdown';
 import { Coins } from './Dropdown/types';
 
@@ -387,9 +387,7 @@ export const Action: FunctionComponent<BuyProps> = ({
           </div>
         )}
       />
-      <span className={styles.fee}>
-        <Icon name="lightning" /> Fee 1.5%
-      </span>
+      <Fee />
       <button
         className={cn('button', styles.button)}
         type="button"

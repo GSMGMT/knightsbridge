@@ -1,0 +1,21 @@
+@import '@styles/helpers';
+
+.fee {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+
+  @include caption-bold-2;
+  color: $n3;
+
+  fill: currentColor;
+
+  user-select: none;
+
+  margin-bottom: 12px;
+
+  @include dark {
+    color: $n8;
+  }
+}

@@ -12,8 +12,6 @@
   background: $n8;
 
   @include t {
-    display: block;
-
     margin-bottom: 16px;
   }
   @include m {
@@ -27,13 +25,8 @@
   display: flex;
   align-items: center;
 
-  @include t {
-    margin-bottom: 16px;
-  }
   @include m {
     display: block;
-
-    margin-bottom: 24px;
   }
 }
 .box {
@@ -60,9 +53,8 @@
 }
 .line {
   display: flex;
-  align-items: center;
-
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: 4px;
 }
 .info {
   @include body-bold-1;
@@ -70,6 +62,14 @@
 
   @include dark {
     color: $n8;
+  }
+}
+.source {
+  @include caption-bold-2;
+  color: $n3;
+
+  @include dark {
+    color: $n5;
   }
 }
 .category {

@@ -15,6 +15,7 @@ import { ExchangeContext } from '@store/contexts/Exchange';
 import { api } from '@services/api';
 
 import { Icon } from '@components/Icon';
+import { Fee } from '@components/Fee';
 
 import { stringToValue } from '@helpers/StringToValue';
 
@@ -355,15 +356,13 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
           </div>
         )}
       />
-      <span className={styles.fee}>
-        <Icon name="lightning" /> Fee 1.5%
-      </span>
+      <Fee />
       {isLimit && (
         <label
           className={cn(styles.field, { [styles.exceeded]: valueIsMajor })}
           htmlFor={expectedId}
         >
-          <div className={styles.label}>Quote</div>
+          <div className={styles.label}>Total</div>
           <input
             type="number"
             className={styles.input}

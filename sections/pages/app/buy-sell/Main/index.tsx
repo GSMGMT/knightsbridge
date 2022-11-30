@@ -39,6 +39,7 @@ export const Main = () => {
     price,
     base: { slug: baseSlug, cmcId: baseCmcId },
     pair: { slug: pairSlug, cmcId: pairCmcId },
+    source: { name: sourceName },
   } = pair!;
   const [percentageChange, setPercentageChange] = useState<number>(0);
 
@@ -107,6 +108,7 @@ export const Main = () => {
             <div className={styles.info}>
               {baseSlug}/{pairSlug}
             </div>
+            <div className={styles.source}>{sourceName}</div>
           </div>
         </div>
         <div className={styles.box}>

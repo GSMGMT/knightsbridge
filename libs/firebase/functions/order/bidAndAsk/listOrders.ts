@@ -18,14 +18,6 @@ export const listBidAndAskOrders: (
       martketPair,
     },
   });
-  const buyApprovedPromise = listOrders({
-    size: 2,
-    filters: {
-      status: 'APPROVED',
-      type: 'buy',
-      martketPair,
-    },
-  });
 
   const sellProcessingPromise = listOrders({
     size: 5,
@@ -35,29 +27,14 @@ export const listBidAndAskOrders: (
       martketPair,
     },
   });
-  const sellApprovedPromise = listOrders({
-    size: 2,
-    filters: {
-      status: 'APPROVED',
-      type: 'sell',
-      martketPair,
-    },
-  });
 
-  const [buyProcessing, buyApproved, sellProcessing, sellApproved] =
-    await Promise.all([
-      buyProcessingPromise,
-      buyApprovedPromise,
-      sellProcessingPromise,
-      sellApprovedPromise,
-    ]);
+  const [buyProcessing, sellProcessing] = await Promise.all([
+    buyProcessingPromise,
+    sellProcessingPromise,
+  ]);
 
   const buy: BidAndAsk[] = [
     ...buyProcessing.map(
-      ({ amount, price, total, uid }) =>
-        ({ amount, price, total, uid } as BidAndAsk)
-    ),
-    ...buyApproved.map(
       ({ amount, price, total, uid }) =>
         ({ amount, price, total, uid } as BidAndAsk)
     ),
@@ -65,10 +42,6 @@ export const listBidAndAskOrders: (
 
   const sell: BidAndAsk[] = [
     ...sellProcessing.map(
-      ({ amount, price, total, uid }) =>
-        ({ amount, price, total, uid } as BidAndAsk)
-    ),
-    ...sellApproved.map(
       ({ amount, price, total, uid }) =>
         ({ amount, price, total, uid } as BidAndAsk)
     ),

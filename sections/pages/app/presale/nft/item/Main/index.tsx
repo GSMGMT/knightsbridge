@@ -2,6 +2,7 @@ import {
   FunctionComponent,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -39,8 +40,12 @@ export const Main: FunctionComponent<MainProps> = ({
 }) => {
   const { processing, handleBuyNFT } = useContext(NFTContext);
 
-  const [amount, setAmount] = useState(amountAvailable);
+  const [amount, setAmount] = useState(0);
   const [buying, setBuying] = useState(false);
+
+  useEffect(() => {
+    setAmount(0);
+  }, [uid]);
 
   const handleBuy = useCallback(async () => {
     if (processing) return;

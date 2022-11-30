@@ -6,6 +6,7 @@ import { Price } from '@services/api/coinMarketCap/marketPair/getMarketPairPrice
 interface Source {
   name: string;
   logo: string;
+  slug: string;
 }
 interface Coin {
   id: string;
