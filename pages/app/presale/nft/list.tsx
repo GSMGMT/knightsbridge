@@ -2,8 +2,6 @@ import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
-import { navigation } from '@navigation';
-
 import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
 import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
@@ -37,13 +35,6 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
           updatedAt: +updatedAt,
         } as PresaleServerSide)
     );
-    if (nfts.length === 0)
-      return {
-        redirect: {
-          destination: navigation.app.wallet,
-          permanent: false,
-        },
-      };
 
     return {
       props: {

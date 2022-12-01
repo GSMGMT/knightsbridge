@@ -63,25 +63,23 @@
 
     margin-right: auto;
   }
-  .image {
+  svg {
     max-width: 136px;
+    max-height: 32px;
 
     @include t {
       max-width: 42px;
     }
 
-    &.light {
-      display: flex !important;
-    }
     &.dark {
-      display: none !important;
+      display: none;
     }
     @include dark {
       &.light {
-        display: none !important;
+        display: none;
       }
       &.dark {
-        display: flex !important;
+        display: block;
       }
     }
   }
