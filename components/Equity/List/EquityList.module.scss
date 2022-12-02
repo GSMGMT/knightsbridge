@@ -1,0 +1,71 @@
+@import '@styles/helpers';
+
+.table {
+  .row {
+    padding-left: 16px;
+    padding-right: 16px;
+
+    display: grid;
+    grid-template-columns: 8.5fr 48fr 21.5fr 13.3fr;
+    align-items: center;
+
+    &:first-child {
+      @include caption-bold-2;
+      color: $n4;
+
+      padding-top: 10px;
+      padding-bottom: 30px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid $n6;
+
+      @include dark {
+        border-bottom-color: $n3;
+      }
+    }
+    &:not(:first-child) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      border-radius: 8px;
+
+      transition: 0.3s all;
+
+      cursor: pointer;
+
+      &:hover,
+      &.selected {
+        background-color: $n7;
+
+        @include dark {
+          background-color: $n3;
+        }
+      }
+
+      .name,
+      .price,
+      .source {
+        color: $n2;
+
+        @include dark {
+          color: $n8;
+        }
+      }
+      .name {
+        font-weight: 500;
+      }
+      .price,
+      .source {
+        @include caption-bold-2;
+      }
+      .code {
+        margin-left: 4px;
+
+        flex-shrink: 0;
+
+        color: $n4;
+
+        position: sticky;
+        right: 0;
+      }
+    }
+  }
+}

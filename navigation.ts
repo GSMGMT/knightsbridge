@@ -75,6 +75,12 @@ export const navigation = {
       crypto: '/app/orders/crypto',
       buySell: '/app/orders/buy-sell',
     },
+    equities: {
+      list: '/app/equities/list',
+      get register() {
+        return `${this.list}?register=true`;
+      },
+    },
     coin: {
       list: '/app/coin/list',
       get register() {

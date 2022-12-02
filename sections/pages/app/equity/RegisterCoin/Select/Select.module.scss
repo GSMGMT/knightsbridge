@@ -1,7 +1,7 @@
 @import '@styles/helpers';
 
 @import '@components/Search/Search.module';
-@import '@components/Coin/List/CoinList.module';
+@import '@components/Equity/List/EquityList.module';
 
 .title {
   @include body-bold-1;
@@ -25,28 +25,12 @@
 
 .select-exchange {
   .row {
-    grid-template-columns: 24px 1fr !important;
-
-    > :first-child {
-      width: 24px;
-      height: 24px;
-    }
-    > :last-child {
-      margin-left: 12px;
-    }
+    grid-template-columns: 1fr !important;
   }
 }
 .select-pair {
   .row {
-    grid-template-columns: 24px 1fr !important;
-
-    > :first-child {
-      width: 24px;
-      height: 24px;
-    }
-    > :last-child {
-      margin-left: 12px;
-    }
+    grid-template-columns: 1fr !important;
 
     .checkbox {
       margin: auto;
@@ -54,23 +38,17 @@
 
     .pair {
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
 
-      .info {
-        display: flex;
-        flex-direction: column;
+      .name {
+        @include text-overflow;
+      }
+      .source {
+        font-weight: 400;
+        color: $n4;
 
-        .name {
-          @include text-overflow;
-        }
-        .exchange {
-          font-weight: 400;
-          color: $n4;
-
-          @include dark {
-            color: $n5;
-          }
+        @include dark {
+          color: $n5;
         }
       }
     }

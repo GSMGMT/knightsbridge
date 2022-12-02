@@ -50,6 +50,11 @@ const navigationItemsDefault: INavigation[] = [
     url: navigation.app.presale.nft.list,
     feature: 'presale_nfts',
   },
+  {
+    title: 'Equities',
+    url: navigation.app.equities.list,
+    feature: 'equities',
+  },
 ];
 
 interface AdminNavigationProps {

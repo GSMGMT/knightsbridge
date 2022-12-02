@@ -1,0 +1,285 @@
+@import '@styles/helpers';
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.head {
+  padding: 40px 0;
+  border-bottom: 1px solid #f1f2f4;
+
+  @include m {
+    padding: 16px 0 32px;
+  }
+  @include dark {
+    border-color: $n2;
+  }
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    @include d {
+      padding: 0 40px;
+    }
+    @include m {
+      display: block;
+
+      padding: 0 32px;
+    }
+  }
+}
+.title {
+  margin-right: auto;
+
+  @include d {
+    font-size: 40px;
+    line-height: 48px;
+    letter-spacing: -0.01em;
+  }
+  @include t {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+.breadcrumbs {
+  margin-left: 40px;
+
+  @include m {
+    margin: 16px 0 0;
+  }
+}
+.body {
+  flex-grow: 1;
+
+  padding: 80px 0;
+
+  background: #f8f8f9;
+
+  @include d {
+    padding-top: 64px;
+  }
+  @include t {
+    padding-top: 40px;
+  }
+  @include m {
+    padding: 16px 0;
+  }
+  @include dark {
+    background: none;
+  }
+  .container {
+    display: flex;
+    align-items: flex-start;
+
+    @include d {
+      padding: 0 40px;
+    }
+    @include t {
+      display: block;
+    }
+    @include m {
+      padding: 0 16px;
+    }
+  }
+}
+.sidebar {
+  flex-shrink: 0;
+  width: 288px;
+  margin-right: 80px;
+  @include x {
+    margin-right: 48px;
+  }
+  @include d {
+    width: 224px;
+    margin-right: 32px;
+  }
+  @include t {
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  @include m {
+    margin-bottom: 24px;
+  }
+}
+.wrapper {
+  flex-grow: 1;
+
+  padding: 40px;
+  border-radius: 16px;
+
+  background: $n8;
+  box-shadow: 0px 64px 64px -48px rgba(15, 15, 15, 0.1);
+
+  @include t {
+    padding: 40px 32px;
+  }
+  @include m {
+    padding: 16px;
+  }
+  @include dark {
+    background: #18191d;
+  }
+}
+.dropdown {
+  @include t {
+    position: relative;
+    z-index: 5;
+
+    &.active {
+      .top {
+        &:after {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+      .group {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}
+.top {
+  display: none;
+
+  @include t {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    height: 48px;
+    padding: 0 64px 0 16px;
+    border-radius: 24px;
+
+    background: $n8;
+
+    @include button-2;
+    @include dark {
+      background: $n2;
+    }
+    svg {
+      margin-right: 8px;
+
+      fill: $n2;
+      @include dark {
+        fill: $n8;
+      }
+    }
+    &:after {
+      content: '';
+
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+
+      width: 24px;
+      height: 24px;
+
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M16.207 9.793a1 1 0 0 0-1.414 0L12 12.586 9.207 9.793a1 1 0 0 0-1.414 1.414l3.5 3.5a1 1 0 0 0 1.414 0l3.5-3.5a1 1 0 0 0 0-1.414z' fill='%23777e91'/%3E%3C/svg%3E")
+        no-repeat 50% 50% / 100% auto;
+      transition: transform 0.2s;
+    }
+  }
+}
+.group {
+  @include t {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 2;
+
+    padding: 16px;
+    border-radius: 24px;
+
+    background: $n8;
+    box-shadow: 0px 40px 32px -24px rgba(15, 15, 15, 0.12);
+    opacity: 0;
+    transition: all 0.2s;
+    visibility: hidden;
+
+    @include dark {
+      background: $n2;
+    }
+  }
+}
+.link {
+  display: flex;
+  align-items: center;
+
+  height: 40px;
+  padding: 0 16px;
+
+  @include button-2;
+  color: $n4;
+
+  transition: color 0.2s;
+
+  @include d {
+    padding: 0;
+  }
+  svg {
+    margin-right: 8px;
+
+    fill: $n4;
+    transition: fill 0.2s;
+  }
+  &:hover,
+  &.active {
+    color: $n2;
+
+    svg {
+      fill: $n2;
+    }
+    @include dark {
+      color: $n8;
+
+      svg {
+        fill: $n8;
+      }
+    }
+  }
+  &:not(:last-child) {
+    margin-bottom: 12px;
+
+    @include t {
+      margin-bottom: 4px;
+    }
+  }
+  &.separator {
+    position: relative;
+
+    margin-bottom: 25px;
+
+    @include t {
+      margin-bottom: 4px;
+    }
+
+    &:after {
+      content: '';
+
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: calc(100% + 12px);
+
+      height: 1px;
+
+      background: $n6;
+
+      @include d {
+        left: 0;
+        right: 0;
+      }
+      @include t {
+        display: none;
+      }
+      @include dark {
+        background: $n2;
+      }
+    }
+  }
+}

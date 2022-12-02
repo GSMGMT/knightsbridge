@@ -3,83 +3,83 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import cn from 'classnames';
-import Image from 'next/image';
 
 import { Icon } from '@components/Icon';
 
-import { api } from '@services/api';
+import { Source } from '@contracts/Equity';
 
 import styles from '../Select.module.scss';
 
-import { Exchange } from '../../types';
-
 const schema = yup.object().shape({
-  search: yup.string().min(3).required('Search is required'),
+  search: yup.string().required('Search is required'),
 });
 interface FormFields {
   search: string;
 }
 
-interface SelectCoinProps {
-  handleSelectExchange: (exchange: Exchange) => void;
+interface SelectSourceProps {
+  handleSelectExchange: (exchange: Source) => void;
 }
-export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
+export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const [exchanges, setExchanges] = useState<Array<Exchange>>([]);
+  const [sources, setSources] = useState<Array<Source>>([]);
   const [selectedExchangeId, setSelectedExchangeId] = useState<string>('');
 
   const [fetching, setFetching] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const fetchCoinCmc: (
-    pageNumber?: number,
-    joinPrevData?: boolean
-  ) => Promise<void> = useCallback(
-    async (currentPageNumber = 1, joinPrevData = true) => {
-      try {
-        setFetching(true);
+  const [joinPrevData, setJoinPrevData] = useState<boolean>(true);
+  const search = useMemo(() => {
+    const newSearch =
+      searchTerm.length >= 3 ? searchTerm.toLowerCase() : undefined;
 
-        const search =
-          searchTerm.length >= 3 ? searchTerm.toLowerCase() : undefined;
+    setSelectedExchangeId('');
+    setSources([]);
 
-        const {
-          data: { data },
-        } = await api.get<{ data: Array<Exchange> }>(
-          '/api/data-analytics/coin-market/exchange/list',
-          {
-            params: {
-              pageNumber: currentPageNumber,
-              pageSize: 10,
-              search,
-            },
-          }
-        );
+    if (newSearch) {
+      setPageNumber(1);
+      setJoinPrevData(false);
+    } else {
+      setPageNumber(1);
+      setJoinPrevData(true);
+    }
 
-        if (data.length < 10) {
-          setHasMore(false);
-        } else {
-          setHasMore(true);
-        }
-
-        if (joinPrevData) {
-          setExchanges([...exchanges, ...data]);
-        } else {
-          setExchanges([...data]);
-        }
-      } finally {
-        setFetching(false);
-      }
-    },
-    [searchTerm, fetching, exchanges]
-  );
-  useEffect(() => {
-    fetchCoinCmc(pageNumber);
-  }, [pageNumber]);
-  useEffect(() => {
-    setPageNumber(1);
-    fetchCoinCmc(1, false);
+    return newSearch;
   }, [searchTerm]);
+  const fetchCoinCmc: () => Promise<void> = useCallback(async () => {
+    try {
+      setFetching(true);
+
+      const data: Array<Source> = [
+        {
+          id: '1',
+          name: 'Nasdaq',
+        },
+        {
+          id: '2',
+          name: 'NYSE',
+        },
+      ];
+
+      if (data.length < 10) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
+
+      if (joinPrevData) {
+        setSources([...sources, ...data]);
+      } else {
+        setSources([...data]);
+      }
+    } finally {
+      setFetching(false);
+    }
+  }, [search, fetching, sources, joinPrevData, pageNumber]);
+  useEffect(() => {
+    fetchCoinCmc();
+  }, [pageNumber, search]);
   const handleLoadMoreExchanges = useCallback(() => {
     setPageNumber(pageNumber + 1);
   }, [pageNumber]);
@@ -110,8 +110,8 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
 
   const canSubmit = useMemo(() => !!selectedExchangeId, [selectedExchangeId]);
   const handleSelectCoin: () => void = useCallback(() => {
-    const selectedExchange = exchanges.find(
-      ({ cmcId: id }) => id === selectedExchangeId
+    const selectedExchange = sources.find(
+      ({ id }) => id === selectedExchangeId
     );
 
     if (selectedExchange) {
@@ -131,7 +131,7 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
             <input
               className={styles.input}
               type="text"
-              placeholder="Search coin"
+              placeholder="Search source"
               autoComplete="off"
               {...field}
               onChange={({ target: { value } }) =>
@@ -151,10 +151,9 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
 
       <div className={cn(styles.table, styles['select-exchange'])}>
         <div className={styles.row}>
-          <span>&nbsp;</span>
           <span>Name</span>
         </div>
-        {exchanges.map(({ cmcId: id, logo, name }) => {
+        {sources.map(({ id, name }) => {
           const isSelected = id === selectedExchangeId;
 
           return (
@@ -165,13 +164,6 @@ export const SelectExchange = ({ handleSelectExchange }: SelectCoinProps) => {
               tabIndex={-1}
               onClick={() => setSelectedExchangeId(id)}
             >
-              <Image
-                className={styles.logo}
-                src={logo}
-                alt={name}
-                width={24}
-                height={24}
-              />
               <span className={styles.name}>{name}</span>
             </div>
           );

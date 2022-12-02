@@ -9,6 +9,7 @@ import { Page } from './Page';
 import { Sign } from './Sign';
 import { Wallet } from './Wallet';
 import { Presale } from './Presale';
+import { Equity } from './Equity';
 
 interface LayoutsProps {
   children: ReactElement;
@@ -40,6 +41,9 @@ export const Layouts = ({ children }: LayoutsProps) => {
   }
   if (path.includes('/app/coin')) {
     return <Coin>{children}</Coin>;
+  }
+  if (path.includes('/app/equities')) {
+    return <Equity>{children}</Equity>;
   }
   if (path.includes('/app')) {
     return <Page>{children}</Page>;
