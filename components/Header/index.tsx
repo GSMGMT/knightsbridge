@@ -4,9 +4,7 @@ import cn from 'classnames';
 import { Features } from '@contracts/Features';
 
 import LogoTextLight from '@public/images/logos/logo-text-light.svg';
-import LogoLight from '@public/images/logos/logo-light.svg';
 import LogoTextDark from '@public/images/logos/logo-text-dark.svg';
-import LogoDark from '@public/images/logos/logo-dark.svg';
 import LogoAdmin from '@public/images/logos/logo-admin.svg';
 
 import { AuthContext } from '@store/contexts/Auth';
@@ -71,16 +69,10 @@ export const Header = ({ headerWide }: HeaderProps) => {
           {isAdmin ? (
             <LogoAdmin alt="Knights Bridge" className={styles.picAdmin} />
           ) : (
-            <>
-              <div className={styles.picDesktop}>
-                <LogoTextLight className={styles.light} alt="Knights Bridge" />
-                <LogoTextDark className={styles.dark} alt="Knights Bridge" />
-              </div>
-              <div className={styles.picMobile}>
-                <LogoLight className={styles.light} alt="Knights Bridge" />
-                <LogoDark className={styles.dark} alt="Knights Bridge" />
-              </div>
-            </>
+            <div>
+              <LogoTextLight className={styles.light} alt="Knights Bridge" />
+              <LogoTextDark className={styles.dark} alt="Knights Bridge" />
+            </div>
           )}
         </Link>
         <div className={styles.wrapper}>
