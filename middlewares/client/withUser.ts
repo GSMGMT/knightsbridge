@@ -30,7 +30,7 @@ export async function withUser<T extends {}>(
       const user = (await getUserByUid(uid))!;
       const { role } = user;
 
-      if (freeToAccessBy === Roles.ADMIN) {
+      if (freeToAccessBy === Roles.ADMIN && role === Roles.SUPERADMIN) {
         freeToAccessBy = Roles.SUPERADMIN;
       }
 

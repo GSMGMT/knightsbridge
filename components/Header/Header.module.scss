@@ -67,10 +67,6 @@
     max-width: 136px;
     max-height: 32px;
 
-    @include t {
-      max-width: 42px;
-    }
-
     &.dark {
       display: none;
     }
@@ -84,11 +80,7 @@
     }
   }
 }
-.picDesktop {
-  @include t {
-    display: none;
-  }
-}
+
 .picMobile {
   display: none;
 
