@@ -19,6 +19,7 @@ export const defaultFlags: Flags = {
   wallet: true,
   presale_coins: true,
   presale_nfts: true,
+  equities: true,
 };
 
 export const FlagsContext = createContext<{
