@@ -12,7 +12,7 @@ import styles from '@styles/pages/app/equity/list/EquityList.module.scss';
 import { Pagination } from '@components/Pagination';
 import { Icon } from '@components/Icon';
 import { Feature } from '@components/Feature';
-import { RegisterCoin } from '@sections/pages/app/equity/RegisterCoin';
+import { RegisterEquity } from '@sections/pages/app/equity/RegisterEquity';
 
 interface FormFields {
   search: string;
@@ -179,7 +179,7 @@ const CoinList = () => {
       </Feature>
 
       <Feature feature="coin_register" restrict="COMPONENT">
-        <RegisterCoin />
+        <RegisterEquity />
       </Feature>
     </>
   );

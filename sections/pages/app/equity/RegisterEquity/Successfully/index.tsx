@@ -4,13 +4,13 @@ import { navigation } from '@navigation';
 
 import { Link } from '@components/Link';
 
-import { Source, Stock } from '@contracts/Equity';
+import { Exchange, Ticker } from '@contracts/MarketStack';
 
 import styles from './Successfully.module.scss';
 
 interface SuccessfullyProps {
-  stockRegistered: Stock;
-  sourceRegistered: Source;
+  stockRegistered: Ticker;
+  sourceRegistered: Exchange;
 }
 export const Successfully = ({
   sourceRegistered,

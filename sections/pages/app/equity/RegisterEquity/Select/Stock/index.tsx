@@ -6,36 +6,48 @@ import cn from 'classnames';
 
 import { Icon } from '@components/Icon';
 
-import { Source } from '@contracts/Equity';
+import {
+  Exchange,
+  MarketStackApiResponse,
+  Ticker,
+} from '@contracts/MarketStack';
+
+import { api } from '@services/api';
 
 import styles from '../Select.module.scss';
 
 const schema = yup.object().shape({
-  search: yup.string().required('Search is required'),
+  search: yup.string().min(3).required('Search is required'),
 });
 interface FormFields {
   search: string;
 }
 
-interface SelectSourceProps {
-  handleSelectExchange: (exchange: Source) => void;
+interface SelectStockProps {
+  currentSource: Exchange;
+  handleSelectStock: (stock: Ticker) => void;
 }
-export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
+export const SelectStock = ({
+  currentSource,
+  handleSelectStock,
+}: SelectStockProps) => {
+  const sourceMIC = useMemo(() => currentSource.mic, [currentSource]);
+
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const [sources, setSources] = useState<Array<Source>>([]);
-  const [selectedExchangeId, setSelectedExchangeId] = useState<string>('');
+  const [stocks, setStocks] = useState<Array<Ticker>>([]);
+  const [selectedStock, setSelectedStock] = useState<Ticker | null>(null);
+  const [registeringStock, setRegisteringStock] = useState<boolean>(false);
 
   const [fetching, setFetching] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [joinPrevData, setJoinPrevData] = useState<boolean>(true);
   const search = useMemo(() => {
-    const newSearch =
-      searchTerm.length >= 3 ? searchTerm.toLowerCase() : undefined;
+    const newSearch = searchTerm.toLowerCase();
 
-    setSelectedExchangeId('');
-    setSources([]);
+    setSelectedStock(null);
+    setStocks([]);
 
     if (newSearch) {
       setPageNumber(1);
@@ -47,20 +59,27 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
 
     return newSearch;
   }, [searchTerm]);
-  const fetchCoinCmc: () => Promise<void> = useCallback(async () => {
+
+  const fetchTickersCmc: () => Promise<void> = useCallback(async () => {
+    if (fetching) return;
+
     try {
       setFetching(true);
 
-      const data: Array<Source> = [
-        {
-          id: '1',
-          name: 'Nasdaq',
+      const {
+        data: { data },
+      } = await api.get<
+        MarketStackApiResponse<{
+          data: Array<Ticker>;
+        }>
+      >('/api/marketStack/ticker', {
+        params: {
+          limit: 10,
+          offset: pageNumber > 1 ? (pageNumber - 1) * 10 : 0,
+          search,
+          exchange: sourceMIC,
         },
-        {
-          id: '2',
-          name: 'NYSE',
-        },
-      ];
+      });
 
       if (data.length < 10) {
         setHasMore(false);
@@ -69,18 +88,18 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
       }
 
       if (joinPrevData) {
-        setSources([...sources, ...data]);
+        setStocks([...stocks, ...data]);
       } else {
-        setSources([...data]);
+        setStocks([...data]);
       }
     } finally {
       setFetching(false);
     }
-  }, [search, fetching, sources, joinPrevData, pageNumber]);
+  }, [fetching, sourceMIC, pageNumber, search, joinPrevData, stocks]);
   useEffect(() => {
-    fetchCoinCmc();
+    fetchTickersCmc();
   }, [pageNumber, search]);
-  const handleLoadMoreExchanges = useCallback(() => {
+  const handleLoadMoreStocks = useCallback(() => {
     setPageNumber(pageNumber + 1);
   }, [pageNumber]);
 
@@ -103,25 +122,34 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
   const searchInput = useWatch('search');
 
   useEffect(() => {
-    if (searchInput.length < 3) {
+    if (searchInput.length < 1) {
       setSearchTerm('');
     }
   }, [searchInput]);
 
-  const canSubmit = useMemo(() => !!selectedExchangeId, [selectedExchangeId]);
-  const handleSelectCoin: () => void = useCallback(() => {
-    const selectedExchange = sources.find(
-      ({ id }) => id === selectedExchangeId
-    );
+  const canSubmit = useMemo(
+    () => !!selectedStock && !registeringStock,
+    [selectedStock, registeringStock]
+  );
+  const handleRegisterStock = useCallback(async () => {
+    if (!canSubmit) return;
 
-    if (selectedExchange) {
-      handleSelectExchange({ ...selectedExchange });
+    try {
+      setRegisteringStock(true);
+
+      handleSelectStock(selectedStock!);
+    } finally {
+      setRegisteringStock(false);
     }
-  }, [selectedExchangeId]);
+  }, [canSubmit, selectedStock, currentSource, sourceMIC]);
+
+  useEffect(() => {
+    setSelectedStock(null);
+  }, [searchTerm]);
 
   return (
     <div className={styles.area}>
-      <h4 className={styles.title}>Select source</h4>
+      <h4 className={styles.title}>Select stock</h4>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <Controller
@@ -131,7 +159,7 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
             <input
               className={styles.input}
               type="text"
-              placeholder="Search source"
+              placeholder="Search stock"
               autoComplete="off"
               {...field}
               onChange={({ target: { value } }) =>
@@ -149,22 +177,27 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
         </button>
       </form>
 
-      <div className={cn(styles.table, styles['select-exchange'])}>
+      <div className={cn(styles.table, styles['select-stock'])}>
         <div className={styles.row}>
           <span>Name</span>
         </div>
-        {sources.map(({ id, name }) => {
-          const isSelected = id === selectedExchangeId;
+        {stocks.map((currentStock) => {
+          const { name, symbol } = currentStock;
+
+          const isSelected = selectedStock?.symbol === symbol;
 
           return (
             <div
-              key={id}
+              key={symbol}
               className={cn(styles.row, { [styles.selected]: isSelected })}
               role="button"
               tabIndex={-1}
-              onClick={() => setSelectedExchangeId(id)}
+              onClick={() => setSelectedStock(currentStock)}
             >
-              <span className={styles.name}>{name}</span>
+              <div className={styles.stock}>
+                <span className={styles.name}>{name}</span>
+                <span className={cn(styles.name, styles.source)}>{symbol}</span>
+              </div>
             </div>
           );
         })}
@@ -172,7 +205,7 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
       {hasMore && (
         <button
           type="button"
-          onClick={handleLoadMoreExchanges}
+          onClick={handleLoadMoreStocks}
           className={styles['load-more']}
           disabled={fetching}
         >
@@ -183,10 +216,14 @@ export const SelectSource = ({ handleSelectExchange }: SelectSourceProps) => {
       <button
         type="button"
         className={cn('button', 'button-small', styles['submit-button'])}
-        onClick={handleSelectCoin}
         disabled={!canSubmit}
+        onClick={handleRegisterStock}
       >
-        Next
+        {registeringStock
+          ? 'Registering stock...'
+          : selectedStock
+          ? 'Register stock'
+          : 'Select stock'}
       </button>
     </div>
   );

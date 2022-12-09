@@ -3,14 +3,14 @@ import { useRouter } from 'next/router';
 
 import { navigation } from '@navigation';
 
-import { Source, Stock } from '@contracts/Equity';
+import { Exchange, Ticker } from '@contracts/MarketStack';
 
 import { Modal } from '@components/Modal';
 import { SelectSource } from './Select/Source';
 import { SelectStock } from './Select/Stock';
 import { Successfully } from './Successfully';
 
-export const RegisterCoin = () => {
+export const RegisterEquity = () => {
   const { asPath: pathname, push } = useRouter();
   const modalVisible = useMemo(
     () => pathname === navigation.app.equities.register,
@@ -29,23 +29,49 @@ export const RegisterCoin = () => {
     }
   }, [modalVisible]);
 
-  const [currentSource, setCurrentSource] = useState<Source>({
-    id: '',
+  const [currentSource, setCurrentSource] = useState<Exchange>({
+    acronym: '',
+    city: '',
+    country: '',
+    country_code: '',
+    mic: '',
     name: '',
+    website: '',
+    currency: {
+      code: '',
+      name: '',
+      symbol: '',
+    },
+    timezone: {
+      abbr: '',
+      abbr_dst: '',
+      timezone: '',
+    },
   });
-  const [currentStock, setCurrentStock] = useState<Stock>({
-    id: '',
+  const [currentStock, setCurrentStock] = useState<Ticker>({
+    country: '',
+    has_eod: false,
+    has_intraday: false,
     name: '',
     symbol: '',
+    stock_exchange: {
+      acronym: '',
+      city: '',
+      country: '',
+      country_code: '',
+      mic: '',
+      name: '',
+      website: '',
+    },
   });
-  const handleSelectExchange: (newExchange: Source) => void = useCallback(
+  const handleSelectExchange: (newExchange: Exchange) => void = useCallback(
     ({ ...newExchange }) => {
       setCurrentSource({ ...newExchange });
       setCurrentStage('STOCK');
     },
     []
   );
-  const handleSelectStock: (newStock: Stock) => void = useCallback(
+  const handleSelectStock: (newStock: Ticker) => void = useCallback(
     ({ ...newStock }) => {
       setCurrentStock({ ...newStock });
       setCurrentStage('CONCLUDED');
