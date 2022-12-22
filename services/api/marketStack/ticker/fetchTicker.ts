@@ -1,20 +1,14 @@
-import {
-  MarketStackApiUrls,
-  Ticker,
-  MarketStackApiDTO,
-} from '@contracts/MarketStack';
+import { MarketStackApiUrls, Ticker } from '@contracts/MarketStack';
 
 import { requestMarketStack } from '../request';
 
 interface FetchTickerParams {
-  exchange?: string;
+  symbol: string;
 }
-export const fetchTicker = async (
-  data: MarketStackApiDTO<FetchTickerParams> = {}
-) => {
-  const { data: exchanges } = await requestMarketStack<{
-    data: Ticker[];
-  }>(MarketStackApiUrls.TICKERS, { ...data });
+export const fetchTicker = async (data: FetchTickerParams) => {
+  const ticker = await requestMarketStack<Ticker>(
+    `${MarketStackApiUrls.TICKERS}/${data.symbol}`
+  );
 
-  return exchanges;
+  return ticker;
 };

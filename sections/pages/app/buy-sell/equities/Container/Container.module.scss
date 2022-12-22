@@ -1,0 +1,56 @@
+@import '@styles/helpers';
+
+.exchange {
+  min-height: calc(100vh - 88px);
+
+  background: #f1f2f4;
+
+  @include t {
+    min-height: calc(100vh - 114px);
+  }
+  @include dark {
+    background: $n1;
+  }
+}
+.nav {
+  display: none;
+
+  @include t {
+    display: flex;
+    margin-bottom: 16px;
+  }
+  @include m {
+    justify-content: space-between;
+  }
+}
+.link {
+  display: flex;
+
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  background: none;
+  transition: all 0.2s;
+
+  @include button-2;
+  color: $n3;
+
+  &.active {
+    background: $n3;
+
+    color: $n8;
+
+    @include dark {
+      background: $n2;
+
+      color: $n8;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: 8px;
+
+    @include m {
+      margin-right: 0;
+    }
+  }
+}

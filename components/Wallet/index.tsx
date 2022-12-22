@@ -57,6 +57,12 @@ const navigationItemsDefault: Array<NavigationItem> = [
   },
   {
     separator: true,
+    title: 'Equities',
+    feature: 'equities',
+    url: navigationLinks.app.equities.trade,
+    icon: 'chart',
+  },
+  {
     title: 'Buy and Sell',
     icon: 'wallet',
     url: navigationLinks.app.buySell,

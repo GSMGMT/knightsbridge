@@ -1,5 +1,4 @@
 interface Currency {
-  code: string;
   name: string;
   symbol: string;
 }
@@ -9,7 +8,7 @@ interface Timezone {
   abbr_dst: string;
 }
 
-interface StockExchange {
+export interface StockExchange {
   name: string;
   acronym: string;
   mic: string;
@@ -33,6 +32,18 @@ export interface Ticker {
   stock_exchange: StockExchange;
 }
 
+export interface Intraday {
+  open: number;
+  high: number;
+  low: number;
+  last: number;
+  close: number;
+  volume: number;
+  date: string;
+  symbol: string;
+  exchange: string;
+}
+
 interface Pagination {
   limit: number;
   offset: number;
@@ -53,4 +64,6 @@ export enum MarketStackApiUrls {
   BASE = 'http://api.marketstack.com/v1',
   EXCHANGES = '/exchanges',
   TICKERS = '/tickers',
+  INTRADAY = '/intraday',
+  INTRADAY_LATEST = '/intraday/latest',
 }

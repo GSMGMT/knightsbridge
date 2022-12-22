@@ -5,7 +5,7 @@ import { ResponseModel } from '@contracts/Response';
 import { Roles } from '@contracts/User';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
-import { fetchTicker } from '@services/api/marketStack/ticker/fetchTicker';
+import { fetchTickers } from '@services/api/marketStack/ticker/fetchTickers';
 import { MarketStackApiDTO } from '@contracts/MarketStack';
 
 const listTickerSchema: SchemaOf<MarketStackApiDTO<{ exchange?: string }>> =
@@ -32,7 +32,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         const params = await listTickerSchema.validate(req.query);
 
-        const tickers = await fetchTicker(params);
+        const tickers = await fetchTickers(params);
 
         return res.status(200).json(
           ResponseModel.create(tickers, {

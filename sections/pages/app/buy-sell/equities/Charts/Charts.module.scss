@@ -1,0 +1,128 @@
+@import '@styles/helpers';
+
+.charts {
+  position: relative;
+  z-index: 2;
+
+  box-shadow: 0px 64px 64px -48px rgba(15, 15, 15, 0.1);
+
+  border-radius: 4px;
+  height: 100%;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px;
+  border-radius: 4px;
+  border-bottom: 1px solid $n6;
+
+  background: $n8;
+
+  @include dark {
+    background: #17181b;
+
+    border-color: $n2;
+  }
+}
+.nav {
+  display: flex;
+}
+.group {
+  .nav {
+    @include m {
+      display: none;
+    }
+  }
+}
+.dropdown {
+  display: none;
+
+  @include m {
+    display: block;
+  }
+}
+.dropdownHead {
+  height: 28px;
+
+  line-height: 28px;
+
+  background: $n6;
+
+  @include dark {
+    background: $n3;
+  }
+}
+.link {
+  display: flex;
+
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  background: none;
+  transition: all 0.2s;
+
+  @include button-2;
+  color: $n4;
+
+  &:hover {
+    color: $n3;
+
+    @include dark {
+      color: $n6;
+    }
+  }
+  &.active {
+    background: $n6;
+
+    color: $n2;
+
+    @include dark {
+      background: $n3;
+
+      color: $n8;
+    }
+  }
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}
+.inner {
+  overflow: hidden;
+
+  height: 100%;
+}
+.iframe {
+  min-height: 490px;
+  height: 100%;
+  margin: -1px;
+
+  position: relative;
+
+  > div {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  @include t {
+    position: relative;
+    z-index: -1;
+  }
+}
+.chart {
+  width: 100%;
+  height: 488px;
+
+  background: $n8;
+
+  @include dark {
+    background: #17181b;
+  }
+}
+.iframe-chart {
+  width: 100%;
+  height: 100%;
+}

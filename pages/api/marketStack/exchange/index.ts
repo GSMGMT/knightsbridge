@@ -5,7 +5,7 @@ import { ResponseModel } from '@contracts/Response';
 import { Roles } from '@contracts/User';
 import { withUser, NextApiRequestWithUser } from '@middlewares/api/withUser';
 import { apiErrorHandler } from '@utils/apiErrorHandler';
-import { fetchExchange } from '@services/api/marketStack/exchange/fetchExchange';
+import { fetchExchanges } from '@services/api/marketStack/exchange/fetchExchanges';
 import { MarketStackApiDTO } from '@contracts/MarketStack';
 
 const listExchangeSchema: SchemaOf<MarketStackApiDTO> = object().shape({
@@ -30,7 +30,7 @@ async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
 
         const params = await listExchangeSchema.validate(req.query);
 
-        const exchanges = await fetchExchange(params);
+        const exchanges = await fetchExchanges(params);
 
         return res.status(200).json(
           ResponseModel.create(exchanges, {

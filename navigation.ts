@@ -80,6 +80,7 @@ export const navigation = {
       get register() {
         return `${this.list}?register=true`;
       },
+      trade: '/app/buy-sell/equities',
     },
     coin: {
       list: '/app/coin/list',
@@ -91,6 +92,7 @@ export const navigation = {
   },
   resources: {
     chart: '/resources/chart',
+    equities: '/resources/equities',
   },
   soon: '/soon',
 };

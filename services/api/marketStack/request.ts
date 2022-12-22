@@ -6,7 +6,7 @@ import {
 } from '@contracts/MarketStack';
 
 export const requestMarketStack = async <T>(
-  endpoint: MarketStackApiUrls,
+  endpoint: MarketStackApiUrls | string,
   params?: {
     [key: string]: string;
   }
@@ -17,9 +17,6 @@ export const requestMarketStack = async <T>(
   };
 
   const { data } = await axios.get<MarketStackApiResponse<T>>(url, {
-    headers: {
-      'X-CMC_PRO_API_KEY': process.env.CMC_API_KEY,
-    },
     params: {
       ...requestParams,
       ...params,

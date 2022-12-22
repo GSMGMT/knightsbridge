@@ -12,7 +12,7 @@ import { Feature } from '@components/Feature';
 
 import { api } from '@services/api';
 
-const FiatSpot = () => {
+const Wallet = () => {
   const [fiatItems, setFiatItems] = useState<Array<ItemI>>([]);
   const [spotItems, setSpotItems] = useState<Array<ItemI>>([]);
 
@@ -129,4 +129,4 @@ const FiatSpot = () => {
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser(ctx, { freeToAccessBy: 'USER' });
-export default FiatSpot;
+export default Wallet;

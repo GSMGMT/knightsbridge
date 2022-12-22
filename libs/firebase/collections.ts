@@ -18,4 +18,9 @@ export enum FirebaseCollections {
   NFT_PRESALE_TOKENS = 'nft_presale_tokens',
   NFT_PRESALE_ORDERS = 'nft_presale_orders',
   NFT_PRESALE_ASSETS = 'nft_presale_assets',
+  STOCKS = 'stocks',
+  STOCK_EXCHANGES = 'stock_exchanges',
+  STOCK_PAIRS = 'stock_pairs',
+  STOCK_ORDERS = 'stock_orders',
+  STOCK_ASSETS = 'stock_assets',
 }

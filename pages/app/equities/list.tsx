@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { Controller, useForm } from 'react-hook-form';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
-import { Equity } from '@contracts/Equity';
+import { StockPair } from '@contracts/StockPair';
 
 import { withUser } from '@middlewares/client/withUser';
 
@@ -13,12 +13,58 @@ import { Pagination } from '@components/Pagination';
 import { Icon } from '@components/Icon';
 import { Feature } from '@components/Feature';
 import { RegisterEquity } from '@sections/pages/app/equity/RegisterEquity';
+import listStockPairs from '@libs/firebase/functions/stockPair/listStockPairs';
+import { OmitTimestamp } from '@utils/types';
 
 interface FormFields {
   search: string;
 }
+interface StockPairServerSide extends OmitTimestamp<StockPair> {
+  createdAt: number;
+  updatedAt: number;
+}
 
-const CoinList = () => {
+export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
+  withUser<{
+    pairs: Array<StockPairServerSide>;
+  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => {
+    const pairs = (
+      await listStockPairs({
+        size: 100,
+        filters: { onlyEnabled: false },
+      })
+    ).map(
+      ({ createdAt, updatedAt, ...data }) =>
+        ({
+          ...data,
+          createdAt: +createdAt,
+          updatedAt: +updatedAt,
+        } as StockPairServerSide)
+    );
+
+    return {
+      props: {
+        pairs,
+      },
+    };
+  });
+
+const CoinList: FunctionComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ pairs: pairsFetched }) => {
+  const pairs = useMemo(() => {
+    const newPairs = pairsFetched.map(
+      (pair) =>
+        ({
+          ...pair,
+          createdAt: new Date(pair.createdAt),
+          updatedAt: new Date(pair.updatedAt),
+        } as StockPair)
+    );
+
+    return newPairs;
+  }, [pairsFetched]);
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { handleSubmit: submit, control } = useForm<FormFields>({
     defaultValues: {
@@ -37,62 +83,34 @@ const CoinList = () => {
     []
   );
 
-  const [equityList, setEquityList] = useState<Array<Equity>>([]);
-  const totalItems = useMemo(() => equityList.length, [equityList]);
+  const filteredPairs = useMemo(() => {
+    if (!search) {
+      return pairs;
+    }
 
-  const [fetching, setFetching] = useState<boolean>(false);
+    const newPairs = pairs.filter(
+      ({ stock: { name, symbol } }) =>
+        name.toLowerCase().includes(search.toLowerCase()) ||
+        symbol.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return newPairs;
+  }, [pairs, search]);
+
+  const totalItems = useMemo(() => filteredPairs.length, [filteredPairs]);
 
   const pageSize = useMemo(() => 2, []);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const filteredItems = useMemo(
-    () => equityList.slice(pageSize * (pageNumber - 1), pageSize * pageNumber),
-    [equityList, pageSize, pageNumber]
+    () =>
+      filteredPairs.slice(pageSize * (pageNumber - 1), pageSize * pageNumber),
+    [filteredPairs, pageSize, pageNumber]
   );
 
-  const handleChangePage: (newPage: number) => void = useCallback(
-    (newPage) => {
-      if (fetching) return;
-
-      setPageNumber(newPage);
-    },
-    [fetching]
-  );
-
-  const fetchCoinList = useCallback(async () => {
-    try {
-      setFetching(true);
-
-      setEquityList([
-        {
-          id: '1',
-          name: 'Apple',
-          symbol: 'AAPL',
-          source: {
-            id: '1',
-            name: 'NASDAQ',
-          },
-          price: 100,
-        },
-        {
-          id: '2',
-          name: 'Amazon',
-          symbol: 'AMZN',
-          source: {
-            id: '2',
-            name: 'NYSE',
-          },
-          price: 100,
-        },
-      ]);
-    } finally {
-      setFetching(false);
-    }
-  }, [search]);
-
-  useEffect(() => {
-    fetchCoinList();
-  }, [fetchCoinList]);
+  const handleChangePage: (newPage: number) => void = useCallback((newPage) => {
+    setPageNumber(newPage);
+  }, []);
 
   return (
     <>
@@ -121,43 +139,33 @@ const CoinList = () => {
                 )}
               />
 
-              <button
-                className={styles.result}
-                type="submit"
-                disabled={fetching}
-              >
-                <Icon
-                  name="search"
-                  size={20}
-                  className={cn({ [styles.loading]: fetching })}
-                />
+              <button className={styles.result} type="submit">
+                <Icon name="search" size={20} />
               </button>
             </form>
           </div>
 
-          <div className={cn(styles.table, { [styles.fetching]: fetching })}>
+          <div className={cn(styles.table)}>
             <div className={styles.row}>
               <span>Name</span>
               <span>Price (USD)</span>
               <span>Source</span>
             </div>
-            {filteredItems.map((item) => {
+            {filteredPairs.map((item) => {
               const {
-                source: { name: sourceName },
-                price,
-                name,
-                symbol,
-                id,
+                uid,
+                stock: { name, symbol },
+                exchange: { mic: exchangeMIC },
               } = item;
 
               return (
-                <div key={id} className={styles.row}>
+                <div key={uid} className={styles.row}>
                   <div className={styles.info}>
                     <span className={styles.name}>{name}</span>
                     <span className={styles.code}>{symbol}</span>
                   </div>
-                  <span className={styles.price}>{price}</span>
-                  <span className={styles.source}>{sourceName}</span>
+                  <span className={styles.price}>100</span>
+                  <span className={styles.source}>{exchangeMIC}</span>
                 </div>
               );
             })}
@@ -184,6 +192,4 @@ const CoinList = () => {
     </>
   );
 };
-export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
-  withUser(ctx, { freeToAccessBy: 'ADMIN' });
 export default CoinList;

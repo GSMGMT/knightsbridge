@@ -137,6 +137,10 @@ export const SelectStock = ({
     try {
       setRegisteringStock(true);
 
+      await api.post('/api/stockPair', {
+        symbol: selectedStock!.symbol,
+      });
+
       handleSelectStock(selectedStock!);
     } finally {
       setRegisteringStock(false);

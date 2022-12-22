@@ -38,7 +38,6 @@ export const RegisterEquity = () => {
     name: '',
     website: '',
     currency: {
-      code: '',
       name: '',
       symbol: '',
     },
