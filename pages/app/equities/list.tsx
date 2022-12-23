@@ -186,7 +186,7 @@ const CoinList: FunctionComponent<
         </div>
       </Feature>
 
-      <Feature feature="coin_register" restrict="COMPONENT">
+      <Feature feature="equities_register" restrict="COMPONENT">
         <RegisterEquity />
       </Feature>
     </>

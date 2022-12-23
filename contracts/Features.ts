@@ -11,4 +11,5 @@ export type Features =
   | 'wallet'
   | 'presale_coins'
   | 'presale_nfts'
-  | 'equities';
+  | 'equities'
+  | 'equities_register';
