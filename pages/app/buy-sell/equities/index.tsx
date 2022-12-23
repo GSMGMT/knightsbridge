@@ -8,7 +8,7 @@ import { Feature } from '@components/Feature';
 import { Container } from '@sections/pages/app/buy-sell/equities/Container';
 
 const Exchange = () => (
-  <Feature feature="buy_sell">
+  <Feature feature="equities_register">
     <EquitiesProvider>
       <Container />
     </EquitiesProvider>
