@@ -52,6 +52,11 @@ const navigationItemsDefault: INavigation[] = [
       },
     ],
   },
+  {
+    title: 'Equities',
+    feature: 'equities',
+    url: navigation.app.equities.trade,
+  },
 ];
 
 interface UserNavigationProps {
