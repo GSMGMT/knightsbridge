@@ -162,7 +162,7 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
 
       setPercentage(0);
 
-      await Promise.all([handleFetchStockWallet, handleFetchCryptoWallet]);
+      await Promise.all([handleFetchStockWallet(), handleFetchCryptoWallet()]);
     } catch (errorHandler: any) {
       if (axios.isAxiosError(errorHandler)) {
         const error = errorHandler as AxiosError<{ message: string }>;
