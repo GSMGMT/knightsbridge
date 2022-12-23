@@ -31,6 +31,7 @@ export const Buy = ({ classButton, buttonText }: BuyProps) => {
       crypto: { amount: cryptoWalletAmount },
     },
     handleFetchCryptoWallet,
+    handleFetchStockWallet,
     pair,
   } = useContext(EquitiesContext);
   const {
@@ -156,7 +157,7 @@ export const Buy = ({ classButton, buttonText }: BuyProps) => {
 
       setPercentage(0);
 
-      await handleFetchCryptoWallet();
+      await Promise.all([handleFetchCryptoWallet, handleFetchStockWallet]);
     } catch (errorHandler: any) {
       if (axios.isAxiosError(errorHandler)) {
         const error = errorHandler as AxiosError<{ message: string }>;
@@ -169,7 +170,13 @@ export const Buy = ({ classButton, buttonText }: BuyProps) => {
     } finally {
       setFetching(false);
     }
-  }, [cryptoAmountValue, pair, handleFetchCryptoWallet, currentPrice]);
+  }, [
+    cryptoAmountValue,
+    pair,
+    handleFetchCryptoWallet,
+    handleFetchStockWallet,
+    currentPrice,
+  ]);
   const canSubmit = useMemo(
     () => !valueIsMajor && percentage > 0 && !fetching,
     [percentage, fetching, valueIsMajor]

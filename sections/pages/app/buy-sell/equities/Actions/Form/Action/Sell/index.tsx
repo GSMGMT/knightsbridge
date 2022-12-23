@@ -31,6 +31,7 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
       stock: { amount: stockWalletAmount },
     },
     handleFetchStockWallet,
+    handleFetchCryptoWallet,
     pair,
   } = useContext(EquitiesContext);
   const {
@@ -161,7 +162,7 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
 
       setPercentage(0);
 
-      await handleFetchStockWallet();
+      await Promise.all([handleFetchStockWallet, handleFetchCryptoWallet]);
     } catch (errorHandler: any) {
       if (axios.isAxiosError(errorHandler)) {
         const error = errorHandler as AxiosError<{ message: string }>;
@@ -174,7 +175,13 @@ export const Sell = ({ classButton, buttonText }: SellProps) => {
     } finally {
       setFetching(false);
     }
-  }, [cryptoAmountValue, pair, handleFetchStockWallet, currentPrice]);
+  }, [
+    cryptoAmountValue,
+    pair,
+    handleFetchStockWallet,
+    handleFetchCryptoWallet,
+    currentPrice,
+  ]);
 
   const handleSubmitOrder = useCallback(() => handleSell(), [handleSell]);
 
