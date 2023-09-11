@@ -11,9 +11,7 @@ import styles from '@styles/pages/app/equity/list/EquityList.module.scss';
 
 import { Pagination } from '@components/Pagination';
 import { Icon } from '@components/Icon';
-import { Feature } from '@components/Feature';
 import { RegisterEquity } from '@sections/pages/app/equity/RegisterEquity';
-import listStockPairs from '@libs/firebase/functions/stockPair/listStockPairs';
 import { OmitTimestamp } from '@utils/types';
 
 interface FormFields {
@@ -27,27 +25,52 @@ interface StockPairServerSide extends OmitTimestamp<StockPair> {
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     pairs: Array<StockPairServerSide>;
-  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => {
-    const pairs = (
-      await listStockPairs({
-        size: 100,
-        filters: { onlyEnabled: false },
-      })
-    ).map(
-      ({ createdAt, updatedAt, ...data }) =>
-        ({
-          ...data,
-          createdAt: +createdAt,
-          updatedAt: +updatedAt,
-        } as StockPairServerSide)
-    );
-
-    return {
-      props: {
-        pairs,
-      },
-    };
-  });
+  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => ({
+    props: {
+      pairs: [
+        {
+          createdAt: 1611600000000,
+          crypto: {
+            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+            name: 'Bitcoin',
+            symbol: 'BTC',
+            uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+            quote: 20000,
+            cmcId: 1,
+            type: 'crypto',
+            deposit: true,
+            sign: '$',
+            walletAddresses: [
+              {
+                address: '0x1234567890',
+                createdAt: new Date(),
+                network: 'ETH',
+                uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+                updatedAt: new Date(),
+              },
+            ],
+          },
+          enabled: true,
+          exchange: {
+            acronym: 'NASDAQ',
+            country: 'US',
+            countryCode: 'US',
+            mic: 'XNAS',
+            name: 'NASDAQ',
+            uid: 'd5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          stock: {
+            history: true,
+            name: 'Apple Inc.',
+            symbol: 'AAPL',
+            uid: 'f4a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          uid: 'f2a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          updatedAt: 1611600000000,
+        },
+      ],
+    },
+  }));
 
 const CoinList: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -114,81 +137,77 @@ const CoinList: FunctionComponent<
 
   return (
     <>
-      <Feature feature="coin_list" restrict="PAGE">
-        <div>
-          <div className={styles.head}>
-            <div className={styles.details}>
-              <div className={styles.user}>Equity List</div>
-            </div>
-
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <Controller
-                name="search"
-                control={control}
-                render={({ field: { onChange, ...field } }) => (
-                  <input
-                    className={styles.input}
-                    type="text"
-                    placeholder="Search equity"
-                    autoComplete="off"
-                    {...field}
-                    onChange={({ target: { value } }) => {
-                      onChange(value.toUpperCase());
-                    }}
-                  />
-                )}
-              />
-
-              <button className={styles.result} type="submit">
-                <Icon name="search" size={20} />
-              </button>
-            </form>
+      <div>
+        <div className={styles.head}>
+          <div className={styles.details}>
+            <div className={styles.user}>Equity List</div>
           </div>
 
-          <div className={cn(styles.table)}>
-            <div className={styles.row}>
-              <span>Name</span>
-              <span>Price (USD)</span>
-              <span>Source</span>
-            </div>
-            {filteredPairs.map((item) => {
-              const {
-                uid,
-                stock: { name, symbol },
-                exchange: { mic: exchangeMIC },
-              } = item;
-
-              return (
-                <div key={uid} className={styles.row}>
-                  <div className={styles.info}>
-                    <span className={styles.name}>{name}</span>
-                    <span className={styles.code}>{symbol}</span>
-                  </div>
-                  <span className={styles.price}>100</span>
-                  <span className={styles.source}>{exchangeMIC}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className={styles['pagination-area']}>
-            <div className={styles['pagination-label']}>
-              Showing ({filteredItems.length}) of {totalItems}
-            </div>
-
-            <Pagination
-              currentPage={pageNumber}
-              pageSize={pageSize}
-              totalItems={totalItems}
-              handleChangePage={handleChangePage}
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <Controller
+              name="search"
+              control={control}
+              render={({ field: { onChange, ...field } }) => (
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder="Search equity"
+                  autoComplete="off"
+                  {...field}
+                  onChange={({ target: { value } }) => {
+                    onChange(value.toUpperCase());
+                  }}
+                />
+              )}
             />
-          </div>
-        </div>
-      </Feature>
 
-      <Feature feature="equities_register" restrict="COMPONENT">
-        <RegisterEquity />
-      </Feature>
+            <button className={styles.result} type="submit">
+              <Icon name="search" size={20} />
+            </button>
+          </form>
+        </div>
+
+        <div className={cn(styles.table)}>
+          <div className={styles.row}>
+            <span>Name</span>
+            <span>Price (USD)</span>
+            <span>Source</span>
+          </div>
+          {filteredPairs.map((item) => {
+            const {
+              uid,
+              stock: { name, symbol },
+              exchange: { mic: exchangeMIC },
+            } = item;
+
+            return (
+              <div key={uid} className={styles.row}>
+                <div className={styles.info}>
+                  <span className={styles.name}>{name}</span>
+                  <span className={styles.code}>{symbol}</span>
+                </div>
+                <span className={styles.price}>100</span>
+                <span className={styles.source}>{exchangeMIC}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className={styles['pagination-area']}>
+          <div className={styles['pagination-label']}>
+            Showing ({filteredItems.length}) of {totalItems}
+          </div>
+
+          <Pagination
+            currentPage={pageNumber}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            handleChangePage={handleChangePage}
+          />
+        </div>
+      </div>
+
+      <RegisterEquity />
     </>
   );
 };

@@ -5,12 +5,7 @@ import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
 import { PresaleOrder } from '@contracts/presale/nft/PresaleOrder';
 import { OmitTimestamp } from '@utils/types';
 
-import { navigation } from '@navigation';
-
 import { withUser } from '@middlewares/client/withUser';
-
-import { getPresaleNFTByUid } from '@libs/firebase/functions/presale/nft/token/getPresaleNFTByUid';
-import { getOrdersByNFTUid } from '@libs/firebase/functions/presale/nft/order/getOrderByNFTUid';
 
 import { Header } from '@sections/pages/app/presale/nft/history/Item/Header';
 import { Detail } from '@sections/pages/app/presale/nft/history/Item/Detail';
@@ -29,60 +24,60 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     nft: PresaleNFTServerSide;
     orders: Array<PresaleOrderServerSide>;
-  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => {
-    const { uid } = ctx.params as any;
-
-    if (!uid)
-      return {
-        redirect: {
-          destination: navigation.app.presale.nft.list,
-          permanent: false,
+  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => ({
+    props: {
+      nft: {
+        amount: 0,
+        amountAvailable: 0,
+        author: 'Author',
+        baseCurrency: {
+          cmcId: 1,
+          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Bitcoin',
+          symbol: 'BTC',
+          type: 'crypto',
+          uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
         },
-      };
-
-    const nftPromise = getPresaleNFTByUid(uid);
-    const ordersPromise = getOrdersByNFTUid(uid);
-
-    const [nftFetched, ordersFetched] = await Promise.all([
-      nftPromise,
-      ordersPromise,
-    ]);
-
-    if (!nftFetched)
-      return {
-        redirect: {
-          destination: navigation.app.presale.nft.list,
-          permanent: false,
+        description: 'Description',
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+        name: 'Name',
+        quote: 20000,
+        uid: 'a5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+      },
+      orders: [
+        {
+          amount: 1,
+          createdAt: 1611600000000,
+          fee: 0,
+          nft: {
+            author: 'Author',
+            baseCurrency: {
+              cmcId: 1,
+              logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+              name: 'Bitcoin',
+              symbol: 'BTC',
+              type: 'crypto',
+              uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+            },
+            description: 'Description',
+            icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+            name: 'Name',
+            quote: 20000,
+            uid: 'a5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          uid: 'e5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          updatedAt: 1611600000000,
+          user: {
+            email: 'user@example.com',
+            name: 'User',
+            role: 'USER',
+            surname: 'User',
+            uid: '3aa1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
         },
-      };
-
-    const nft: PresaleNFTServerSide = {
-      amount: nftFetched.amount,
-      amountAvailable: nftFetched.amountAvailable,
-      author: nftFetched.author,
-      baseCurrency: nftFetched.baseCurrency,
-      icon: nftFetched.icon,
-      name: nftFetched.name,
-      quote: nftFetched.quote,
-      uid: nftFetched.uid,
-      description: nftFetched.description,
-    };
-
-    const orders = ordersFetched
-      .map(
-        ({ createdAt, updatedAt, ...data }) =>
-          ({
-            ...data,
-            createdAt: +createdAt,
-            updatedAt: +updatedAt,
-          } as PresaleOrderServerSide)
-      )
-      .sort(({ createdAt: a }, { createdAt: b }) => (a > b ? -1 : 1));
-
-    return {
-      props: { nft, orders },
-    };
-  });
+      ],
+    },
+  }));
 
 const Page: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

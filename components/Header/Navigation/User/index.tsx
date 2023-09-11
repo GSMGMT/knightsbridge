@@ -3,8 +3,6 @@ import { useMemo } from 'react';
 
 import { navigation } from '@navigation';
 
-import { useFeature } from '@hooks/Feature';
-
 import { NavLink } from '@components/NavLink';
 import { Dropdown } from '../../Dropdown';
 
@@ -63,18 +61,14 @@ interface UserNavigationProps {
   setVisibleNav: (visible: boolean) => void;
 }
 export const UserNavigation = ({ setVisibleNav }: UserNavigationProps) => {
-  const { isEnabled } = useFeature();
-
   const navigationItems: INavigation[] = useMemo(() => {
     const items: Array<INavigation> = [];
 
     navigationItemsDefault.forEach((item) => {
-      if (item.feature && isEnabled(item.feature)) {
+      if (item.feature) {
         items.push(item);
       } else if (item.dropdown) {
-        const dropdown = item.dropdown.filter((dropdownItem) =>
-          isEnabled(dropdownItem.feature)
-        );
+        const { dropdown } = item;
 
         if (dropdown.length) {
           items.push({
@@ -86,7 +80,7 @@ export const UserNavigation = ({ setVisibleNav }: UserNavigationProps) => {
     });
 
     return items;
-  }, [isEnabled, navigationItemsDefault]);
+  }, [navigationItemsDefault]);
 
   return (
     <nav className={styles.nav}>

@@ -22,7 +22,6 @@ import { Calendar } from '@components/Calendar';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
-import { Feature } from '@components/Feature';
 import { Table } from '@sections/pages/app/orders/crypto/Table';
 import { Bulk } from '@sections/pages/app/orders/crypto/Action/Bulk';
 
@@ -273,117 +272,115 @@ const Crypto = () => {
   );
 
   return (
-    <Feature feature="deposit_crypto">
-      <div className={styles.activity}>
-        <div className={cn('container', styles.container)}>
-          <div className={styles.body}>
-            <h4 className={cn('h4', styles.title)}>Deposits Crypto</h4>
-            <div className={styles.top}>
-              <div className={styles.nav}>
-                {allStatus.map((status, index) => (
-                  <button
-                    className={cn(styles.link, {
-                      [styles.active]: index === activeIndex,
-                    })}
-                    onClick={() => handleChangeStatus(status)}
-                    key={status}
-                    type="button"
-                  >
-                    {status.toLowerCase()}
-                  </button>
-                ))}
-              </div>
-              <div className={styles.dropdown}>
-                <Dropdown
-                  className={styles.dropdown}
-                  classDropdownHead={styles.dropdownHead}
-                  value={currentStatus}
-                  setValue={handleChangeStatus}
-                  options={allStatus}
-                />
-              </div>
-
-              <form className={styles.form} onSubmit={handleSubmit}>
-                <input
-                  className={styles.input}
-                  type="text"
-                  placeholder="Search"
-                  {...register('email')}
-                  autoComplete="off"
-                />
-                <button className={styles.result} type="submit">
-                  <Icon name="search" size={20} />
+    <div className={styles.activity}>
+      <div className={cn('container', styles.container)}>
+        <div className={styles.body}>
+          <h4 className={cn('h4', styles.title)}>Deposits Crypto</h4>
+          <div className={styles.top}>
+            <div className={styles.nav}>
+              {allStatus.map((status, index) => (
+                <button
+                  className={cn(styles.link, {
+                    [styles.active]: index === activeIndex,
+                  })}
+                  onClick={() => handleChangeStatus(status)}
+                  key={status}
+                  type="button"
+                >
+                  {status.toLowerCase()}
                 </button>
-              </form>
+              ))}
+            </div>
+            <div className={styles.dropdown}>
+              <Dropdown
+                className={styles.dropdown}
+                classDropdownHead={styles.dropdownHead}
+                value={currentStatus}
+                setValue={handleChangeStatus}
+                options={allStatus}
+              />
+            </div>
 
-              <Calendar
-                className={styles.calendar}
-                handleSetDate={handleSetDate}
+            <form className={styles.form} onSubmit={handleSubmit}>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Search"
+                {...register('email')}
+                autoComplete="off"
               />
-            </div>
-            <div className={styles.box}>
-              <div className={styles.actions}>
-                <div className={styles.bulk}>
-                  <div className={styles['dropdown-area']}>
-                    <Dropdown
-                      options={bulkActions}
-                      setValue={setBulkAction}
-                      value={bulkAction}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="button button-small"
-                    disabled={!canSubmitBulkAction}
-                    onClick={() => setIsTriggeredBulkAction(true)}
-                  >
-                    Apply
-                  </button>
+              <button className={styles.result} type="submit">
+                <Icon name="search" size={20} />
+              </button>
+            </form>
+
+            <Calendar
+              className={styles.calendar}
+              handleSetDate={handleSetDate}
+            />
+          </div>
+          <div className={styles.box}>
+            <div className={styles.actions}>
+              <div className={styles.bulk}>
+                <div className={styles['dropdown-area']}>
+                  <Dropdown
+                    options={bulkActions}
+                    setValue={setBulkAction}
+                    value={bulkAction}
+                  />
                 </div>
-                <Export
-                  className={styles.export}
-                  status={currentStatus}
-                  urlExport="/api/crypto/deposit/export"
-                />
+                <button
+                  type="button"
+                  className="button button-small"
+                  disabled={!canSubmitBulkAction}
+                  onClick={() => setIsTriggeredBulkAction(true)}
+                >
+                  Apply
+                </button>
               </div>
-              <Table
-                className={styles.table}
-                items={tableItems}
-                selectedItems={selectedItems}
-                handleToggleSelection={handleToggleSelection}
-                setSelectedItems={setSelectedItems}
-                handleChangeItemStatus={handleChangeItemStatus}
-                fetching={fetching}
-                handleSetSortBy={handleSetSortBy}
-                sortByCurrent={sortBy}
-                sortAsceding={sortAsceding}
-                fetchData={fetchData}
+              <Export
+                className={styles.export}
+                status={currentStatus}
+                urlExport="/api/crypto/deposit/export"
               />
             </div>
-            <div className={styles['pagination-area']}>
-              <div className={styles['pagination-label']}>
-                Showing ({tableItems.length}) of {totalItems}
-              </div>
-              <Pagination
-                currentPage={pageNumber}
-                handleChangePage={handleChangePage}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                siblingCount={0}
-              />
+            <Table
+              className={styles.table}
+              items={tableItems}
+              selectedItems={selectedItems}
+              handleToggleSelection={handleToggleSelection}
+              setSelectedItems={setSelectedItems}
+              handleChangeItemStatus={handleChangeItemStatus}
+              fetching={fetching}
+              handleSetSortBy={handleSetSortBy}
+              sortByCurrent={sortBy}
+              sortAsceding={sortAsceding}
+              fetchData={fetchData}
+            />
+          </div>
+          <div className={styles['pagination-area']}>
+            <div className={styles['pagination-label']}>
+              Showing ({tableItems.length}) of {totalItems}
             </div>
+            <Pagination
+              currentPage={pageNumber}
+              handleChangePage={handleChangePage}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              siblingCount={0}
+            />
           </div>
         </div>
-
-        <Bulk
-          handleChangeItemStatus={handleChangeItemStatus}
-          isTriggeredBulk={isTriggeredBulkAction}
-          handleClose={handleClose}
-          selectedItems={selectedItems}
-          variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
-        />
       </div>
-    </Feature>
+
+      <Bulk
+        handleChangeItemStatus={handleChangeItemStatus}
+        isTriggeredBulk={isTriggeredBulkAction}
+        handleClose={handleClose}
+        selectedItems={selectedItems}
+        variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
+      />
+    </div>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

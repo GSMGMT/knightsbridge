@@ -8,7 +8,6 @@ import * as yup from 'yup';
 import { AuthContext } from '@store/contexts/Auth';
 
 import { TextInput } from '@components/TextInput';
-import { Feature } from '@components/Feature';
 import { Checkbox } from '@components/Checkbox';
 
 import { navigation } from '@navigation';
@@ -104,13 +103,11 @@ export const Form = () => {
         data-testid="password-input"
         {...register('password', { required: true })}
       />
-      <Feature feature="forgot_password" restrict="COMPONENT">
-        <div className={styles.foot}>
-          <Link href={navigation.auth.password.forgot}>
-            <a className={styles.link}>Forgot password?</a>
-          </Link>
-        </div>
-      </Feature>
+      <div className={styles.foot}>
+        <Link href={navigation.auth.password.forgot}>
+          <a className={styles.link}>Forgot password?</a>
+        </Link>
+      </div>
       <Checkbox className={styles.check} {...register('remember')}>
         <span>Remember me</span>
       </Checkbox>

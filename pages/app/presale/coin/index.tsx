@@ -1,14 +1,9 @@
-import { parseCookies } from 'nookies';
 import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import { withUser } from '@middlewares/client/withUser';
 
-import listCoins from '@libs/firebase/functions/presale/currency/coin/listCoins';
-import { adminAuth } from '@libs/firebase/admin-config';
-
 import { Funds } from '@components/PresaleFunds';
-import { Feature } from '@components/Feature';
 
 import { Main } from '@sections/pages/app/presale/coin/Main';
 import { Buy } from '@sections/pages/app/presale/coin/Buy';
@@ -17,12 +12,7 @@ import styles from '@styles/pages/app/presale/Presale.module.sass';
 
 import { PresaleCoin } from '@contracts/presale/currency/PresaleCoin';
 
-import { navigation } from '@navigation';
-
-import {
-  PresaleData,
-  usersPresalePortfolio,
-} from '@services/api/presale/currency/portfolio';
+import { PresaleData } from '@services/api/presale/currency/portfolio';
 import { api } from '@services/api';
 
 export type Coin = Omit<PresaleCoin, 'availableAt' | 'createdAt' | 'updatedAt'>;
@@ -31,47 +21,29 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     coins: Coin[];
     assets: PresaleData[];
-  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const { token } = parseCookies(ctx);
-    const { uid: userId } = await adminAuth.verifyIdToken(token);
-
-    const allCoinsPromise = listCoins();
-    const userPresalePortfolioPromise = usersPresalePortfolio(userId);
-
-    const [allCoins, { assets }] = await Promise.all([
-      allCoinsPromise,
-      userPresalePortfolioPromise,
-    ]);
-
-    const coins: Coin[] = allCoins.map(
-      ({ amount, baseCurrency, icon, name, quote, symbol, uid }) =>
-        ({
-          amount,
-          baseCurrency,
-          icon,
-          name,
-          quote,
-          symbol,
-          uid,
-        } as Coin)
-    );
-
-    if (coins.length === 0) {
-      return {
-        redirect: {
-          destination: navigation.app.wallet,
-          permanent: false,
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => ({
+    props: {
+      coins: [
+        {
+          amount: 0,
+          baseCurrency: {
+            cmcId: 2781,
+            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2781.png',
+            name: 'US Dollar',
+            symbol: 'USD',
+            type: 'fiat',
+            uid: 'e5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Bitcoin',
+          quote: 20000,
+          symbol: 'BTC',
+          uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
         },
-      };
-    }
-
-    return {
-      props: {
-        coins,
-        assets,
-      },
-    };
-  });
+      ],
+      assets: [],
+    },
+  }));
 
 const Presale: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -127,24 +99,22 @@ const Presale: FunctionComponent<
   );
 
   return (
-    <Feature feature="presale_coins">
-      <div className={styles.container}>
-        <Main balanceDollar={totalBalance} />
-        <Buy
-          coins={presaleCoins}
-          handleFetchPorfolio={handleFetchPorfolio}
-          handleFetchCoins={handleFetchCoins}
-        />
-        <div className={styles.list}>
-          <div className={styles.item}>
-            <div className={styles.head}>Funds</div>
-            <div className={styles.body}>
-              <Funds items={presaleAssets} />
-            </div>
+    <div className={styles.container}>
+      <Main balanceDollar={totalBalance} />
+      <Buy
+        coins={presaleCoins}
+        handleFetchPorfolio={handleFetchPorfolio}
+        handleFetchCoins={handleFetchCoins}
+      />
+      <div className={styles.list}>
+        <div className={styles.item}>
+          <div className={styles.head}>Funds</div>
+          <div className={styles.body}>
+            <Funds items={presaleAssets} />
           </div>
         </div>
       </div>
-    </Feature>
+    </div>
   );
 };
 export default Presale;

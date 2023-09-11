@@ -2,7 +2,6 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import { Bidding } from '@components/Bidding';
-import { Feature } from '@components/Feature';
 
 import { SelectCurrency } from '@sections/pages/app/deposit/fiat/SelectCurrency';
 import { ImportantNotes } from '@sections/pages/app/deposit/fiat/ImportantNotes';
@@ -13,9 +12,6 @@ import { withUser } from '@middlewares/client/withUser';
 
 import { Currency } from '@contracts/Currency';
 import { Bank as DefaultBank } from '@contracts/Bank';
-
-import listCurrencies from '@libs/firebase/functions/currency/listCurrencies';
-import listBanks from '@libs/firebase/functions/fiat/bank/listBanks';
 
 export type FiatCurrency = Omit<Currency, 'createdAt' | 'updatedAt'>;
 export type Bank = Omit<DefaultBank, 'createdAt' | 'updatedAt'>;
@@ -30,32 +26,37 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
   withUser<{
     currencies: FiatCurrency[];
     banks: Bank[];
-  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const currencies: FiatCurrency[] = (
-      await listCurrencies({
-        filters: { type: 'fiat' },
-        size: 100,
-      })
-    ).map(({ createdAt, updatedAt, deposit, ...data }) => ({ ...data }));
-    const banks: Bank[] = (
-      await listBanks({
-        size: 100,
-        sort: [
-          {
-            field: 'uid',
-            orientation: 'asc',
-          },
-        ],
-      })
-    ).map(({ createdAt, updatedAt, ...data }) => ({ ...data }));
-
-    return {
-      props: {
-        currencies,
-        banks,
-      },
-    };
-  });
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => ({
+    props: {
+      currencies: [
+        {
+          cmcId: 2781,
+          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2781.png',
+          symbol: 'USD',
+          name: 'US Dollar',
+          type: 'fiat',
+          uid: 'f2a8b0e0-5f9a-4b1a-8b0e-05f9a4b1a8b0',
+          deposit: true,
+          quote: 1,
+          sign: '$',
+          walletAddresses: [],
+        },
+      ],
+      banks: [
+        {
+          accountName: 'Binance',
+          accountNumber: '123456789',
+          address: 'Binance',
+          bankAddress: 'Binance',
+          bankName: 'Binance',
+          branch: 'Binance',
+          paymentMethod: 'Binance',
+          swiftCode: 'Binance',
+          uid: 'c2a8b0e0-5f9a-4b1a-8b0e-05f9a4b1a8b0',
+        },
+      ],
+    },
+  }));
 const DepositFiat: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ currencies, banks }) => {
@@ -76,32 +77,30 @@ const DepositFiat: FunctionComponent<
   }, []);
 
   return (
-    <Feature feature="deposit_fiat">
-      <Bidding title="Deposit fiat" items={steps} activeIndex={activeIndex}>
-        {activeIndex === 0 && (
-          <SelectCurrency
+    <Bidding title="Deposit fiat" items={steps} activeIndex={activeIndex}>
+      {activeIndex === 0 && (
+        <SelectCurrency
+          goNext={handleNextStep}
+          setRequestInfo={setRequestInfo}
+          banks={banks}
+          currencies={currencies}
+        />
+      )}
+      {requestInfo &&
+        (activeIndex === 1 ? (
+          <ImportantNotes
+            referenceNumber={referenceNumber}
             goNext={handleNextStep}
-            setRequestInfo={setRequestInfo}
-            banks={banks}
-            currencies={currencies}
           />
-        )}
-        {requestInfo &&
-          (activeIndex === 1 ? (
-            <ImportantNotes
-              referenceNumber={referenceNumber}
-              goNext={handleNextStep}
+        ) : (
+          activeIndex === 2 && (
+            <PaymentDetails
+              requestInfo={requestInfo}
+              handleBackToBegining={handleBackToBegining}
             />
-          ) : (
-            activeIndex === 2 && (
-              <PaymentDetails
-                requestInfo={requestInfo}
-                handleBackToBegining={handleBackToBegining}
-              />
-            )
-          ))}
-      </Bidding>
-    </Feature>
+          )
+        ))}
+    </Bidding>
   );
 };
 export default DepositFiat;

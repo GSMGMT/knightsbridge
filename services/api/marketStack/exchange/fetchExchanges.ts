@@ -1,15 +1,15 @@
-import {
-  MarketStackApiUrls,
-  Exchange,
-  MarketStackApiDTO,
-} from '@contracts/MarketStack';
+import { Exchange } from '@contracts/MarketStack';
 
-import { requestMarketStack } from '../request';
+import { RequestMarketStack } from '../request';
 
-export const fetchExchanges = async (data: MarketStackApiDTO = {}) => {
-  const { data: exchanges } = await requestMarketStack<{
-    data: Exchange[];
-  }>(MarketStackApiUrls.EXCHANGES, { ...data });
-
-  return exchanges;
-};
+export const fetchExchanges = (): RequestMarketStack<{
+  data: Exchange[];
+}> => ({
+  data: [],
+  pagination: {
+    count: 0,
+    limit: 100,
+    offset: 0,
+    total: 0,
+  },
+});

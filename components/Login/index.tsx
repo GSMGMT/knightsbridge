@@ -1,8 +1,6 @@
 import { ReactNode, useMemo } from 'react';
 import cn from 'classnames';
 
-import { useFeature } from '@hooks/Feature';
-
 import { Features } from '@contracts/Features';
 
 import LogoLight from '@public/images/logos/logo-text-light.svg';
@@ -39,13 +37,11 @@ export const Login = ({
   sideImage,
   feature,
 }: LoginProps) => {
-  const { isEnabled } = useFeature();
-
   const canAction = useMemo(() => {
     if (!feature) return false;
 
-    return isEnabled(feature);
-  }, [isEnabled, feature]);
+    return true;
+  }, [feature]);
 
   return (
     <div className={cn(className, styles.login)}>

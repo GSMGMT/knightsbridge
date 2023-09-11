@@ -22,7 +22,6 @@ import { Icon } from '@components/Icon';
 import { Export } from '@components/Export';
 import { Dropdown } from '@components/Dropdown';
 import { Pagination } from '@components/Pagination';
-import { Feature } from '@components/Feature';
 
 import { listDeposit } from '@services/api/app/deposit/list';
 
@@ -212,132 +211,130 @@ const Bank = () => {
   );
 
   return (
-    <Feature feature="deposit_fiat">
-      <div className={styles.activity}>
-        <div className={cn('container', styles.container)}>
-          <div className={styles.body}>
-            <h4 className={cn('h4', styles.title)}>
-              {isAdmin ? 'Deposits FIAT' : 'My Deposits'}
-            </h4>
-            <div className={styles.top}>
-              <div className={styles.nav}>
-                {allStatus.map((status, index) => (
-                  <button
-                    className={cn(styles.link, {
-                      [styles.active]: index === activeIndex,
-                    })}
-                    onClick={() => handleChangeStatus(status)}
-                    key={status}
-                    type="button"
-                  >
-                    {status.toLowerCase()}
-                  </button>
-                ))}
-              </div>
-              <div className={styles.dropdown}>
-                <Dropdown
-                  className={styles.dropdown}
-                  classDropdownHead={styles.dropdownHead}
-                  value={currentStatus}
-                  setValue={handleChangeStatus}
-                  options={allStatus}
-                />
-              </div>
-
-              {isAdmin && (
-                <form className={styles.form} onSubmit={handleSubmit}>
-                  <input
-                    className={styles.input}
-                    type="text"
-                    placeholder="Search"
-                    {...register('email')}
-                    autoComplete="off"
-                  />
-                  <button className={styles.result} type="submit">
-                    <Icon name="search" size={20} />
-                  </button>
-                </form>
-              )}
+    <div className={styles.activity}>
+      <div className={cn('container', styles.container)}>
+        <div className={styles.body}>
+          <h4 className={cn('h4', styles.title)}>
+            {isAdmin ? 'Deposits FIAT' : 'My Deposits'}
+          </h4>
+          <div className={styles.top}>
+            <div className={styles.nav}>
+              {allStatus.map((status, index) => (
+                <button
+                  className={cn(styles.link, {
+                    [styles.active]: index === activeIndex,
+                  })}
+                  onClick={() => handleChangeStatus(status)}
+                  key={status}
+                  type="button"
+                >
+                  {status.toLowerCase()}
+                </button>
+              ))}
             </div>
-            <div className={styles.box}>
-              {isAdmin && (
-                <div className={styles.actions}>
-                  <div className={styles.bulk}>
-                    <div className={styles['dropdown-area']}>
-                      <Dropdown
-                        options={bulkActions}
-                        setValue={setBulkAction}
-                        value={bulkAction}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className="button button-small"
-                      disabled={!canSubmitBulkAction}
-                      onClick={() => setIsTriggeredBulkAction(true)}
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  <Export
-                    className={styles.export}
-                    status={currentStatus}
-                    urlExport="/api/admin/deposit/export"
-                  />
-                </div>
-              )}
-              {isAdmin ? (
-                <Table
-                  className={styles.table}
-                  items={visibleTableItems}
-                  canAction
-                  selectedItems={selectedItems}
-                  handleToggleSelection={handleToggleSelection}
-                  setSelectedItems={setSelectedItems}
-                  handleChangeItemStatus={handleChangeItemStatus}
-                  fetching={fetching}
-                  handleSetSortBy={handleSetSortBy}
-                  sortByCurrent={sortBy}
-                  sortAsceding={sortAsceding}
-                />
-              ) : (
-                <Table
-                  className={styles.table}
-                  items={visibleTableItems}
-                  canAction={false}
-                  fetching={fetching}
-                  handleSetSortBy={handleSetSortBy}
-                  sortByCurrent={sortBy}
-                  sortAsceding={sortAsceding}
-                />
-              )}
-            </div>
-            <div className={styles['pagination-area']}>
-              <div className={styles['pagination-label']}>
-                Showing ({visibleTableItems.length}) of {totalItems}
-              </div>
-              <Pagination
-                currentPage={pageNumber}
-                handleChangePage={handleChangePage}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                siblingCount={0}
+            <div className={styles.dropdown}>
+              <Dropdown
+                className={styles.dropdown}
+                classDropdownHead={styles.dropdownHead}
+                value={currentStatus}
+                setValue={handleChangeStatus}
+                options={allStatus}
               />
             </div>
+
+            {isAdmin && (
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder="Search"
+                  {...register('email')}
+                  autoComplete="off"
+                />
+                <button className={styles.result} type="submit">
+                  <Icon name="search" size={20} />
+                </button>
+              </form>
+            )}
+          </div>
+          <div className={styles.box}>
+            {isAdmin && (
+              <div className={styles.actions}>
+                <div className={styles.bulk}>
+                  <div className={styles['dropdown-area']}>
+                    <Dropdown
+                      options={bulkActions}
+                      setValue={setBulkAction}
+                      value={bulkAction}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="button button-small"
+                    disabled={!canSubmitBulkAction}
+                    onClick={() => setIsTriggeredBulkAction(true)}
+                  >
+                    Apply
+                  </button>
+                </div>
+                <Export
+                  className={styles.export}
+                  status={currentStatus}
+                  urlExport="/api/admin/deposit/export"
+                />
+              </div>
+            )}
+            {isAdmin ? (
+              <Table
+                className={styles.table}
+                items={visibleTableItems}
+                canAction
+                selectedItems={selectedItems}
+                handleToggleSelection={handleToggleSelection}
+                setSelectedItems={setSelectedItems}
+                handleChangeItemStatus={handleChangeItemStatus}
+                fetching={fetching}
+                handleSetSortBy={handleSetSortBy}
+                sortByCurrent={sortBy}
+                sortAsceding={sortAsceding}
+              />
+            ) : (
+              <Table
+                className={styles.table}
+                items={visibleTableItems}
+                canAction={false}
+                fetching={fetching}
+                handleSetSortBy={handleSetSortBy}
+                sortByCurrent={sortBy}
+                sortAsceding={sortAsceding}
+              />
+            )}
+          </div>
+          <div className={styles['pagination-area']}>
+            <div className={styles['pagination-label']}>
+              Showing ({visibleTableItems.length}) of {totalItems}
+            </div>
+            <Pagination
+              currentPage={pageNumber}
+              handleChangePage={handleChangePage}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              siblingCount={0}
+            />
           </div>
         </div>
-
-        {isAdmin && (
-          <Bulk
-            handleChangeItemStatus={handleChangeItemStatus}
-            isTriggeredBulk={isTriggeredBulkAction}
-            handleClose={handleClose}
-            selectedItems={selectedItems}
-            variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
-          />
-        )}
       </div>
-    </Feature>
+
+      {isAdmin && (
+        <Bulk
+          handleChangeItemStatus={handleChangeItemStatus}
+          isTriggeredBulk={isTriggeredBulkAction}
+          handleClose={handleClose}
+          selectedItems={selectedItems}
+          variant={bulkAction === 'CONFIRM' ? 'CONFIRM' : 'REJECT'}
+        />
+      )}
+    </div>
   );
 };
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>

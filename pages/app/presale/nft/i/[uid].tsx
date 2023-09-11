@@ -4,12 +4,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { PresaleNFT } from '@contracts/presale/nft/PresaleCoin';
 import { OmitTimestamp } from '@utils/types';
 
-import { navigation } from '@navigation';
-
 import { withUser } from '@middlewares/client/withUser';
-
-import { getPresaleNFTByUid } from '@libs/firebase/functions/presale/nft/token/getPresaleNFTByUid';
-import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
 
 import { Container } from '@sections/pages/app/presale/nft/item/Container';
 
@@ -24,60 +19,31 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     nft: PresaleNFTServerSide;
     nfts: Array<PresaleNFTServerSide>;
-  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const { uid } = ctx.params as any;
-
-    if (!uid)
-      return {
-        redirect: {
-          destination: navigation.app.presale.nft.list,
-          permanent: false,
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => ({
+    props: {
+      nft: {
+        amount: 0,
+        amountAvailable: 0,
+        author: 'Author',
+        createdAt: 1611600000000,
+        updatedAt: 1611600000000,
+        baseCurrency: {
+          cmcId: 1,
+          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Bitcoin',
+          symbol: 'BTC',
+          type: 'crypto',
+          uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
         },
-      };
-
-    const nftPromise = getPresaleNFTByUid(uid);
-    const nftsPromise = listNFTs({ size: 7 });
-
-    const [nftFetched, nftsFetched] = await Promise.all([
-      nftPromise,
-      nftsPromise,
-    ]);
-
-    if (!nftFetched)
-      return {
-        redirect: {
-          destination: navigation.app.presale.nft.list,
-          permanent: false,
-        },
-      };
-
-    const nft: PresaleNFTServerSide = {
-      amount: nftFetched.amount,
-      amountAvailable: nftFetched.amountAvailable,
-      author: nftFetched.author,
-      baseCurrency: nftFetched.baseCurrency,
-      icon: nftFetched.icon,
-      name: nftFetched.name,
-      quote: nftFetched.quote,
-      uid: nftFetched.uid,
-      description: nftFetched.description,
-      createdAt: +nftFetched.createdAt,
-      updatedAt: +nftFetched.updatedAt,
-    };
-
-    const nfts = nftsFetched.map(
-      ({ createdAt, updatedAt, ...data }) =>
-        ({
-          ...data,
-          createdAt: +createdAt,
-          updatedAt: +updatedAt,
-        } as PresaleNFTServerSide)
-    );
-
-    return {
-      props: { nft, nfts },
-    };
-  });
+        description: 'Description',
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+        name: 'Name',
+        quote: 20000,
+        uid: 'a5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+      },
+      nfts: [],
+    },
+  }));
 
 const Page: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

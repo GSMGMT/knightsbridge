@@ -4,9 +4,6 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
-import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
-
-import { Feature } from '@components/Feature';
 import { Icon } from '@components/Icon';
 
 import { withUser } from '@middlewares/client/withUser';
@@ -24,24 +21,32 @@ interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     nfts: PresaleServerSide[];
-  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => {
-    const allNFTs = await listNFTs();
-
-    const nfts: PresaleServerSide[] = allNFTs.map(
-      ({ createdAt, updatedAt, ...data }) =>
-        ({
-          ...data,
-          createdAt: +createdAt,
-          updatedAt: +updatedAt,
-        } as PresaleServerSide)
-    );
-
-    return {
-      props: {
-        nfts,
-      },
-    };
-  });
+  }>(ctx, { freeToAccessBy: 'ADMIN' }, async () => ({
+    props: {
+      nfts: [
+        {
+          amount: 0,
+          amountAvailable: 0,
+          author: 'Author',
+          baseCurrency: {
+            cmcId: 1,
+            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+            name: 'Bitcoin',
+            symbol: 'BTC',
+            type: 'crypto',
+            uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          description: 'Description',
+          icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Name',
+          quote: 20000,
+          uid: 'a5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          createdAt: 1611600000000,
+          updatedAt: 1611600000000,
+        },
+      ],
+    },
+  }));
 
 interface FormFields {
   search: string;
@@ -103,52 +108,50 @@ const List: FunctionComponent<
   }, []);
 
   return (
-    <Feature feature="presale_nfts">
-      <div>
-        <div className={styles.head}>
-          <div className={styles.details}>
-            <div className={styles.user}>Create a Digital Asset Presale</div>
-          </div>
-
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <Controller
-              name="search"
-              control={control}
-              render={({ field: { onChange, ...field } }) => (
-                <input
-                  className={styles.input}
-                  type="text"
-                  placeholder="Search NFT"
-                  autoComplete="off"
-                  {...field}
-                  onChange={({ target: { value } }) => {
-                    onChange(value.toUpperCase());
-                  }}
-                />
-              )}
-            />
-
-            <button className={styles.result} type="submit">
-              <Icon name="search" size={20} />
-            </button>
-          </form>
+    <div>
+      <div className={styles.head}>
+        <div className={styles.details}>
+          <div className={styles.user}>Create a Digital Asset Presale</div>
         </div>
-        <Collection items={pagedItems} />
 
-        <div className={styles['pagination-area']}>
-          <div className={styles['pagination-label']}>
-            Showing ({pagedItems.length}) of {totalItems}
-          </div>
-
-          <Pagination
-            currentPage={pageNumber}
-            pageSize={pageSize}
-            totalItems={totalItems}
-            handleChangePage={handleChangePage}
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <Controller
+            name="search"
+            control={control}
+            render={({ field: { onChange, ...field } }) => (
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Search NFT"
+                autoComplete="off"
+                {...field}
+                onChange={({ target: { value } }) => {
+                  onChange(value.toUpperCase());
+                }}
+              />
+            )}
           />
-        </div>
+
+          <button className={styles.result} type="submit">
+            <Icon name="search" size={20} />
+          </button>
+        </form>
       </div>
-    </Feature>
+      <Collection items={pagedItems} />
+
+      <div className={styles['pagination-area']}>
+        <div className={styles['pagination-label']}>
+          Showing ({pagedItems.length}) of {totalItems}
+        </div>
+
+        <Pagination
+          currentPage={pageNumber}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          handleChangePage={handleChangePage}
+        />
+      </div>
+    </div>
   );
 };
 export default List;

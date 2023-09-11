@@ -1,6 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
 
-import { Feature } from '@components/Feature';
 import { Form } from '@sections/pages/app/presale/nft/create/Form';
 
 import { withUser } from '@middlewares/client/withUser';
@@ -11,15 +10,13 @@ export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser(ctx, { freeToAccessBy: 'ADMIN' });
 
 const Create = () => (
-  <Feature feature="presale_nfts">
-    <div>
-      <div className={styles.head}>
-        <div className={styles.details}>
-          <div className={styles.user}>Create a Digital Asset Presale</div>
-        </div>
+  <div>
+    <div className={styles.head}>
+      <div className={styles.details}>
+        <div className={styles.user}>Create a Digital Asset Presale</div>
       </div>
-      <Form />
     </div>
-  </Feature>
+    <Form />
+  </div>
 );
 export default Create;

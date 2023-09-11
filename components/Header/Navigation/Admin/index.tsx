@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import cn from 'classnames';
 
-import { useFeature } from '@hooks/Feature';
-
 import { navigation } from '@navigation';
 
 import { NavLink } from '@components/NavLink';
@@ -61,18 +59,14 @@ interface AdminNavigationProps {
   setVisibleNav: (visible: boolean) => void;
 }
 export const AdminNavigation = ({ setVisibleNav }: AdminNavigationProps) => {
-  const { isEnabled } = useFeature();
-
   const navigationItems: INavigation[] = useMemo(() => {
     const items: Array<INavigation> = [];
 
     navigationItemsDefault.forEach((item) => {
-      if (item.feature && isEnabled(item.feature)) {
+      if (item.feature) {
         items.push(item);
       } else if (item.dropdown) {
-        const dropdown = item.dropdown.filter((dropdownItem) =>
-          isEnabled(dropdownItem.feature)
-        );
+        const { dropdown } = item;
 
         if (dropdown.length) {
           items.push({
@@ -84,7 +78,7 @@ export const AdminNavigation = ({ setVisibleNav }: AdminNavigationProps) => {
     });
 
     return items;
-  }, [isEnabled, navigationItemsDefault]);
+  }, [navigationItemsDefault]);
 
   return (
     <nav className={styles.nav}>

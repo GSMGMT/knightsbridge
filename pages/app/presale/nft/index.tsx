@@ -3,15 +3,11 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import { PresaleNFT as IPresale } from '@contracts/presale/nft/PresaleCoin';
 
-import listNFTs from '@libs/firebase/functions/presale/nft/token/listCoins';
-
 import { withUser } from '@middlewares/client/withUser';
 
 import { NFTProvider } from '@store/providers/NFT';
 
 import PresaleNFTContainer from '@sections/pages/app/presale/nft/store/Container';
-
-import { navigation } from '@navigation';
 
 interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
   createdAt: number;
@@ -21,33 +17,32 @@ interface PresaleServerSide extends Omit<IPresale, 'createdAt' | 'updatedAt'> {
 export const getServerSideProps = (ctx: GetServerSidePropsContext) =>
   withUser<{
     nfts: PresaleServerSide[];
-  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const allCoinsPromise = listNFTs();
-
-    const [allNFTs] = await Promise.all([allCoinsPromise]);
-
-    const nfts: PresaleServerSide[] = allNFTs.map(
-      ({ createdAt, updatedAt, ...data }) =>
-        ({
-          ...data,
-          createdAt: +createdAt,
-          updatedAt: +updatedAt,
-        } as PresaleServerSide)
-    );
-    if (nfts.length === 0)
-      return {
-        redirect: {
-          destination: navigation.app.wallet,
-          permanent: false,
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => ({
+    props: {
+      nfts: [
+        {
+          amount: 0,
+          amountAvailable: 0,
+          author: 'Author',
+          baseCurrency: {
+            cmcId: 1,
+            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+            name: 'Bitcoin',
+            symbol: 'BTC',
+            type: 'crypto',
+            uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+          },
+          description: 'Description',
+          icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Name',
+          quote: 20000,
+          uid: 'a5a1b2e0-5b9a-11eb-ae93-0242ac130002',
+          createdAt: 1611600000000,
+          updatedAt: 1611600000000,
         },
-      };
-
-    return {
-      props: {
-        nfts,
-      },
-    };
-  });
+      ],
+    },
+  }));
 
 const PresaleNFT: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

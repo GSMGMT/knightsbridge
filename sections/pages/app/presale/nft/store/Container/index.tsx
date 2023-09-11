@@ -9,8 +9,6 @@ import { useMediaQuery } from 'usehooks-ts';
 
 import { NFTContext } from '@store/contexts/NFT';
 
-import { Feature } from '@components/Feature';
-
 import styles from '@styles/pages/app/presale/Presale.module.sass';
 
 import { Main } from '../Main';
@@ -51,13 +49,11 @@ const PresaleNFTContainer: FunctionComponent = () => {
   }, []);
 
   return (
-    <Feature feature="presale_coins">
-      <div className={styles.container}>
-        <Main />
-        <Buy items={newestNFTs} />
-        <Trending items={trendingNFTs} />
-      </div>
-    </Feature>
+    <div className={styles.container}>
+      <Main />
+      <Buy items={newestNFTs} />
+      <Trending items={trendingNFTs} />
+    </div>
   );
 };
 

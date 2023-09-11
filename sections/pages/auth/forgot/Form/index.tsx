@@ -8,8 +8,6 @@ import toast from 'react-hot-toast';
 import useDarkMode from 'use-dark-mode';
 
 import { TextInput } from '@components/TextInput';
-import { Feature } from '@components/Feature';
-// import { Recaptcha } from '@components/Recaptcha';
 import { Link } from '@components/Link';
 
 import { recoverPasswordByEmail } from '@services/api/auth/recoverPasswordByEmail';
@@ -125,16 +123,7 @@ export const Form = () => {
           variant={errors.email ? 'error' : undefined}
         />
       </div>
-      {/* <Recaptcha
-        onChange={handleChangeCaptcha}
-        note={errors.recaptcha?.message}
-      />
-      <input
-        type="checkbox"
-        data-testid="recaptcha-input"
-        className={styles['recaptcha-check']}
-        {...register('recaptcha')}
-      /> */}
+
       <button
         className={cn('button', styles.button)}
         type="submit"
@@ -144,13 +133,11 @@ export const Form = () => {
       >
         Continue
       </button>
-      <Feature feature="sign_in" restrict="COMPONENT">
-        <div className={styles.foot}>
-          <Link className={styles.link} href={navigation.auth.signIn}>
-            Nevermind, I got it
-          </Link>
-        </div>
-      </Feature>
+      <div className={styles.foot}>
+        <Link className={styles.link} href={navigation.auth.signIn}>
+          Nevermind, I got it
+        </Link>
+      </div>
     </form>
   );
 };

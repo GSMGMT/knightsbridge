@@ -12,19 +12,14 @@ import { withUser } from '@middlewares/client/withUser';
 
 import { navigation } from '@navigation';
 
-import listCurrenciesWithAddresses from '@libs/firebase/functions/crypto/address/listCurrenciesWithAddresses';
-
 import { Bidding } from '@components/Bidding';
-import { Feature } from '@components/Feature';
 import {
   CoinAddress,
   Addresses,
-  Coin,
   Coins,
 } from '@sections/pages/app/deposit/crypto/types';
 import { DepositDetails } from '@sections/pages/app/deposit/crypto/DepositDetails';
 import { ConfirmDeposit } from '@sections/pages/app/deposit/crypto/ConfirmDeposit';
-import { fetchCryptoPrice } from '@services/api/coinMarketCap/crypto/getCryptoPrice';
 
 const steps = [
   { title: 'Deposit details', slug: 'details' },
@@ -34,51 +29,28 @@ const steps = [
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>
   withUser<{
     currencies: Coins;
-  }>(ctx, { freeToAccessBy: 'USER' }, async () => {
-    const fetchedCurrencies = await listCurrenciesWithAddresses({
-      size: 100,
-    });
-
-    if (!fetchedCurrencies.length) {
-      return {
-        redirect: {
-          destination: navigation.app.wallet,
-          permanent: false,
+  }>(ctx, { freeToAccessBy: 'USER' }, async () => ({
+    props: {
+      currencies: [
+        {
+          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+          name: 'Bitcoin',
+          symbol: 'BTC',
+          uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+          quote: 20000,
+          walletAddresses: [
+            {
+              address: '0x1234567890',
+              createdAt: new Date(),
+              network: 'ETH',
+              uid: 'baa1b2e0-5b9a-11eb-ae93-0242ac130002',
+              updatedAt: new Date(),
+            },
+          ],
         },
-      };
-    }
-
-    const currencies: Coins = fetchedCurrencies
-      .map(({ logo, name, symbol, uid, walletAddresses: addresses }) => {
-        const walletAddresses =
-          addresses?.map(({ createdAt, updatedAt, ...address }) => address) ??
-          [];
-
-        return {
-          uid,
-          logo,
-          name,
-          symbol,
-          quote: 1,
-          walletAddresses,
-        } as Coin;
-      })
-      .sort((a, b) => a.symbol.localeCompare(b.symbol));
-
-    for await (const fetchedCurrency of fetchedCurrencies) {
-      const price = await fetchCryptoPrice(fetchedCurrency.cmcId);
-
-      currencies.find(
-        (currency) => currency.uid === fetchedCurrency.uid
-      )!.quote = price;
-    }
-
-    return {
-      props: {
-        currencies,
-      },
-    };
-  });
+      ],
+    },
+  }));
 const DepositCrypto: FunctionComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ currencies: coins }) => {
@@ -128,33 +100,31 @@ const DepositCrypto: FunctionComponent<
   }, [activeIndex]);
 
   return (
-    <Feature feature="deposit_crypto">
-      <Bidding title="Deposit crypto" items={steps} activeIndex={activeIndex}>
-        {!fetching && (
-          <>
-            {activeIndex === 0 && (
-              <DepositDetails
-                goNext={handleNextStep}
-                coins={coins}
-                addresses={addresses}
-                setAmount={setAmount}
-                setCoinSelectedIndex={setCoinSelectedIndex}
-                setNetworkSelectedIndex={setNetworkSelectedIndex}
-              />
-            )}
-            {activeIndex === 1 && (
-              <ConfirmDeposit
-                amount={amount}
-                coinSelected={coinSelected}
-                networkSelected={networkSelected}
-                goNext={handleNextStep}
-                goBack={handleBackStep}
-              />
-            )}
-          </>
-        )}
-      </Bidding>
-    </Feature>
+    <Bidding title="Deposit crypto" items={steps} activeIndex={activeIndex}>
+      {!fetching && (
+        <>
+          {activeIndex === 0 && (
+            <DepositDetails
+              goNext={handleNextStep}
+              coins={coins}
+              addresses={addresses}
+              setAmount={setAmount}
+              setCoinSelectedIndex={setCoinSelectedIndex}
+              setNetworkSelectedIndex={setNetworkSelectedIndex}
+            />
+          )}
+          {activeIndex === 1 && (
+            <ConfirmDeposit
+              amount={amount}
+              coinSelected={coinSelected}
+              networkSelected={networkSelected}
+              goNext={handleNextStep}
+              goBack={handleBackStep}
+            />
+          )}
+        </>
+      )}
+    </Bidding>
   );
 };
 export default DepositCrypto;

@@ -107,8 +107,6 @@ export const SelectCurrency = ({
           try {
             const { uid, referenceNo } = await createDeposit({
               amount: value,
-              bankId: currentPayment!.uid,
-              currencyId: currentCurrency!.uid,
             })!;
 
             setRequestInfo({

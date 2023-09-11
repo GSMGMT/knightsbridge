@@ -1,17 +1,6 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: 'local' | 'development' | 'production';
-      USER_UID?: string;
-      PORT?: string;
-      PWD: string;
-      API_URL: string;
-
-      ADMIN: string;
-
-      CMC_API_KEY: string;
-      MARKETS_API_KEY: string;
-
       FIREBASE_API_KEY: string;
       FIREBASE_AUTH_DOMAIN: string;
       FIREBASE_DATABASE_URL: string;

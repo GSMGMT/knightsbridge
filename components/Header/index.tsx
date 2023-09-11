@@ -15,7 +15,7 @@ import { Icons } from '@components/Icon';
 import { Theme } from '@components/Theme';
 import { Link } from '@components/Link';
 import { NavLink } from '@components/NavLink';
-import { Feature } from '@components/Feature';
+
 import { Navigation } from './Navigation';
 import { User } from './User';
 
@@ -79,30 +79,26 @@ export const Header = ({ headerWide }: HeaderProps) => {
           <div className={cn(styles.wrap, { [styles.visible]: visibleNav })}>
             <Navigation setVisibleNav={setVisibleNav} />
             {!isAdmin && (
-              <Feature feature="wallet" restrict="COMPONENT">
-                <NavLink
-                  className={cn('button-stroke button-small', styles.button)}
-                  href={navigation.app.wallet}
-                >
-                  Wallet
-                </NavLink>
-              </Feature>
+              <NavLink
+                className={cn('button-stroke button-small', styles.button)}
+                href={navigation.app.wallet}
+              >
+                Wallet
+              </NavLink>
             )}
           </div>
           <div className={styles.control}>
             {!isAdmin && (
-              <Feature feature="wallet" restrict="COMPONENT">
-                <NavLink
-                  className={({ isActive }) =>
-                    cn('button-stroke button-small', styles.button, {
-                      active: isActive,
-                    })
-                  }
-                  href={navigation.app.wallet}
-                >
-                  Wallet
-                </NavLink>
-              </Feature>
+              <NavLink
+                className={({ isActive }) =>
+                  cn('button-stroke button-small', styles.button, {
+                    active: isActive,
+                  })
+                }
+                href={navigation.app.wallet}
+              >
+                Wallet
+              </NavLink>
             )}
             <Theme className={styles.theme} icon />
             <User className={styles.user} />

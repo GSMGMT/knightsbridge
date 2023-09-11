@@ -16,7 +16,6 @@ import { Icon } from '@components/Icon';
 import { Switch } from '@components/Switch';
 
 import { RegisterCoin } from '@sections/pages/app/coin/RegisterCoin';
-import { Feature } from '@components/Feature';
 
 interface Exchange {
   name: string;
@@ -118,116 +117,108 @@ const CoinList = () => {
 
   return (
     <>
-      <Feature feature="coin_list" restrict="PAGE">
-        <div>
-          <div className={styles.head}>
-            <div className={styles.details}>
-              <div className={styles.user}>Coin List</div>
-            </div>
-
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <Controller
-                name="search"
-                control={control}
-                render={({ field: { onChange, ...field } }) => (
-                  <input
-                    className={styles.input}
-                    type="text"
-                    placeholder="Search coin"
-                    autoComplete="off"
-                    {...field}
-                    onChange={({ target: { value } }) => {
-                      onChange(value.toUpperCase());
-                    }}
-                  />
-                )}
-              />
-
-              <button
-                className={styles.result}
-                type="submit"
-                disabled={fetching}
-              >
-                <Icon
-                  name="search"
-                  size={20}
-                  className={cn({ [styles.loading]: fetching })}
-                />
-              </button>
-            </form>
+      <div>
+        <div className={styles.head}>
+          <div className={styles.details}>
+            <div className={styles.user}>Coin List</div>
           </div>
 
-          <div className={cn(styles.table, { [styles.fetching]: fetching })}>
-            <div className={styles.row}>
-              <span>#</span>
-              <span>Name</span>
-              <span>Enabled</span>
-              <span>Source</span>
-            </div>
-            {filteredItems.map((coin, index) => {
-              const {
-                source: { logo: exchangeLogo, name: exchangeName },
-                marketPair,
-                logo,
-                enabled,
-                uid,
-              } = coin;
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <Controller
+              name="search"
+              control={control}
+              render={({ field: { onChange, ...field } }) => (
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder="Search coin"
+                  autoComplete="off"
+                  {...field}
+                  onChange={({ target: { value } }) => {
+                    onChange(value.toUpperCase());
+                  }}
+                />
+              )}
+            />
 
-              return (
-                <div key={uid} className={styles.row}>
-                  <span>{(pageNumber - 1) * pageSize + index + 1}</span>
-                  <div>
-                    <Image
-                      src={logo}
-                      alt={marketPair}
-                      className={styles.logo}
-                      width={24}
-                      height={24}
-                    />
-                    <div className={styles.info}>
-                      <span className={styles.name}>{marketPair}</span>
-                      <span className={styles.code}>{exchangeName}</span>
-                    </div>
-                  </div>
-                  <span>
-                    <Switch
-                      checked={enabled}
-                      onChange={() => handleSwitchEnabled(uid)}
-                    />
-                  </span>
-                  <div>
-                    <Image
-                      className={styles.logo}
-                      src={exchangeLogo}
-                      alt={exchangeName}
-                      title={exchangeName}
-                      width={24}
-                      height={24}
-                    />
+            <button className={styles.result} type="submit" disabled={fetching}>
+              <Icon
+                name="search"
+                size={20}
+                className={cn({ [styles.loading]: fetching })}
+              />
+            </button>
+          </form>
+        </div>
+
+        <div className={cn(styles.table, { [styles.fetching]: fetching })}>
+          <div className={styles.row}>
+            <span>#</span>
+            <span>Name</span>
+            <span>Enabled</span>
+            <span>Source</span>
+          </div>
+          {filteredItems.map((coin, index) => {
+            const {
+              source: { logo: exchangeLogo, name: exchangeName },
+              marketPair,
+              logo,
+              enabled,
+              uid,
+            } = coin;
+
+            return (
+              <div key={uid} className={styles.row}>
+                <span>{(pageNumber - 1) * pageSize + index + 1}</span>
+                <div>
+                  <Image
+                    src={logo}
+                    alt={marketPair}
+                    className={styles.logo}
+                    width={24}
+                    height={24}
+                  />
+                  <div className={styles.info}>
+                    <span className={styles.name}>{marketPair}</span>
+                    <span className={styles.code}>{exchangeName}</span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          <div className={styles['pagination-area']}>
-            <div className={styles['pagination-label']}>
-              Showing ({filteredItems.length}) of {totalItems}
-            </div>
-
-            <Pagination
-              currentPage={pageNumber}
-              pageSize={pageSize}
-              totalItems={totalItems}
-              handleChangePage={handleChangePage}
-            />
-          </div>
+                <span>
+                  <Switch
+                    checked={enabled}
+                    onChange={() => handleSwitchEnabled(uid)}
+                  />
+                </span>
+                <div>
+                  <Image
+                    className={styles.logo}
+                    src={exchangeLogo}
+                    alt={exchangeName}
+                    title={exchangeName}
+                    width={24}
+                    height={24}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </Feature>
 
-      <Feature feature="coin_register" restrict="COMPONENT">
-        <RegisterCoin fetchPairs={fetchCoinList} />
-      </Feature>
+        <div className={styles['pagination-area']}>
+          <div className={styles['pagination-label']}>
+            Showing ({filteredItems.length}) of {totalItems}
+          </div>
+
+          <Pagination
+            currentPage={pageNumber}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            handleChangePage={handleChangePage}
+          />
+        </div>
+      </div>
+
+      <RegisterCoin fetchPairs={fetchCoinList} />
     </>
   );
 };

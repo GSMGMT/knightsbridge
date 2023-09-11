@@ -3,8 +3,6 @@ import Link from 'next/link';
 import cn from 'classnames';
 import { format } from 'date-fns';
 
-import { useFeature } from '@hooks/Feature';
-
 import { navigation } from '@navigation';
 
 import { Features } from '@contracts/Features';
@@ -63,13 +61,11 @@ export const Footer = () => {
     e.preventDefault();
   };
 
-  const { isEnabled } = useFeature();
-
   const menu = useMemo(() => {
     const items: MenuItem[] = [];
 
     menuDefault.forEach((item) => {
-      if (item.feature && isEnabled(item.feature)) {
+      if (item.feature) {
         items.push(item);
       } else if (!item.feature) {
         items.push(item);
@@ -77,7 +73,7 @@ export const Footer = () => {
     });
 
     return items;
-  }, [menuDefault, isEnabled]);
+  }, [menuDefault]);
 
   return (
     <footer className={styles.footer}>

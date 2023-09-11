@@ -1,7 +1,4 @@
-import { api } from '@services/api';
-
 import { Request } from '@contracts/Request';
-import { Price } from '@services/api/coinMarketCap/marketPair/getMarketPairPrice';
 
 interface Source {
   name: string;
@@ -38,92 +35,35 @@ interface Response {
 
 export const fetchPairsSources: (
   args: RequestArgs
-) => Promise<Response> = async ({ ...params }) => {
-  let newPairsSources: PairsSources = [];
-  let newTotalCount: Response['totalCount'] = 0;
-
-  try {
-    const {
-      data: { data, totalCount },
-    } = await api.get<{
-      data: Array<{
-        uid: string;
-        exchange: {
-          name: string;
-          logo: string;
-        };
-        name: string;
-        cmcId: number;
-        base: {
-          name: string;
-          cmcId?: number;
-          logo: string;
-          uid: string;
-          type: string;
-        };
-        quote: {
-          uid: string;
-          type: string;
-        };
-        enabled: boolean;
-      }>;
-      totalCount: number;
-    }>('/api/marketPair', {
-      params,
-    });
-
-    const prices = await Promise.all(
-      data.map(async (pair) => {
-        const price = await api.get<{ data: Price }>(
-          `/api/marketPair/${pair.uid}/price`
-        );
-
-        return price.data.data;
-      })
-    );
-
-    newPairsSources = data.map(
-      (
-        {
-          uid: id,
-          base: { name, cmcId, logo, uid: baseId, type: baseType },
-          exchange: { ...source },
-          cmcId: marketPairId,
-          name: marketPair,
-          quote: { uid: pairId, type: pairType },
-          enabled,
-        },
-        index
-      ) => {
-        const [baseSlug, pairSlug] = marketPair.split('/');
-
-        return {
-          id,
-          marketPair: name,
-          source,
-          marketPairId,
-          price: prices[index].price,
-          usdQuote: prices[index].usdQuote,
-          base: {
-            id: baseId,
-            slug: baseSlug,
-            type: baseType === 'fiat' ? 'FIAT' : 'CRYPTOCURRENCY',
-            logo,
-            cmcId,
-          },
-          pair: {
-            id: pairId,
-            slug: pairSlug,
-            type: pairType === 'fiat' ? 'FIAT' : 'CRYPTOCURRENCY',
-          },
-          enabled,
-        } as PairSource;
-      }
-    );
-    newTotalCount = totalCount;
-  } catch (error) {
-    console.error({ error });
-  }
-
-  return { pairsSources: [...newPairsSources], totalCount: newTotalCount };
-};
+) => Promise<Response> = async () => ({
+  pairsSources: [
+    {
+      id: 'b2d0f7e0-8e2a-4b0a-9b6e-7b6c5c6e9c1a',
+      base: {
+        id: 'd4a0f7e0-8e2a-4b0a-9b6e-7b6c5c6e9c1a',
+        slug: 'BTC',
+        type: 'CRYPTOCURRENCY',
+        cmcId: 1,
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+      },
+      enabled: true,
+      marketPair: 'BTC/USD',
+      marketPairId: 1,
+      pair: {
+        id: '24a0f7e0-8e2a-4b0a-9b6e-7b6c5c6e9c1a',
+        slug: 'USD',
+        type: 'FIAT',
+        cmcId: 2781,
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2781.png',
+      },
+      price: 20000,
+      source: {
+        name: 'Binance',
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png',
+        slug: 'binance',
+      },
+      usdQuote: 20000,
+    },
+  ],
+  totalCount: 1,
+});

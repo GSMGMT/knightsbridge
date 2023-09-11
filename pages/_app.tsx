@@ -11,7 +11,6 @@ import '@styles/app.scss';
 import { Layouts } from '@layouts/index';
 
 import { AuthProvider } from '@store/providers/Auth';
-import { FlagsProvider } from '@store/providers/Flags';
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -35,14 +34,12 @@ const App = ({ Component, pageProps }: AppProps) => {
       <Head>
         <title>KnightsBridge</title>
       </Head>
-      <FlagsProvider>
-        <AuthProvider>
-          <Layouts>
-            <Component {...pageProps} />
-          </Layouts>
-          <Toaster />
-        </AuthProvider>
-      </FlagsProvider>
+      <AuthProvider>
+        <Layouts>
+          <Component {...pageProps} />
+        </Layouts>
+        <Toaster />
+      </AuthProvider>
     </>
   );
 };

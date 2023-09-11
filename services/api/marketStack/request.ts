@@ -25,3 +25,5 @@ export const requestMarketStack = async <T>(
 
   return data;
 };
+
+export type RequestMarketStack<T> = MarketStackApiResponse<T>;

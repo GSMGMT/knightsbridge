@@ -1,5 +1,3 @@
-import { api } from '@services/api';
-
 import { Request } from '@contracts/Request';
 
 export type Pairs = Array<string>;
@@ -12,28 +10,16 @@ interface Response {
   totalCount: number;
 }
 
-export const fetchPairs: (args: RequestArgs) => Promise<Response> = async ({
-  cryptoId,
-  ...params
-}) => {
-  let newPairs: Pairs = [];
-  let newTotalCount: Response['totalCount'] = 0;
-
-  try {
-    const {
-      data: { data, totalCount },
-    } = await api.get<{ data: Pairs; totalCount: number }>(
-      `/api/currency/${cryptoId}/marketPairs`,
-      {
-        params,
-      }
-    );
-
-    newPairs = [...data];
-    newTotalCount = totalCount;
-  } catch (error) {
-    console.error({ error });
-  }
-
-  return { pairs: [...newPairs], totalCount: newTotalCount };
-};
+export const fetchPairs: (
+  args: RequestArgs
+) => Promise<Response> = async () => ({
+  pairs: [
+    'BTC/USD',
+    'BTC/EUR',
+    'BTC/USDT',
+    'BTC/ETH',
+    'BTC/BNB',
+    'BTC/ADA',
+  ] as Pairs,
+  totalCount: 1,
+});

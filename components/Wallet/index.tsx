@@ -2,8 +2,6 @@ import { ReactNode, useMemo, useState } from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 
-import { useFeature } from '@hooks/Feature';
-
 import { navigation as navigationLinks } from '@navigation';
 
 import { Features } from '@contracts/Features';
@@ -76,7 +74,6 @@ interface WalletProps {
 }
 export const Wallet = ({ className, children }: WalletProps) => {
   const { pathname } = useRouter();
-  const { isEnabled } = useFeature();
 
   const [visibleMenu, setVisibleMenu] = useState(false);
 
@@ -90,20 +87,18 @@ export const Wallet = ({ className, children }: WalletProps) => {
     let addSeparatorToNextItem: boolean = false;
 
     navigationItemsDefault.forEach(({ separator, ...item }) => {
-      if (isEnabled(item.feature)) {
-        if (addSeparatorToNextItem) {
-          items.push({ separator: true, ...item });
-          addSeparatorToNextItem = false;
-        } else {
-          items.push({ ...item, separator });
-        }
-      } else if (separator) {
+      if (separator) {
         addSeparatorToNextItem = true;
+      } else if (addSeparatorToNextItem) {
+        items.push({ separator: true, ...item });
+        addSeparatorToNextItem = false;
+      } else {
+        items.push({ ...item, separator });
       }
     });
 
     return items;
-  }, [isEnabled, navigationItemsDefault]);
+  }, [navigationItemsDefault]);
 
   return (
     <div className={cn(className, styles.wallet)}>

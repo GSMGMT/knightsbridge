@@ -1,14 +1,28 @@
-import { MarketStackApiUrls, Exchange } from '@contracts/MarketStack';
+import { Exchange } from '@contracts/MarketStack';
 
-import { requestMarketStack } from '../request';
+import { RequestMarketStack } from '../request';
 
-interface FetchTickerParams {
-  symbol: string;
-}
-export const fetchExchange = async (data: FetchTickerParams) => {
-  const exchange = await requestMarketStack<Exchange>(
-    `${MarketStackApiUrls.EXCHANGES}/${data.symbol}`
-  );
-
-  return exchange;
-};
+export const fetchExchange = (): RequestMarketStack<Exchange> => ({
+  acronym: 'B3',
+  city: 'São Paulo',
+  country: 'Brazil',
+  country_code: 'BR',
+  currency: {
+    name: 'Brazilian Real',
+    symbol: 'R$',
+  },
+  mic: 'XBSP',
+  name: 'B3 - Brazil Stock Exchange',
+  pagination: {
+    count: 1,
+    limit: 100,
+    offset: 0,
+    total: 1,
+  },
+  timezone: {
+    abbr: 'BRT',
+    abbr_dst: 'BRST',
+    timezone: 'America/Sao_Paulo',
+  },
+  website: 'http://www.b3.com.br/en_us/',
+});

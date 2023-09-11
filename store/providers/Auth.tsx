@@ -9,11 +9,9 @@ import { useRouter } from 'next/router';
 
 import { auth } from '@libs/firebase/config';
 import insertUser from '@libs/firebase/functions/users/insertUser';
-import insertReferral from '@libs/firebase/functions/referral/insertReferral';
 import getUserByUid from '@libs/firebase/functions/users/getUserById';
 
 import { Roles, User } from '@contracts/User';
-import { verifyReferral } from '@contracts/Referral';
 
 import {
   AuthContext,
@@ -58,15 +56,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => clearInterval(handle);
   }, []);
 
-  const signUp = async ({
-    email,
-    password,
-    name,
-    surname,
-    referral,
-  }: ISignUp) => {
-    const referredBy = referral ? await verifyReferral(referral) : undefined;
-
+  const signUp = async ({ email, password, name, surname }: ISignUp) => {
     const credential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -81,7 +71,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         surname,
         role: Roles.USER,
       }),
-      insertReferral(credential.user.uid, referredBy?.user.uid),
       sendEmailVerification(credential.user),
     ]);
   };

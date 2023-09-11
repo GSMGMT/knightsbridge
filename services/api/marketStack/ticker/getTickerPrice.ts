@@ -1,22 +1,15 @@
-import {
-  MarketStackApiUrls,
-  Intraday,
-  MarketStackApiDTO,
-} from '@contracts/MarketStack';
+import { Intraday } from '@contracts/MarketStack';
 
-import { requestMarketStack } from '../request';
+import { RequestMarketStack } from '../request';
 
-interface FetchTickerParams {
-  symbols?: string;
-}
-export const getTickerPrice = async (
-  data: MarketStackApiDTO<FetchTickerParams> = {}
-) => {
-  const {
-    data: [{ open: price }],
-  } = await requestMarketStack<{
-    data: Intraday[];
-  }>(MarketStackApiUrls.INTRADAY_LATEST, { ...data });
-
-  return price;
-};
+export const getTickerPrice = (): RequestMarketStack<{
+  data: Intraday[];
+}> => ({
+  data: [],
+  pagination: {
+    count: 0,
+    limit: 0,
+    offset: 0,
+    total: 0,
+  },
+});
